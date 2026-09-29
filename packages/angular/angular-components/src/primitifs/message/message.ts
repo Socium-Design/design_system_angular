@@ -80,11 +80,7 @@ const inlineIconClasses: Record<MessageStatus, string> = {
       <div class="flex w-full items-start gap-[var(--index-feedback-message-icon-gap)]">
         @if (!hideIcon()) {
           <span class="size-6 shrink-0 text-[var(--index-feedback-message-icon-color)]">
-            @if (hasCustomIcon()) {
-              <ng-content select="[socMessageIcon]" />
-            } @else {
-              <ng-container [ngTemplateOutlet]="defaultIcon" />
-            }
+            <ng-container [ngTemplateOutlet]="iconSlot" />
           </span>
         }
         <div class="flex min-w-0 flex-1 flex-col gap-[var(--index-feedback-message-content-gap)]">
@@ -94,7 +90,7 @@ const inlineIconClasses: Record<MessageStatus, string> = {
             </p>
           }
           <p class="text-[length:var(--index-feedback-message-content-size)] text-[var(--index-feedback-message-content-color)] [font-family:var(--index-feedback-message-content-font)] [font-weight:var(--index-feedback-message-content-weight)]">
-            <ng-content select="[socMessageContent]" />
+            <ng-container [ngTemplateOutlet]="contentSlot" />
           </p>
         </div>
       </div>
@@ -123,17 +119,33 @@ const inlineIconClasses: Record<MessageStatus, string> = {
     } @else {
       @if (!hideIcon()) {
         <span [class]="'size-5 shrink-0 ' + inlineIconClasses[status()]">
-          @if (hasCustomIcon()) {
-            <ng-content select="[socMessageIcon]" />
-          } @else {
-            <ng-container [ngTemplateOutlet]="defaultIcon" />
-          }
+          <ng-container [ngTemplateOutlet]="iconSlot" />
         </span>
       }
       <p [class]="'text-[length:var(--index-feedback-message-inline-size)] [font-family:var(--index-feedback-message-inline-font)] [font-weight:var(--index-feedback-message-inline-weight)] ' + inlineTextClasses[status()]">
-        <ng-content select="[socMessageContent]" />
+        <ng-container [ngTemplateOutlet]="contentSlot" />
       </p>
     }
+
+    <!-- Declared once each and reused via ngTemplateOutlet from both variant branches above —
+         Angular allocates each distinct ng-content selector to exactly one static slot bucket at
+         compile time, so the same selector written in two different ng-content instances (one per
+         @if/@else branch) silently drops whichever one isn't the canonical slot, even though only
+         one branch is ever active at runtime. Verified this empirically: with two separate
+         <ng-content select="[socMessageContent]"> instances (one per branch), the "banner" one
+         worked and the "inline"/"plain" one silently rendered nothing. A single ng-content inside
+         an <ng-template>, outlet-referenced from wherever it's needed, has only one bucket to
+         begin with, so there's no ambiguity regardless of how many places instantiate it. -->
+    <ng-template #iconSlot>
+      @if (hasCustomIcon()) {
+        <ng-content select="[socMessageIcon]" />
+      } @else {
+        <ng-container [ngTemplateOutlet]="defaultIcon" />
+      }
+    </ng-template>
+    <ng-template #contentSlot>
+      <ng-content select="[socMessageContent]" />
+    </ng-template>
 
     <ng-template #defaultIcon>
       @switch (status()) {
