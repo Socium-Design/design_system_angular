@@ -9,9 +9,12 @@
 
 export * from './primitifs/avatar/avatar';
 export * from './primitifs/badge/badge';
+export * from './primitifs/breadcrumb/breadcrumb';
 export * from './primitifs/button/button';
 export * from './primitifs/button/split-button';
+export * from './primitifs/card/card';
 export * from './primitifs/checkbox/checkbox';
+export * from './primitifs/chips/chips';
 export * from './primitifs/document-line/document-line';
 export * from './primitifs/input-area/input-area';
 export * from './primitifs/input-number/input-number';
