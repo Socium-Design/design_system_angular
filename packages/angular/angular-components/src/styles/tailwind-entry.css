@@ -20,3 +20,15 @@
  * sync step. Do not hand-edit tokens.generated.css directly.
  */
 @import "./tokens.generated.css";
+
+/* Copied from design_system (React)'s src/index.css — ProgressBar's `indeterminate` mode
+ * references this by name (`animate-[progress-indeterminate_1.4s_ease-in-out_infinite]`) but the
+ * keyframes themselves are defined globally there, not in ProgressBar.tsx itself. */
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
