@@ -1,0 +1,13 @@
+{
+  "name": "socium-ds-angular",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "packages/angular"
+  ],
+  "scripts": {
+    "storybook": "npm run storybook --workspace=socium-ds-angular-workspace",
+    "build-storybook": "npm run build-storybook --workspace=socium-ds-angular-workspace",
+    "build": "npm run build --workspace=socium-ds-angular-workspace"
+  }
+}
