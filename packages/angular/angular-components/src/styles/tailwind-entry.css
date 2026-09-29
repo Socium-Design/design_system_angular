@@ -32,3 +32,13 @@
     transform: translateX(300%);
   }
 }
+
+/* Copied from design_system (React)'s src/index.css — used by SideNavigation's own scroll
+ * region (still scrollable via wheel/trackpad/keyboard, just visually hidden), same as there. */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

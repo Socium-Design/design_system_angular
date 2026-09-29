@@ -8,6 +8,9 @@
  */
 
 export * from './primitifs/accordion/accordion';
+export * from './primitifs/app-switch/app-icons';
+export * from './primitifs/app-switch/app-switch';
+export * from './primitifs/app-switch/app-switch-presets';
 export * from './primitifs/avatar/avatar';
 export * from './primitifs/badge/badge';
 export * from './primitifs/breadcrumb/breadcrumb';
@@ -25,8 +28,11 @@ export * from './primitifs/overlay/overlay';
 export * from './primitifs/pagination/pagination';
 export * from './primitifs/password/password';
 export * from './primitifs/progress-bar/progress-bar';
+export * from './primitifs/popover/popover';
 export * from './primitifs/radio-button/radio-button';
 export * from './primitifs/search-bar/search-bar';
+export * from './primitifs/side-navigation/navigation-presets';
+export * from './primitifs/side-navigation/side-navigation';
 export * from './primitifs/stepper/stepper';
 export * from './primitifs/switch/switch';
 export * from './primitifs/tabs/tabs';
