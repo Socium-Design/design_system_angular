@@ -7,7 +7,10 @@
  * (src/templates/*). Rien n'est encore migré à ce stade (squelette seulement).
  */
 
+export * from './primitifs/avatar/avatar';
+export * from './primitifs/badge/badge';
 export * from './primitifs/button/button';
 export * from './primitifs/button/split-button';
+export * from './primitifs/tag/tag';
 // export * from './composes/select/select';
 // export * from './templates/page-home/page-home';
