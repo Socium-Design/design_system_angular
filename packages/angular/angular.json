@@ -43,7 +43,8 @@
             "configDir": "angular-components/.storybook",
             "browserTarget": "angular-components:build",
             "compodoc": false,
-            "port": 6006
+            "port": 6006,
+            "styles": ["angular-components/src/styles/tailwind-entry.css"]
           }
         },
         "build-storybook": {
@@ -52,7 +53,8 @@
             "configDir": "angular-components/.storybook",
             "browserTarget": "angular-components:build",
             "compodoc": false,
-            "outputDir": "storybook-static"
+            "outputDir": "storybook-static",
+            "styles": ["angular-components/src/styles/tailwind-entry.css"]
           }
         }
       }

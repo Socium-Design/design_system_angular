@@ -2,12 +2,10 @@
   "name": "socium-ds-angular",
   "private": true,
   "version": "0.0.0",
-  "workspaces": [
-    "packages/angular"
-  ],
+  "description": "Repo root — not an npm workspace root. packages/angular is a fully self-contained npm project (its own node_modules/package-lock.json): tried wiring it up as an npm workspace member here, but npm's own hoisting split @storybook/angular from its storybook core package across two different node_modules trees and broke ESM resolution between them, even on a clean install. Not worth chasing for a single-package repo — this file exists for repo-root documentation parity with design_system (React)'s own root package.json, nothing more.",
   "scripts": {
-    "storybook": "npm run storybook --workspace=socium-ds-angular-workspace",
-    "build-storybook": "npm run build-storybook --workspace=socium-ds-angular-workspace",
-    "build": "npm run build --workspace=socium-ds-angular-workspace"
+    "storybook": "npm --prefix packages/angular run storybook",
+    "build-storybook": "npm --prefix packages/angular run build-storybook",
+    "build": "npm --prefix packages/angular run build"
   }
 }

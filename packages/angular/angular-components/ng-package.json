@@ -3,5 +3,6 @@
   "dest": "../dist/angular-components",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@lucide/angular"]
 }

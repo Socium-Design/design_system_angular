@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/*
+ * Tailwind v4's automatic content detection (walking outward from this file on disk) doesn't
+ * reliably reach our .ts component files through Angular's PostCSS-loader invocation — verified
+ * empirically: without an explicit @source, `ng run angular-components:storybook` compiles this
+ * file's @layer theme/tokens correctly but emits zero utility classes (e.g. no `.inline-flex` rule
+ * at all), even though the classes are present, unminified, in the rendered DOM. Declaring the
+ * source explicitly avoids depending on that auto-detection working inside this build pipeline.
+ */
+@source "../primitifs/**/*.ts";
+@source "../composes/**/*.ts";
+@source "../templates/**/*.ts";
+
+/*
+ * Copied verbatim from design_system (React)'s packages/react/src/tokens.generated.css — itself
+ * synced there from packages/tokens/dist/css/variables.css (the design system's single source of
+ * truth for tokens, style-dictionary-compiled). The React repo is read-only reference material for
+ * this migration; re-copy this file by hand when tokens change there until this repo has its own
+ * sync step. Do not hand-edit tokens.generated.css directly.
+ */
+@import "./tokens.generated.css";

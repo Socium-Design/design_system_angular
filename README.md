@@ -7,8 +7,13 @@ analogie avec un équivalent HTML natif), pas traduit ligne à ligne.
 
 ## État actuel
 
-Squelette uniquement — aucun composant migré. Voir la spec de migration (lots par niveau,
-primitifs avant composés) pour l'ordre de traitement.
+Lot 1 (primitifs) en cours — voir la spec de migration (lots par niveau, primitifs avant composés)
+pour l'ordre de traitement. Migrés jusqu'ici :
+
+- `Button` / `SplitButton` (`src/primitifs/button/`)
+
+Voir `CLAUDE.md` pour les conventions établies (sélecteur d'attribut, `ViewEncapsulation.None`,
+projection de contenu pour les slots d'icône) à réutiliser pour les composants suivants.
 
 ## Structure
 

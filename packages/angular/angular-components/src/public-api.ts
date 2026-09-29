@@ -7,10 +7,7 @@
  * (src/templates/*). Rien n'est encore migré à ce stade (squelette seulement).
  */
 
-// export * from './primitifs/button/button';
+export * from './primitifs/button/button';
+export * from './primitifs/button/split-button';
 // export * from './composes/select/select';
 // export * from './templates/page-home/page-home';
-
-// ng-packagr refuses to build an entry point with zero exports — placeholder only, delete the
-// moment the first real export above is uncommented.
-export const ANGULAR_COMPONENTS_SKELETON = true;
