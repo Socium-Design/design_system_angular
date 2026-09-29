@@ -21,6 +21,35 @@
  */
 @import "./tokens.generated.css";
 
+/*
+ * Copied verbatim from design_system (React)'s packages/react/src/fonts.css + its packages/react/
+ * src/fonts/*.woff2 binaries — self-hosted @font-face declarations for DM Sans / Lexend / JetBrains
+ * Mono, the three families every `--*-font`/`--*-font-family` token above actually names. Without
+ * this, those token values are just strings the browser can't resolve to any installed font, and
+ * every component silently falls back to its generic (`sans-serif`) stack — verified this is
+ * exactly what was happening in this repo's Storybook: the `[font-family:var(--...)]` classes were
+ * present and correct in the DOM, resolving to e.g. `DM Sans`, but nothing on the page had ever
+ * registered that family.
+ */
+@import "./fonts.css";
+
+/* Copied from design_system (React)'s src/index.css — Tailwind v4's own preflight/theme defines
+ * --font-sans (and, in a consumer app that also runs its own Tailwind instance, that app's
+ * --font-sans wins the cascade over this kit's). Rebinding both here to the design tokens makes any
+ * Tailwind default-font utility (e.g. `font-sans`) resolve to the DS typeface instead of silently
+ * falling back to Tailwind's own default stack in either instance. */
+:root {
+  --font-sans: var(--bridges-shape-text-body-font);
+  --font-display: var(--bridges-shape-text-display-1-font);
+}
+
+/* Global default — components still set their own family/weight/size per token, but anything
+ * without one of those classes (Storybook's own Docs pages, etc.) was falling back to the browser's
+ * system font instead of the brand typeface. */
+body {
+  font-family: 'DM Sans', sans-serif;
+}
+
 /* Copied from design_system (React)'s src/index.css — ProgressBar's `indeterminate` mode
  * references this by name (`animate-[progress-indeterminate_1.4s_ease-in-out_infinite]`) but the
  * keyframes themselves are defined globally there, not in ProgressBar.tsx itself. */
