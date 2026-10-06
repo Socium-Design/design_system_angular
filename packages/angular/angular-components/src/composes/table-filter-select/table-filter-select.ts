@@ -17,7 +17,8 @@ import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../sel
   imports: [SocSelect],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'contents' },
+  // `id` is forwarded to the inner soc-select (see SocSelect) — don't also leave it on this host.
+  host: { class: 'contents', '[attr.id]': 'null' },
   template: `
     <soc-select
       mode="labelHeader"

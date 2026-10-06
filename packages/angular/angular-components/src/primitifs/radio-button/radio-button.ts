@@ -12,6 +12,9 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input,
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  // `id` targets the inner control (the `<label for>` target), like React — a static `id="…"` on
+  // the element would otherwise also land on this host as a duplicate DOM id.
+  host: { '[attr.id]': 'null' },
   template: `
     <label [for]="id()" [class]="hostClass()">
       <button

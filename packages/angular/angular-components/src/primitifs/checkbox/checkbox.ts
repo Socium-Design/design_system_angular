@@ -22,6 +22,9 @@ import { nextUniqueId } from '../../internal/unique-id';
   imports: [LucideCheck],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  // `id` targets the inner control (the `<label for>` target), like React — a static `id="…"` on
+  // the element would otherwise also land on this host as a duplicate DOM id.
+  host: { '[attr.id]': 'null' },
   template: `
     <label [for]="checkboxId" [class]="hostClass()">
       <button
@@ -47,8 +50,12 @@ export class SocCheckbox {
   readonly checked = model(false);
   readonly disabled = input(false);
   readonly label = input<string>();
+  readonly id = input<string>();
 
-  protected readonly checkboxId = nextUniqueId('soc-checkbox');
+  private readonly generatedId = nextUniqueId('soc-checkbox');
+  protected get checkboxId(): string {
+    return this.id() ?? this.generatedId;
+  }
 
   protected toggle(): void {
     if (this.disabled()) return;

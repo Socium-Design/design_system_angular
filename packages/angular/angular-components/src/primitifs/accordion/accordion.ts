@@ -64,7 +64,7 @@ export class SocAccordion {
         : this.open()
           ? 'border-[var(--index-conteneur-accordion-header-stroke-open)]'
           : 'border-[var(--index-conteneur-accordion-header-stroke)] hover:border-[var(--index-conteneur-accordion-header-stroke-hover)] focus-within:border-[var(--index-conteneur-accordion-header-stroke-focus)]';
-    return `w-full overflow-hidden rounded-[var(--index-conteneur-accordion-header-radius)] border-[length:var(--index-conteneur-accordion-header-stroke-width)] ${border}`;
+    return `block w-full overflow-hidden rounded-[var(--index-conteneur-accordion-header-radius)] border-[length:var(--index-conteneur-accordion-header-stroke-width)] ${border}`;
   });
 
   protected readonly headerClasses = computed(() => {

@@ -31,6 +31,9 @@ const thumbTranslateClasses: Record<SwitchSize, string> = {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  // `id` targets the inner control (the `<label for>` target), like React — a static `id="…"` on
+  // the element would otherwise also land on this host as a duplicate DOM id.
+  host: { '[attr.id]': 'null' },
   template: `
     <label [for]="switchId" [class]="hostClass()">
       <button
@@ -57,8 +60,12 @@ export class SocSwitch {
   readonly size = input<SwitchSize>('sm');
   readonly disabled = input(false);
   readonly label = input<string>();
+  readonly id = input<string>();
 
-  protected readonly switchId = nextUniqueId('soc-switch');
+  private readonly generatedId = nextUniqueId('soc-switch');
+  protected get switchId(): string {
+    return this.id() ?? this.generatedId;
+  }
 
   protected toggle(): void {
     if (this.disabled()) return;
