@@ -39,6 +39,7 @@ export * from './primitifs/tabs/tabs';
 export * from './primitifs/tag/tag';
 export * from './primitifs/tooltip/tooltip';
 export * from './composes/avatar-menu/avatar-menu';
+export * from './composes/card-grid/card-grid';
 export * from './composes/dialog/dialog';
 export * from './composes/drawer/drawer';
 export * from './composes/enterprise-select/enterprise-select';
