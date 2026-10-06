@@ -15,6 +15,7 @@ import { SocSwitch } from '../primitifs/switch/switch';
 import { SocMultiSelect } from '../composes/multi-select/multi-select';
 import { SocSelect } from '../composes/select/select';
 import { SocTableFilterSelect } from '../composes/table-filter-select/table-filter-select';
+import { SocUploadFile } from '../composes/upload-file/upload-file';
 
 const COUNTRIES = [
   { value: 'fr', label: 'France' },
@@ -45,6 +46,7 @@ const SKILLS = [
     SocSelect,
     SocMultiSelect,
     SocTableFilterSelect,
+    SocUploadFile,
   ],
   template: `
     <form [formGroup]="form" (ngSubmit)="submitted.set(true)" class="flex w-[480px] flex-col gap-4" novalidate>
@@ -67,6 +69,7 @@ const SKILLS = [
       <soc-select label="Pays" formControlName="country" placeholder="Choisir un pays" [options]="countries" />
       <soc-multi-select label="Compétences" formControlName="skills" placeholder="Choisir" [options]="skills" />
       <div class="w-[160px]"><soc-table-filter-select label="Filtre" formControlName="filter" [options]="countries" /></div>
+      <soc-upload-file formControlName="cv" helperText="Déposez votre CV" />
       <soc-checkbox label="J'accepte les conditions" formControlName="terms" />
       <soc-switch label="Notifications" formControlName="notifications" />
       <div class="flex gap-4">
@@ -99,6 +102,7 @@ class ReactiveFormDemo {
     country: this.fb.control<string | null>(null),
     skills: this.fb.control<string[]>([]),
     filter: this.fb.control<string | null>(null),
+    cv: this.fb.control<File[] | null>([]),
     terms: [false, Validators.requiredTrue],
     notifications: [true],
     plan: this.fb.control<string | null>('monthly'),
@@ -143,7 +147,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          "Tous les champs de saisie du kit (`soc-input-text`, `soc-input-area`, `soc-input-number`, `soc-password`, `soc-search-bar`, `soc-checkbox`, `soc-switch`, `soc-radio-button`, `soc-select`, `soc-multi-select`, `soc-table-filter-select`) sont des `ControlValueAccessor` : `formControl`, `formControlName` et `ngModel` fonctionnent directement. `[disabled]`/`setDisabledState`, `required` (Validators.required) et l'état *touched* (blur ou fermeture du menu) sont gérés. Les attributs natifs passent par `id`, `name`, `autocomplete`, `readonly`, `maxlength`, `inputClass` et `inputAttrs`. Pour les `radio-button`, donner à chacun sa `value` et le même `formControlName`.",
+          "Tous les champs de saisie du kit (`soc-input-text`, `soc-input-area`, `soc-input-number`, `soc-password`, `soc-search-bar`, `soc-checkbox`, `soc-switch`, `soc-radio-button`, `soc-select`, `soc-multi-select`, `soc-table-filter-select`, `soc-upload-file` — valeur `File[]`) sont des `ControlValueAccessor` : `formControl`, `formControlName` et `ngModel` fonctionnent directement. `[disabled]`/`setDisabledState`, `required` (Validators.required) et l'état *touched* (blur ou fermeture du menu) sont gérés. Les attributs natifs passent par `id`, `name`, `autocomplete`, `readonly`, `maxlength`, `inputClass` et `inputAttrs`. Pour les `radio-button`, donner à chacun sa `value` et le même `formControlName`.",
       },
     },
   },
