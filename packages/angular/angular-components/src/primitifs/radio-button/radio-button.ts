@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, Injector, ViewEncapsulation, afterNextRender, computed, inject, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Injector, ViewEncapsulation, afterNextRender, booleanAttribute, computed, inject, input, model, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { provideFormControl } from '../../internal/form-control';
@@ -27,7 +27,7 @@ import { provideFormControl } from '../../internal/form-control';
         role="radio"
         [name]="name()"
         [attr.aria-checked]="selected()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         (click)="handleClick()"
         (blur)="onTouched()"
         [class]="buttonClass()"
@@ -45,7 +45,9 @@ import { provideFormControl } from '../../internal/form-control';
 export class SocRadioButton implements ControlValueAccessor {
   /** Controlled like React (`selected` + `(select)`), but a `model()` so a form can drive it too. */
   readonly selected = model(false);
-  readonly disabled = model(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  private readonly formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
   readonly label = input<string>();
   readonly name = input<string>();
   readonly id = input<string>();
@@ -74,7 +76,7 @@ export class SocRadioButton implements ControlValueAccessor {
   }
 
   protected handleClick(): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     this.selected.set(true);
     this.select.emit();
     this.onChange(this.value());
@@ -90,14 +92,14 @@ export class SocRadioButton implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this.formDisabled.set(isDisabled);
   }
 
-  protected readonly hostClass = computed(() => `inline-flex items-center gap-2 ${this.disabled() ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`);
+  protected readonly hostClass = computed(() => `inline-flex items-center gap-2 ${this.isDisabled() ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`);
 
   protected readonly buttonClass = computed(() => {
     const base = 'group flex size-[var(--index-contrôleur-radio-size)] shrink-0 items-center justify-center rounded-full border-[length:var(--index-contrôleur-radio-stroke-weight)] transition-colors disabled:cursor-not-allowed';
-    if (this.disabled()) {
+    if (this.isDisabled()) {
       return `${base} ${this.selected() ? 'border-[var(--index-contrôleur-radio-dot-selected-disabled)]' : 'border-[var(--index-contrôleur-radio-dot-disabled)]'}`;
     }
     return `${base} ${
@@ -110,7 +112,7 @@ export class SocRadioButton implements ControlValueAccessor {
   protected readonly dotClass = computed(
     () =>
       `size-[var(--index-contrôleur-radio-dot-size)] rounded-full transition-colors ${
-        this.disabled()
+        this.isDisabled()
           ? 'bg-[var(--index-contrôleur-radio-dot-selected-disabled)]'
           : 'bg-[var(--index-contrôleur-radio-dot-selected)] group-hover:bg-[var(--index-contrôleur-radio-dot-selected-hover)] group-active:bg-[var(--index-contrôleur-radio-dot-selected-pressed)]'
       }`,

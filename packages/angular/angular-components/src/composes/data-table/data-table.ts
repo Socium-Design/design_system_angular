@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Directive, TemplateRef, ViewEncapsulation, computed, contentChild, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, TemplateRef, ViewEncapsulation, booleanAttribute, computed, contentChild, input, output, signal } from '@angular/core';
 import { LucideMoreHorizontal } from '@lucide/angular';
 import { SocCard, SocCardActionSlot, SocCardFooter } from '../../primitifs/card/card';
 import { SocCheckbox } from '../../primitifs/checkbox/checkbox';
@@ -353,16 +353,16 @@ export class SocDataTable<T> {
   readonly rows = input.required<T[]>();
   readonly rowKey = input.required<(row: T) => string>();
 
-  readonly selectable = input(false);
+  readonly selectable = input(false, { transform: booleanAttribute });
   readonly selectedKeys = input<Set<string>>();
   readonly selectedKeysChange = output<Set<string>>();
 
-  readonly searchable = input(false);
+  readonly searchable = input(false, { transform: booleanAttribute });
   readonly search = output<string>();
 
-  readonly rowClickable = input(false);
+  readonly rowClickable = input(false, { transform: booleanAttribute });
   readonly rowClick = output<T>();
-  readonly rowActions = input(false);
+  readonly rowActions = input(false, { transform: booleanAttribute });
   readonly rowAction = output<T>();
   readonly rowActionsMenu = input<TemplateRef<DataTableRowActionsContext<T>>>();
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, computed, contentChild, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, booleanAttribute, computed, contentChild, input } from '@angular/core';
 
 export type ProgressBarStatus = 'information' | 'success' | 'warning' | 'error';
 export type ProgressBarSize = 'tiny' | 'sm' | 'md' | 'lg';
@@ -87,7 +87,7 @@ export class SocProgressBar {
   readonly helpTextLeft = input<string>();
   readonly helpTextRight = input<string>();
   readonly tinyLabel = input<string>();
-  readonly indeterminate = input(false);
+  readonly indeterminate = input(false, { transform: booleanAttribute });
 
   private readonly tagContent = contentChild(SocProgressBarTag);
   protected readonly hasTag = computed(() => !!this.tagContent());

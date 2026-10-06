@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, input, model } from '@angular/core';
 import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../select/select';
 
@@ -33,16 +33,16 @@ import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../sel
       [options]="options()"
       [(value)]="value"
       [defaultValue]="defaultValue()"
-      [disabled]="disabled()"
+      [disabled]="isDisabled()"
       [id]="id()"
     />
   `,
 })
 export class SocTableFilterSelect extends SocFormControl<string | undefined> {
   readonly label = input<string>();
-  readonly required = input(false);
-  readonly error = input(false);
-  readonly warning = input(false);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly error = input(false, { transform: booleanAttribute });
+  readonly warning = input(false, { transform: booleanAttribute });
   readonly helperText = input<string>();
   readonly placeholder = input(SELECT_DEFAULT_PLACEHOLDER);
   readonly options = input.required<SelectOption[]>();

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, computed, contentChild, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, booleanAttribute, computed, contentChild, input } from '@angular/core';
 import { LucideCircleAlert, LucideCircleCheck, LucideCircleX, LucideTriangleAlert } from '@lucide/angular';
 
 export type MessageStatus = 'success' | 'error' | 'warning' | 'info';
@@ -170,7 +170,7 @@ export class SocMessage {
   readonly variant = input<MessageVariant>('banner');
   /** Equivalent of React's explicit `icon={null}` — suppresses the icon entirely, default (false)
    * matches React's default behavior of always showing one. */
-  readonly hideIcon = input(false);
+  readonly hideIcon = input(false, { transform: booleanAttribute });
   readonly title = input<string>();
   readonly primaryAction = input<MessageAction>();
   readonly secondaryAction = input<MessageAction>();

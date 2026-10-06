@@ -60,7 +60,7 @@ export class SocInputTextRightIcon {}
         [attr.maxlength]="maxlength()"
         [readOnly]="readonly()"
         [placeholder]="placeholder() ?? ''"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         [required]="required()"
         [value]="value()"
         (input)="value.set($any($event.target).value)"
@@ -112,7 +112,7 @@ export class SocInputText extends SocTextFieldBase<string> {
 
   protected readonly labelClass = computed(
     () =>
-      `[font-family:var(--index-input-input-text-label-font-family)] [font-weight:var(--index-input-input-text-label-font-weight)] text-[length:var(--index-input-input-text-label-font-size)] ${this.disabled() ? 'text-[var(--index-input-input-text-label-color-disabled)]' : 'text-[var(--index-input-input-text-label-color)]'}`,
+      `[font-family:var(--index-input-input-text-label-font-family)] [font-weight:var(--index-input-input-text-label-font-weight)] text-[length:var(--index-input-input-text-label-font-size)] ${this.isDisabled() ? 'text-[var(--index-input-input-text-label-color-disabled)]' : 'text-[var(--index-input-input-text-label-color)]'}`,
   );
 
   protected readonly fieldClass = computed(

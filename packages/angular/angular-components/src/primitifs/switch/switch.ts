@@ -43,7 +43,7 @@ const thumbTranslateClasses: Record<SwitchSize, string> = {
         type="button"
         role="switch"
         [attr.aria-checked]="checked()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         (click)="toggle()"
         (blur)="onTouched()"
         class="inline-flex shrink-0 items-center justify-center rounded-[var(--index-contrôleur-switch-radius-track)] p-[var(--index-contrôleur-switch-outer-padding)] focus-visible:outline-none focus-visible:ring-[length:var(--index-contrôleur-switch-border-focus-stroke)] focus-visible:ring-[var(--index-contrôleur-switch-border-focus-color)]"
@@ -75,13 +75,13 @@ export class SocSwitch extends SocFormControl<boolean> {
   }
 
   protected toggle(): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     this.checked.set(!this.checked());
   }
 
   protected readonly hostClass = computed(
     () =>
-      `inline-flex items-center gap-2 ${this.disabled() ? `cursor-not-allowed opacity-[var(--index-contrôleur-switch-opacity-disabled)]` : 'cursor-pointer'}`,
+      `inline-flex items-center gap-2 ${this.isDisabled() ? `cursor-not-allowed opacity-[var(--index-contrôleur-switch-opacity-disabled)]` : 'cursor-pointer'}`,
   );
 
   protected readonly trackClass = computed(

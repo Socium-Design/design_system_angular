@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewEncapsulation, effect, inject, input, output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewEncapsulation, booleanAttribute, effect, inject, input, output, viewChild } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { SocButton } from '../../primitifs/button/button';
 
@@ -90,7 +90,7 @@ export interface DialogAction {
   `,
 })
 export class SocDialog {
-  readonly open = input(false);
+  readonly open = input(false, { transform: booleanAttribute });
   readonly title = input.required<string>();
   readonly primaryAction = input<DialogAction>();
   readonly secondaryAction = input<DialogAction>();

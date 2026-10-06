@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, computed, contentChild, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, booleanAttribute, computed, contentChild, input, model, output } from '@angular/core';
 import { SocAppSwitch, SocAppSwitchLogo } from '../../primitifs/app-switch/app-switch';
 import { SocSwitchLogo } from '../../primitifs/app-switch/app-icons';
 import { SocSideNavigation } from '../../primitifs/side-navigation/side-navigation';
@@ -152,8 +152,8 @@ export class SocAppShell {
 
   /** Signed-in user shown in the avatar menu — standard way to get a clickable avatar menu. */
   readonly user = input<AppShellHeaderUser>();
-  readonly showViewProfile = input(false);
-  readonly showEditAvatar = input(false);
+  readonly showViewProfile = input(false, { transform: booleanAttribute });
+  readonly showEditAvatar = input(false, { transform: booleanAttribute });
   readonly viewProfile = output<void>();
   readonly editAvatar = output<void>();
   readonly disconnect = output<void>();

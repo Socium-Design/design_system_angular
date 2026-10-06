@@ -1,17 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  Directive,
-  ElementRef,
-  ViewEncapsulation,
-  effect,
-  inject,
-  input,
-  model,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Directive, ElementRef, ViewEncapsulation, booleanAttribute, effect, inject, input, model, signal, viewChild } from '@angular/core';
 
 export type PopoverPosition = 'top' | 'bottom' | 'left' | 'right' | 'bottom-end';
 
@@ -99,7 +86,7 @@ function computePosition(position: PopoverPosition, triggerRect: DOMRect, panelR
 export class SocPopover {
   readonly position = input<PopoverPosition>('bottom');
   readonly open = model(false);
-  readonly matchTriggerWidth = input(false);
+  readonly matchTriggerWidth = input(false, { transform: booleanAttribute });
   /** React `Popover`'s `className` — extra classes merged onto the portaled panel (e.g.
    * `EnterpriseSelect`'s explicit `w-[400px]`). A literal `class` on `<soc-popover>` can't do this:
    * the panel is portaled out to `document.body`, away from the host element. */

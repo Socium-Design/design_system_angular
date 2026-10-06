@@ -1,4 +1,4 @@
-import { Directive, ModelSignal, Provider, Type, effect, forwardRef, input, model } from '@angular/core';
+import { Directive, ModelSignal, Provider, Type, booleanAttribute, computed, effect, forwardRef, input, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { OutputRefSubscription } from '@angular/core';
 
@@ -39,15 +39,20 @@ export function syncNativeAttributes(element: () => HTMLElement | undefined, att
  * interaction — is forwarded to the form through the model's own change stream. No template needs to
  * call `onChange` by hand; only `onTouched` is wired to blur/close where it makes sense.
  *
- * `disabled` is a `model()` too (not an `input()`): `setDisabledState` can write it while
- * `[disabled]="…"` bindings keep working.
+ * `disabled` is the plain input (`[disabled]="x"` or the bare attribute); `isDisabled()` combines it with
+ * the state the form writes through `setDisabledState` — templates and computed classes read that one.
  */
 @Directive()
 export abstract class SocFormControl<T> implements ControlValueAccessor {
   /** The model carrying this control's value (`value`, `checked`, …). */
   protected abstract readonly valueModel: ModelSignal<T>;
 
-  readonly disabled = model(false);
+  /** `[disabled]` / bare `disabled` attribute. (An `input()` rather than a `model()` so the bare-attribute
+   * form works — models can't take a transform.) Templates read `isDisabled()`, not this. */
+  readonly disabled = input(false, { transform: booleanAttribute });
+  private readonly formDisabled = signal(false);
+  /** The input OR'ed with the state the form writes through `setDisabledState`. */
+  readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
 
   protected onTouched: () => void = () => {};
   private writing = false;
@@ -77,7 +82,7 @@ export abstract class SocFormControl<T> implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this.formDisabled.set(isDisabled);
   }
 }
 
@@ -97,14 +102,14 @@ export abstract class SocFormControl<T> implements ControlValueAccessor {
 @Directive({ host: { '[attr.id]': 'null', '[attr.name]': 'null' } })
 export abstract class SocTextFieldBase<T> extends SocFormControl<T> {
   readonly label = input<string>();
-  readonly required = input(false);
-  readonly error = input(false);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly error = input(false, { transform: booleanAttribute });
   readonly helperText = input<string>();
   readonly placeholder = input<string>();
   readonly id = input<string>();
   readonly name = input<string>();
   readonly autocomplete = input<string>();
-  readonly readonly = input(false);
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly inputClass = input<string>();
   readonly inputAttrs = input<NativeAttributes>();
 

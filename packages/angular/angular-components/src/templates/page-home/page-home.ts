@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, contentChild, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, contentChild, input, output } from '@angular/core';
 import { SocSearchBar } from '../../primitifs/search-bar/search-bar';
 import { SocPageSectionActions } from '../page-slots';
 
@@ -97,7 +97,7 @@ export class SocPageHome {
   /** The banner's headline, e.g. "Bienvenue {name}" — its presence shows/hides the whole banner. */
   readonly welcomeTitle = input<string>();
   readonly welcomeDescription = input<string>();
-  readonly searchable = input(false);
+  readonly searchable = input(false, { transform: booleanAttribute });
   readonly search = output<string>();
   readonly sectionTitle = input<string>();
   readonly sectionSubtitle = input<string>();

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, input, output } from '@angular/core';
 import { LucideLogOut } from '@lucide/angular';
 import { SocAvatar } from '../../primitifs/avatar/avatar';
 import { SocButton } from '../../primitifs/button/button';
@@ -59,8 +59,8 @@ export class SocAvatarMenu {
   readonly userEmail = input.required<string>();
   /** Initials shown in the profile circle — 2 characters max, forwarded to `Avatar`. */
   readonly avatarLabel = input.required<string>();
-  readonly showViewProfile = input(false);
-  readonly showEditAvatar = input(false);
+  readonly showViewProfile = input(false, { transform: booleanAttribute });
+  readonly showEditAvatar = input(false, { transform: booleanAttribute });
 
   readonly viewProfile = output<void>();
   readonly editAvatar = output<void>();

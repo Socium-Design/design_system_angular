@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, output } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 
 export type TagColor = 'success' | 'warning' | 'error' | 'information' | 'purple' | 'orange';
@@ -54,7 +54,7 @@ const sizeClasses: Record<TagSize, string> = {
 export class SocTag {
   readonly color = input<TagColor>('success');
   readonly size = input<TagSize>('sm');
-  readonly removable = input(false);
+  readonly removable = input(false, { transform: booleanAttribute });
   readonly remove = output<void>();
 
   protected readonly hostClasses = computed(

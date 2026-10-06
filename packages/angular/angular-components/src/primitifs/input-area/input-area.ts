@@ -37,7 +37,7 @@ import { nextUniqueId } from '../../internal/unique-id';
         [attr.autocomplete]="autocomplete()"
         [attr.maxlength]="maxlength()"
         [readOnly]="readonly()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         [required]="required()"
         [value]="value()"
         (input)="value.set($any($event.target).value)"
@@ -90,12 +90,12 @@ export class SocInputArea extends SocTextFieldBase<string> {
 
   protected readonly labelClass = computed(
     () =>
-      `[font-family:var(--index-input-input-area-label-font-family)] [font-weight:var(--index-input-input-area-label-font-weight)] text-[length:var(--index-input-input-area-label-font-size)] ${this.disabled() ? 'text-[var(--index-input-input-area-label-color-disabled)]' : 'text-[var(--index-input-input-area-label-color)]'}`,
+      `[font-family:var(--index-input-input-area-label-font-family)] [font-weight:var(--index-input-input-area-label-font-weight)] text-[length:var(--index-input-input-area-label-font-size)] ${this.isDisabled() ? 'text-[var(--index-input-input-area-label-color-disabled)]' : 'text-[var(--index-input-input-area-label-color)]'}`,
   );
 
   protected readonly fieldClass = computed(
     () =>
-      `flex w-full rounded-[var(--index-input-input-area-field-radius)] border-[length:var(--index-input-input-area-field-stroke-width)] bg-[var(--index-input-input-area-field-bg)] px-[var(--index-input-input-area-field-pad-h)] py-[var(--index-input-input-area-field-pad-v)] ${this.disabled() ? 'opacity-[var(--index-input-input-area-disabled-opacity)]' : ''} ${
+      `flex w-full rounded-[var(--index-input-input-area-field-radius)] border-[length:var(--index-input-input-area-field-stroke-width)] bg-[var(--index-input-input-area-field-bg)] px-[var(--index-input-input-area-field-pad-h)] py-[var(--index-input-input-area-field-pad-v)] ${this.isDisabled() ? 'opacity-[var(--index-input-input-area-disabled-opacity)]' : ''} ${
         this.error()
           ? 'border-[var(--index-input-input-area-field-stroke-error)]'
           : 'border-[var(--index-input-input-area-field-stroke)] hover:border-[var(--index-input-input-area-field-stroke-pressed)] has-[:focus]:border-[var(--index-input-input-area-field-stroke-focus)]'

@@ -32,7 +32,7 @@ import { SocFormControl, provideFormControl } from '../../internal/form-control'
       #inputEl
       type="text"
       [placeholder]="placeholder()"
-      [disabled]="disabled()"
+      [disabled]="isDisabled()"
       [value]="value()"
       (input)="value.set($any($event.target).value)"
       (blur)="onTouched()"

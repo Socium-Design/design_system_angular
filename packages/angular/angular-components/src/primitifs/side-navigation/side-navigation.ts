@@ -1,5 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, output, signal } from '@angular/core';
 import { LucideChevronDown, LucidePanelLeftClose, LucidePanelLeftOpen } from '@lucide/angular';
 import {
   NAVIGATION_PRESETS,
@@ -57,7 +57,7 @@ import {
 export class SocSideNavSection {
   readonly section = input.required<SideNavSectionData>();
   readonly selectedId = input<string>();
-  readonly collapsed = input(false);
+  readonly collapsed = input(false, { transform: booleanAttribute });
   readonly itemSelect = output<string>();
 
   protected readonly open = signal(true);
@@ -166,7 +166,7 @@ export class SocSideNavigation {
   readonly sections = input<SideNavSectionData[]>();
   readonly actionSection = input<{ title: string; items: SideNavActionData[] }>();
   readonly selectedId = input<string>();
-  readonly collapsed = input(false);
+  readonly collapsed = input(false, { transform: booleanAttribute });
 
   readonly select = output<string>();
   readonly toggleCollapse = output<void>();

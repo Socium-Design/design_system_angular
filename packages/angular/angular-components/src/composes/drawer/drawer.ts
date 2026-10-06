@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewEncapsulation, computed, effect, inject, input, output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewEncapsulation, booleanAttribute, computed, effect, inject, input, output, viewChild } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { SocButton } from '../../primitifs/button/button';
 
@@ -84,7 +84,7 @@ const ANCHOR_CLASSES: Record<DrawerAnchor, string> = {
   `,
 })
 export class SocDrawer {
-  readonly open = input(false);
+  readonly open = input(false, { transform: booleanAttribute });
   readonly title = input.required<string>();
   readonly topline = input<string>();
   readonly subtitle = input<string>();

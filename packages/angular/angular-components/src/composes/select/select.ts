@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, model, signal } from '@angular/core';
 import { LucideCheck, LucideChevronDown, LucideInfo } from '@lucide/angular';
 import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
@@ -49,7 +49,7 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
       </label>
     }
     <soc-popover [matchTriggerWidth]="true" [open]="isOpen()" (openChange)="onOpenChange($event)">
-      <button socPopoverTrigger type="button" [id]="selectId" [disabled]="disabled()" [class]="fieldClass()">
+      <button socPopoverTrigger type="button" [id]="selectId" [disabled]="isDisabled()" [class]="fieldClass()">
         @if (mode() === 'labelHeader') {
           <span class="flex min-w-0 flex-1 flex-col items-start">
             @if (label()) {
@@ -69,7 +69,7 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
             {{ selectedOption()?.label ?? placeholder() }}
           </span>
         }
-        <span [class]="'size-[var(--index-selection-select-icon-field-size)] shrink-0 ' + (disabled() ? 'text-[var(--index-selection-select-icon-chevron-disabled)]' : 'text-[var(--index-selection-select-icon-chevron)]')">
+        <span [class]="'size-[var(--index-selection-select-icon-field-size)] shrink-0 ' + (isDisabled() ? 'text-[var(--index-selection-select-icon-chevron-disabled)]' : 'text-[var(--index-selection-select-icon-chevron)]')">
           <svg lucideChevronDown class="size-full" [strokeWidth]="iconThickness"></svg>
         </span>
       </button>
@@ -100,9 +100,9 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
 export class SocSelect extends SocFormControl<string | undefined> {
   readonly label = input<string>();
   readonly mode = input<SelectMode>('formulaire');
-  readonly required = input(false);
-  readonly error = input(false);
-  readonly warning = input(false);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly error = input(false, { transform: booleanAttribute });
+  readonly warning = input(false, { transform: booleanAttribute });
   readonly helperText = input<string>();
   readonly placeholder = input(SELECT_DEFAULT_PLACEHOLDER);
   readonly options = input.required<SelectOption[]>();
@@ -124,7 +124,7 @@ export class SocSelect extends SocFormControl<string | undefined> {
   }
 
   protected readonly open = signal(false);
-  protected readonly isOpen = computed(() => this.open() && !this.disabled());
+  protected readonly isOpen = computed(() => this.open() && !this.isDisabled());
 
   protected readonly currentValue = computed(() => this.value() ?? this.defaultValue());
   protected readonly selectedOption = computed(() => this.options().find((option) => option.value === this.currentValue()));
@@ -145,7 +145,7 @@ export class SocSelect extends SocFormControl<string | undefined> {
   protected readonly labelClass = computed(
     () =>
       `[font-family:var(--index-selection-select-label-font)] [font-weight:var(--index-selection-select-label-weight)] text-[length:var(--index-selection-select-label-size)] ${
-        this.disabled() ? 'text-[var(--index-selection-select-label-disabled)]' : 'text-[var(--index-selection-select-label-color)]'
+        this.isDisabled() ? 'text-[var(--index-selection-select-label-disabled)]' : 'text-[var(--index-selection-select-label-color)]'
       }`,
   );
 
@@ -170,7 +170,7 @@ export class SocSelect extends SocFormControl<string | undefined> {
     if (this.selectedOption()) {
       return labelHeader ? 'text-[var(--index-selection-select-label-color)]' : 'text-[var(--index-selection-select-value-color)]';
     }
-    return this.disabled() ? 'text-[var(--index-selection-select-placeholder-color-disabled)]' : 'text-[var(--index-selection-select-placeholder-color)]';
+    return this.isDisabled() ? 'text-[var(--index-selection-select-placeholder-color-disabled)]' : 'text-[var(--index-selection-select-placeholder-color)]';
   }
 
   protected readonly helperIconColorClass = computed(() =>

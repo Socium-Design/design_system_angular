@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, contentChild, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, contentChild, input, output } from '@angular/core';
 import { LucideChevronDown } from '@lucide/angular';
 import {
   SocButtonLeftIcon,
@@ -94,7 +94,7 @@ const chevronColorVar: Record<ButtonVariant, string> = {
 export class SocSplitButton {
   readonly variant = input<ButtonVariant>('primary');
   readonly size = input<ButtonSize>('sm');
-  readonly disabled = input<boolean>(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly triggerLabel = input<string>("Plus d'options");
 
   readonly click = output<MouseEvent>();

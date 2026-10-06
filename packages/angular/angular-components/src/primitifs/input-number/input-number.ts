@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, computed, input, model, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, booleanAttribute, computed, input, model, viewChild } from '@angular/core';
 import { LucideInfo, LucideMinus, LucidePlus } from '@lucide/angular';
 import { SocTextFieldBase, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
@@ -40,7 +40,7 @@ import { nextUniqueId } from '../../internal/unique-id';
         [readOnly]="readonly()"
         [placeholder]="placeholder() ?? ''"
         [required]="required()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         [attr.min]="min()"
         [attr.max]="max()"
         [step]="step()"
@@ -54,7 +54,7 @@ import { nextUniqueId } from '../../internal/unique-id';
         <span class="h-6 w-px shrink-0 bg-[var(--index-input-input-number-stepper-border)]"></span>
         <button
           type="button"
-          [disabled]="disabled() || readonly() || atMin()"
+          [disabled]="isDisabled() || readonly() || atMin()"
           (click)="commit((value() ?? 0) - step())"
           aria-label="Diminuer"
           class="flex h-full w-9 shrink-0 items-center justify-center text-[var(--index-input-input-number-stepper-icon)] disabled:cursor-not-allowed disabled:text-[var(--index-input-input-number-stepper-icon-disabled)]"
@@ -66,7 +66,7 @@ import { nextUniqueId } from '../../internal/unique-id';
         <span class="h-6 w-px shrink-0 bg-[var(--index-input-input-number-stepper-border)]"></span>
         <button
           type="button"
-          [disabled]="disabled() || readonly() || atMax()"
+          [disabled]="isDisabled() || readonly() || atMax()"
           (click)="commit((value() ?? 0) + step())"
           aria-label="Augmenter"
           class="flex h-full w-9 shrink-0 items-center justify-center text-[var(--index-input-input-number-stepper-icon)] disabled:cursor-not-allowed disabled:text-[var(--index-input-input-number-stepper-icon-disabled)]"
@@ -88,7 +88,7 @@ import { nextUniqueId } from '../../internal/unique-id';
   `,
 })
 export class SocInputNumber extends SocTextFieldBase<number | null> {
-  readonly showSteppers = input(true);
+  readonly showSteppers = input(true, { transform: booleanAttribute });
   readonly min = input<number>();
   readonly max = input<number>();
   readonly step = input(1);
@@ -127,12 +127,12 @@ export class SocInputNumber extends SocTextFieldBase<number | null> {
 
   protected readonly labelClass = computed(
     () =>
-      `[font-family:var(--index-input-input-number-label-font-family)] [font-weight:var(--index-input-input-number-label-font-weight)] text-[length:var(--index-input-input-number-label-font-size)] ${this.disabled() ? 'text-[var(--index-input-input-number-label-color-disabled)]' : 'text-[var(--index-input-input-number-label-color)]'}`,
+      `[font-family:var(--index-input-input-number-label-font-family)] [font-weight:var(--index-input-input-number-label-font-weight)] text-[length:var(--index-input-input-number-label-font-size)] ${this.isDisabled() ? 'text-[var(--index-input-input-number-label-color-disabled)]' : 'text-[var(--index-input-input-number-label-color)]'}`,
   );
 
   protected readonly fieldClass = computed(
     () =>
-      `flex w-full items-center overflow-hidden rounded-[var(--index-input-input-number-field-radius)] border-[length:var(--index-input-input-number-field-stroke-width)] bg-[var(--index-input-input-number-field-bg)] ${this.disabled() ? 'opacity-[var(--index-input-input-number-disabled-opacity)]' : ''} ${
+      `flex w-full items-center overflow-hidden rounded-[var(--index-input-input-number-field-radius)] border-[length:var(--index-input-input-number-field-stroke-width)] bg-[var(--index-input-input-number-field-bg)] ${this.isDisabled() ? 'opacity-[var(--index-input-input-number-disabled-opacity)]' : ''} ${
         this.error()
           ? 'border-[var(--index-input-input-number-field-stroke-error)]'
           : 'border-[var(--index-input-input-number-field-stroke)] hover:border-[var(--index-input-input-number-field-stroke-pressed)] has-[:focus]:border-[var(--index-input-input-number-field-stroke-focus)]'

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, input } from '@angular/core';
 
 /**
  * Real vector glyphs exported from the Figma "AppIcon" component (Index/Navigation/AppIcon), one
@@ -104,7 +104,7 @@ const SELECTED_ACCENT_CLASS = 'fill-[var(--index-navigation-appicon-icon-accent)
 })
 export class SocAppIconGlyph {
   readonly name = input.required<AppIconName>();
-  readonly selected = input(false);
+  readonly selected = input(false, { transform: booleanAttribute });
 
   protected shapeClass(accent: boolean): string {
     if (!this.selected()) return DEFAULT_HOVER_CLASS;

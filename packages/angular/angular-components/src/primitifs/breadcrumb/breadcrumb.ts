@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, output } from '@angular/core';
 import { LucideChevronRight, LucideHouse, LucideMoreHorizontal } from '@lucide/angular';
 
 export interface BreadcrumbItemData {
@@ -80,7 +80,7 @@ export interface BreadcrumbItemData {
 })
 export class SocBreadcrumb {
   readonly items = input.required<BreadcrumbItemData[]>();
-  readonly truncated = input(false);
+  readonly truncated = input(false, { transform: booleanAttribute });
   readonly homeClick = output<void>();
 
   protected readonly iconThickness = 'var(--index-navigation-breadcrumb-icon-thickness)';

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, output } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 
 export type ChipsSize = 'sm' | 'lg';
@@ -43,7 +43,7 @@ const paddingClasses = 'py-[var(--index-selection-chips-pad-v)] pl-[var(--index-
 export class SocChips {
   readonly label = input.required<string>();
   readonly size = input<ChipsSize>('sm');
-  readonly removable = input(false);
+  readonly removable = input(false, { transform: booleanAttribute });
   readonly remove = output<void>();
 
   protected readonly closeIconThickness = 'var(--index-selection-chips-close-icon-thickness)';
@@ -80,7 +80,7 @@ export class SocChips {
 export class SocSelectableChips {
   readonly label = input.required<string>();
   readonly size = input<ChipsSize>('sm');
-  readonly selected = input(false);
+  readonly selected = input(false, { transform: booleanAttribute });
   readonly click = output<void>();
 
   protected readonly hostClasses = computed(
@@ -116,7 +116,7 @@ export class SocSelectableChips {
 })
 export class SocInputChip {
   readonly label = input.required<string>();
-  readonly removable = input(false);
+  readonly removable = input(false, { transform: booleanAttribute });
   readonly remove = output<void>();
 
   protected readonly closeIconThickness = 'var(--index-selection-chips-close-icon-input-thickness)';

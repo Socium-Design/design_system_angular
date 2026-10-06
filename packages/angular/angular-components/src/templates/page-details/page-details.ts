@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, contentChild, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, contentChild, input, output } from '@angular/core';
 import { LucideArrowLeft } from '@lucide/angular';
 import { SocButton, SocButtonLeftIcon } from '../../primitifs/button/button';
 import { SocPageActions, SocPageTabs } from '../page-slots';
@@ -94,7 +94,7 @@ import { SocPageActions, SocPageTabs } from '../page-slots';
   `,
 })
 export class SocPageDetails {
-  readonly showBack = input(false);
+  readonly showBack = input(false, { transform: booleanAttribute });
   readonly backLabel = input('Retour');
   /** Small label above the title. */
   readonly topStatusLabel = input<string>();

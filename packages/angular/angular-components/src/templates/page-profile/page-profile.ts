@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, contentChild, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, contentChild, input, output } from '@angular/core';
 import { LucideArrowLeft } from '@lucide/angular';
 import { SocButton, SocButtonLeftIcon } from '../../primitifs/button/button';
 import { SocPageMessage, SocPageTabs } from '../page-slots';
@@ -78,7 +78,7 @@ import { SocPageMessage, SocPageTabs } from '../page-slots';
   `,
 })
 export class SocPageProfile {
-  readonly showBack = input(false);
+  readonly showBack = input(false, { transform: booleanAttribute });
   readonly backLabel = input('Retour');
   readonly statusLabel = input<string>();
   readonly back = output<void>();

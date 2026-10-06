@@ -1,17 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  Directive,
-  ElementRef,
-  ViewEncapsulation,
-  computed,
-  effect,
-  inject,
-  input,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Directive, ElementRef, ViewEncapsulation, booleanAttribute, computed, effect, inject, input, signal, viewChild } from '@angular/core';
 import { LucideCircleAlert, LucideCircleCheck, LucideCircleX, LucideTriangleAlert } from '@lucide/angular';
 import { nextUniqueId } from '../../internal/unique-id';
 
@@ -184,7 +171,7 @@ export class SocTooltip {
   readonly variant = input<TooltipVariant>('default');
   readonly title = input<string>();
   readonly status = input<TooltipMessageStatus>('info');
-  readonly showIcon = input(true);
+  readonly showIcon = input(true, { transform: booleanAttribute });
 
   protected readonly arrowPositionClasses = arrowPositionClasses;
   protected readonly tooltipId = nextUniqueId('soc-tooltip');

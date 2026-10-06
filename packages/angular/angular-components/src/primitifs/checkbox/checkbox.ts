@@ -34,13 +34,13 @@ import { nextUniqueId } from '../../internal/unique-id';
         type="button"
         role="checkbox"
         [attr.aria-checked]="checked()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         (click)="toggle()"
         (blur)="onTouched()"
         [class]="buttonClass()"
       >
         @if (checked()) {
-          <svg lucideCheck [class]="disabled() ? 'text-[var(--index-contrôleur-checkbox-check-disabled)]' : 'text-[var(--index-contrôleur-checkbox-check-color)]'" [style.width.px]="14" [style.height.px]="14" [strokeWidth]="2.5"></svg>
+          <svg lucideCheck [class]="isDisabled() ? 'text-[var(--index-contrôleur-checkbox-check-disabled)]' : 'text-[var(--index-contrôleur-checkbox-check-color)]'" [style.width.px]="14" [style.height.px]="14" [strokeWidth]="2.5"></svg>
         }
       </button>
       @if (label()) {
@@ -65,18 +65,18 @@ export class SocCheckbox extends SocFormControl<boolean> {
   }
 
   protected toggle(): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     this.checked.set(!this.checked());
   }
 
   // Applied to both the host and the inner <label> — this component's host IS effectively the
   // label wrapper (no separate outer element), matching React's own root-is-the-label structure.
-  protected readonly hostClass = computed(() => `inline-flex items-center gap-2 ${this.disabled() ? 'cursor-not-allowed' : 'cursor-pointer'}`);
+  protected readonly hostClass = computed(() => `inline-flex items-center gap-2 ${this.isDisabled() ? 'cursor-not-allowed' : 'cursor-pointer'}`);
 
   protected readonly buttonClass = computed(() => {
     const base =
       'group flex shrink-0 items-center justify-center rounded-[var(--index-contrôleur-checkbox-radius)] border-[length:var(--index-contrôleur-checkbox-stroke-weight)] size-[var(--index-contrôleur-checkbox-size)] transition-colors disabled:cursor-not-allowed';
-    if (this.disabled()) {
+    if (this.isDisabled()) {
       return `${base} ${
         this.checked()
           ? 'border-[var(--index-contrôleur-checkbox-bg-checked-disabled)] bg-[var(--index-contrôleur-checkbox-bg-checked-disabled)]'

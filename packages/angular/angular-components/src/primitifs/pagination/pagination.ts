@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, output } from '@angular/core';
 import { LucideChevronLeft, LucideChevronRight, LucideChevronsLeft, LucideChevronsRight } from '@lucide/angular';
 
 export type PaginationVariant = 'numbered' | 'dots';
@@ -119,7 +119,7 @@ export class SocPagination {
   readonly currentPage = input.required<number>();
   readonly totalPages = input.required<number>();
   readonly variant = input<PaginationVariant>('numbered');
-  readonly hasFirstLast = input(true);
+  readonly hasFirstLast = input(true, { transform: booleanAttribute });
   readonly totalEntries = input<number>();
   readonly pageSize = input<number>();
   readonly pageSizeOptions = input<number[]>([10, 20, 50, 100]);

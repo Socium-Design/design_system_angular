@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, booleanAttribute, computed, input, model } from '@angular/core';
 import { LucideChevronDown, LucideInfo } from '@lucide/angular';
 import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
@@ -43,7 +43,7 @@ export interface MultiSelectOption {
       </label>
     }
     <soc-popover [matchTriggerWidth]="true" (openChange)="onOpenChange($event)">
-      <button socPopoverTrigger type="button" [id]="fieldId" [disabled]="disabled()" [class]="fieldClass()">
+      <button socPopoverTrigger type="button" [id]="fieldId" [disabled]="isDisabled()" [class]="fieldClass()">
         @if (value().length === 0) {
           <span class="text-[length:var(--index-selection-select-value-size)] text-[var(--index-selection-select-placeholder-color)]">
             {{ placeholder() }}
@@ -76,9 +76,9 @@ export interface MultiSelectOption {
 })
 export class SocMultiSelect extends SocFormControl<string[]> {
   readonly label = input<string>();
-  readonly required = input(false);
-  readonly error = input(false);
-  readonly warning = input(false);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly error = input(false, { transform: booleanAttribute });
+  readonly warning = input(false, { transform: booleanAttribute });
   readonly helperText = input<string>();
   readonly placeholder = input('Select options');
   readonly options = input.required<MultiSelectOption[]>();
@@ -112,7 +112,7 @@ export class SocMultiSelect extends SocFormControl<string[]> {
   protected readonly labelClass = computed(
     () =>
       `[font-family:var(--index-selection-select-label-font)] [font-weight:var(--index-selection-select-label-weight)] text-[length:var(--index-selection-select-label-size)] ${
-        this.disabled() ? 'text-[var(--index-selection-select-label-disabled)]' : 'text-[var(--index-selection-select-label-color)]'
+        this.isDisabled() ? 'text-[var(--index-selection-select-label-disabled)]' : 'text-[var(--index-selection-select-label-color)]'
       }`,
   );
 

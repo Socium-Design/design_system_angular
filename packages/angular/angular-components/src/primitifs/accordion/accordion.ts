@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, computed, contentChild, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, booleanAttribute, computed, contentChild, input, model } from '@angular/core';
 import { LucideChevronDown } from '@lucide/angular';
 
 /** React `Accordion`'s `rightSlot?: ReactNode` — extra content next to the label (info text, a
@@ -43,8 +43,8 @@ export class SocAccordionRightSlot {}
 })
 export class SocAccordion {
   readonly label = input.required<string>();
-  readonly error = input(false);
-  readonly warning = input(false);
+  readonly error = input(false, { transform: booleanAttribute });
+  readonly warning = input(false, { transform: booleanAttribute });
   readonly open = model(false);
 
   protected readonly iconThickness = 'var(--index-conteneur-accordion-icon-thickness)';

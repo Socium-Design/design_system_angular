@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, computed, contentChild, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, booleanAttribute, computed, contentChild, input, output } from '@angular/core';
 import type { NavigationProduct } from '../side-navigation/navigation-presets';
 import { SocAppIconGlyph, type AppIconName } from './app-icons';
 import { APP_SWITCH_ITEMS, type AppSwitchItemData } from './app-switch-presets';
@@ -32,7 +32,7 @@ export class SocAppSwitchLogo {}
 export class SocAppIcon {
   readonly name = input.required<AppIconName>();
   readonly label = input.required<string>();
-  readonly selected = input(false);
+  readonly selected = input(false, { transform: booleanAttribute });
 
   protected readonly hostClasses = computed(
     () =>

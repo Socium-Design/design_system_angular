@@ -40,7 +40,7 @@ import { nextUniqueId } from '../../internal/unique-id';
         [readOnly]="readonly()"
         [placeholder]="placeholder() ?? ''"
         [required]="required()"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         [value]="value()"
         (input)="value.set($any($event.target).value)"
         (blur)="onTouched()"
@@ -49,7 +49,7 @@ import { nextUniqueId } from '../../internal/unique-id';
       />
       <button
         type="button"
-        [disabled]="disabled()"
+        [disabled]="isDisabled()"
         (click)="visible.set(!visible())"
         [attr.aria-label]="visible() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
         class="size-[var(--index-input-input-password-icon-field-size)] shrink-0 text-[var(--index-input-input-password-toggle-icon)] disabled:cursor-not-allowed disabled:text-[var(--index-input-input-password-toggle-icon-disabled)]"
@@ -92,12 +92,12 @@ export class SocPassword extends SocTextFieldBase<string> {
 
   protected readonly labelClass = computed(
     () =>
-      `[font-family:var(--index-input-input-password-label-font-family)] [font-weight:var(--index-input-input-password-label-font-weight)] text-[length:var(--index-input-input-password-label-font-size)] ${this.disabled() ? 'text-[var(--index-input-input-password-label-color-disabled)]' : 'text-[var(--index-input-input-password-label-color)]'}`,
+      `[font-family:var(--index-input-input-password-label-font-family)] [font-weight:var(--index-input-input-password-label-font-weight)] text-[length:var(--index-input-input-password-label-font-size)] ${this.isDisabled() ? 'text-[var(--index-input-input-password-label-color-disabled)]' : 'text-[var(--index-input-input-password-label-color)]'}`,
   );
 
   protected readonly fieldClass = computed(
     () =>
-      `flex w-full items-center gap-2 rounded-[var(--index-input-input-password-field-radius)] border-[length:var(--index-input-input-password-field-stroke-width)] bg-[var(--index-input-input-password-field-bg)] ${this.disabled() ? 'opacity-[var(--index-input-input-password-disabled-opacity)]' : ''} ${
+      `flex w-full items-center gap-2 rounded-[var(--index-input-input-password-field-radius)] border-[length:var(--index-input-input-password-field-stroke-width)] bg-[var(--index-input-input-password-field-bg)] ${this.isDisabled() ? 'opacity-[var(--index-input-input-password-disabled-opacity)]' : ''} ${
         this.error()
           ? 'border-[var(--index-input-input-password-field-stroke-error)]'
           : 'border-[var(--index-input-input-password-field-stroke)] hover:border-[var(--index-input-input-password-field-stroke-pressed)] has-[:focus]:border-[var(--index-input-input-password-field-stroke-focus)]'
