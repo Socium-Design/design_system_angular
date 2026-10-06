@@ -141,6 +141,28 @@ from the React repo when tokens change there, until this repo has its own sync s
   (Angular only calls `writeValue` on the clicked radio).
 - `@angular/forms` is a peer dependency of the library.
 
+### Tests (`npm test`, from `packages/angular/`)
+
+Karma + Jasmine in headless Chrome (`karma.conf.js`, `*.spec.ts` next to the code, shared helpers in
+`src/testing/helpers.ts` — not exported). Specs cover behaviour, not pixels: form-control integration,
+overlay portals and cleanup (a leaked panel in `<body>` fails *other* specs), `CardGrid` clamping,
+`DataTable` modes, native attribute passthrough, slot-projection regressions, templates' optional slots.
+Rules of thumb learned writing them:
+- Portaled panels (`Popover`, `Dialog`, `Drawer`, `Tooltip`) live in `document.body`, not in the fixture:
+  query them with `q(document.body, …)` / `visiblePanels()`.
+- A two-way-bound `model()` needs a `fixture.detectChanges()` between the child changing it and the
+  parent setting it back to the same value, or Angular sees no change to push.
+- Several optional slots in one `@if` block don't project (see below) — one `@if` per projected element.
+- Fix a bug, then add the spec that would have caught it (the suite was mutation-checked: removing
+  `block` from Accordion, the SideNavigation icon inputs, the Popover cleanup, or a CardGrid tier fails it).
+
+### Boolean inputs
+
+Every boolean `input()` takes `{ transform: booleanAttribute }` so `<soc-input-text required disabled>`
+works like a native element (a bare attribute is `''`, which is falsy). `model()` can't take a transform:
+`checked`/`open`/`selected`/`navCollapsed` must be bound (`[checked]="true"`), and `disabled` on form
+controls is therefore an `input()` + the form's own state (`SocFormControl.disabled` is a `computed`).
+
 ### Page templates (`src/templates/`)
 
 - Content slots: one shared set of marker directives in `templates/page-slots.ts` (`socPageBreadcrumb`,

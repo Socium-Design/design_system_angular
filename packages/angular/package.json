@@ -2,13 +2,13 @@
   "name": "socium-ds-angular-workspace",
   "version": "0.0.0",
   "private": true,
-  "description": "Angular CLI workspace tooling — not published. The actual library is angular-components/package.json (@socium-ds/angular-components).",
+  "description": "Angular CLI workspace tooling \u2014 not published. The actual library is angular-components/package.json (@socium-ds/angular-components).",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build angular-components && node scripts/build-styles.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test angular-components --watch=false",
     "storybook": "NODE_OPTIONS=--max-old-space-size=6144 ng run angular-components:storybook",
     "build-storybook": "NODE_OPTIONS=--max-old-space-size=6144 ng run angular-components:build-storybook"
   },

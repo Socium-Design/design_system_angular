@@ -57,6 +57,7 @@ Depuis `packages/angular/` :
 
 ```bash
 npm install
+npm test                            # tests unitaires (Karma + Jasmine, Chrome headless)
 npm run build                       # librairie (ng-packagr) + dist/angular-components/styles.css
 npx ng run angular-components:storybook   # Storybook, http://localhost:6006
 ```
