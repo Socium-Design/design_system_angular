@@ -38,5 +38,6 @@ export * from './primitifs/switch/switch';
 export * from './primitifs/tabs/tabs';
 export * from './primitifs/tag/tag';
 export * from './primitifs/tooltip/tooltip';
+export * from './composes/menu/menu';
 // export * from './composes/select/select';
 // export * from './templates/page-home/page-home';
