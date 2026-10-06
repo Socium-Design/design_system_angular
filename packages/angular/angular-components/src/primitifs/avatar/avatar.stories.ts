@@ -13,8 +13,14 @@ const meta: Meta<SocAvatar> = {
     mode: { control: 'select', options: ['soft', 'solid'] },
     namePosition: { control: 'select', options: ['left', 'right'] },
   },
+  // Every input bound by the stories' templates needs a default here: an arg left `undefined` is
+  // passed through as `[color]="undefined"` and overrides the component's own default.
   args: {
     label: 'DM',
+    color: 'blue',
+    size: 'md',
+    mode: 'soft',
+    namePosition: 'right',
   },
   render: (args) => ({
     props: args,
