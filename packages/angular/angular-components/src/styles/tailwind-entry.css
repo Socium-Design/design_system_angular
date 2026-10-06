@@ -62,6 +62,15 @@ body {
   }
 }
 
+/* Copied from design_system (React)'s src/index.css — Lucide icons keep a fixed 24x24 viewBox, so
+ * when rendered smaller (our tokens size most icons well under 24px) stroke-width scales down with
+ * them: a token value of e.g. 1.5px ends up thinner on screen than 1.5px. Keeps the stroke in real
+ * screen pixels regardless of the icon's rendered size. @lucide/angular's <svg> carries the same
+ * `lucide` class lucide-react's does, so the selector applies unchanged. */
+.lucide * {
+  vector-effect: non-scaling-stroke;
+}
+
 /* Copied from design_system (React)'s src/index.css — used by SideNavigation's own scroll
  * region (still scrollable via wheel/trackpad/keyboard, just visually hidden), same as there. */
 .scrollbar-hide {
