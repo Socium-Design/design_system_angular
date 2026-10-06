@@ -53,7 +53,6 @@ import { SocMenu, SocMenuItem, SocMenuItemIcon } from '../menu/menu';
       </button>
     </soc-menu>
   `,
-  styleUrl: './avatar-menu.css',
 })
 export class SocAvatarMenu {
   readonly userName = input.required<string>();

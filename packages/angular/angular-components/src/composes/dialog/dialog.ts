@@ -88,7 +88,6 @@ export interface DialogAction {
       </div>
     }
   `,
-  styleUrl: './dialog.css',
 })
 export class SocDialog {
   readonly open = input(false);

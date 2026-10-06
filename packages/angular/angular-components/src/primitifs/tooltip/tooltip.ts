@@ -178,7 +178,6 @@ const messageArrowColorVar: Record<TooltipMessageStatus, string> = {
       <span class="absolute size-0" [class]="arrowPositionClasses[resolvedPosition()]" [style]="arrowStyle()"></span>
     </span>
   `,
-  styleUrl: './tooltip.css',
 })
 export class SocTooltip {
   readonly position = input<TooltipPosition>('top');

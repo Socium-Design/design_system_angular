@@ -94,7 +94,6 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
       </div>
     }
   `,
-  styleUrl: './select.css',
 })
 export class SocSelect {
   readonly label = input<string>();

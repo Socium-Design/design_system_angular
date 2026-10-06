@@ -59,7 +59,6 @@ import { nextUniqueId } from '../../internal/unique-id';
       </div>
     }
   `,
-  styleUrl: './password.css',
 })
 export class SocPassword {
   readonly label = input<string>();

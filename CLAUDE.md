@@ -99,13 +99,18 @@ Every `@Component` in this library sets it:
 })
 ```
 
-### Each component's own CSS file just imports the shared Tailwind entry point
+### Components have NO `styleUrl` — one compiled `styles.css` is shipped instead
 
-`src/primitifs/button/button.css` (and equally for every future component) is just:
+Components carry no stylesheet of their own: their Tailwind classes are resolved by a single
+global stylesheet. (Originally each component had a `<name>.css` that `@import`-ed the shared Tailwind
+entry — every component then embedded a full copy of Tailwind, tokens and fonts: the published
+package was ~35MB. Don't reintroduce a per-component `styleUrl`.)
 
-```css
-@import '../../styles/tailwind-entry.css';
-```
+- Storybook loads `src/styles/tailwind-entry.css` through the `styles` option of `angular.json`.
+- The library build is `npm run build` (`ng build angular-components` + `scripts/build-styles.mjs`),
+  which compiles that same entry into `dist/angular-components/styles.css` (exposed as
+  `@socium-ds/angular-components/styles.css`). Consumers add it once to their app's `styles`.
+  Running `ng build` alone doesn't produce it.
 
 `src/styles/tailwind-entry.css` does `@import "tailwindcss";`, explicit `@source` directives (see
 below for why explicit), then `@import "./tokens.generated.css";` — a copy of `design_system`

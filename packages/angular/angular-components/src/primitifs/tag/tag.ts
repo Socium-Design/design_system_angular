@@ -50,7 +50,6 @@ const sizeClasses: Record<TagSize, string> = {
       </button>
     }
   `,
-  styleUrl: './tag.css',
 })
 export class SocTag {
   readonly color = input<TagColor>('success');

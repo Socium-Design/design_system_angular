@@ -42,7 +42,6 @@ import { nextUniqueId } from '../../internal/unique-id';
       }
     </label>
   `,
-  styleUrl: './checkbox.css',
 })
 export class SocCheckbox {
   readonly checked = model(false);

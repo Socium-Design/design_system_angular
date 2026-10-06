@@ -55,7 +55,6 @@ const GAP_CLASSES: Record<CardGridGap, string> = {
       <ng-content />
     </div>
   `,
-  styleUrl: './card-grid.css',
 })
 export class SocCardGrid {
   readonly mode = input<CardGridMode>('fixed');

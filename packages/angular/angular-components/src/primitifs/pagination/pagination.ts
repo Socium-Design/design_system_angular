@@ -114,7 +114,6 @@ const navButtonClass =
       }
     }
   `,
-  styleUrl: './pagination.css',
 })
 export class SocPagination {
   readonly currentPage = input.required<number>();

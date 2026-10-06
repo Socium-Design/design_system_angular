@@ -159,7 +159,6 @@ export class SocSideNavSection {
       }
     </div>
   `,
-  styleUrl: './side-navigation.css',
 })
 export class SocSideNavigation {
   readonly product = input<NavigationProduct>();

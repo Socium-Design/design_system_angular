@@ -74,7 +74,6 @@ export class SocInputTextRightIcon {}
       </div>
     }
   `,
-  styleUrl: './input-text.css',
 })
 export class SocInputText {
   readonly label = input<string>();

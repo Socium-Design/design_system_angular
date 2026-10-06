@@ -77,7 +77,6 @@ const colorClasses: Record<AvatarColor, Record<AvatarMode, string>> = {
       </span>
     }
   `,
-  styleUrl: './avatar.css',
 })
 export class SocAvatar {
   readonly label = input.required<string>();

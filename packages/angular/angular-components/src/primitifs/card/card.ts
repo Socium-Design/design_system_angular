@@ -103,7 +103,6 @@ const BENTO_COLSPAN_75PCT_OVERRIDE = {
       </div>
     }
   `,
-  styleUrl: './card.css',
 })
 export class SocCard {
   readonly title = input.required<string>();

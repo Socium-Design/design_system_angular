@@ -35,7 +35,6 @@ const sizeClasses: Record<BadgeSize, string> = {
     '[class]': 'hostClasses()',
   },
   template: `<ng-content />`,
-  styleUrl: './badge.css',
 })
 export class SocBadge {
   readonly color = input<BadgeColor>('primary');

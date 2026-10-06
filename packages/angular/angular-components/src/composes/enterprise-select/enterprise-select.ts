@@ -54,7 +54,6 @@ export interface EnterpriseOption {
       </soc-menu>
     </soc-popover>
   `,
-  styleUrl: './enterprise-select.css',
 })
 export class SocEnterpriseSelect {
   readonly options = input.required<EnterpriseOption[]>();

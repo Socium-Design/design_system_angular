@@ -43,7 +43,6 @@ import { SocAvatar, type AvatarColor } from '../../primitifs/avatar/avatar';
       }
     </div>
   `,
-  styleUrl: './profile-line.css',
 })
 export class SocProfileLine {
   /** Initials shown in the avatar circle — 2 characters max. */

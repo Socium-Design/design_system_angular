@@ -164,7 +164,6 @@ const inlineIconClasses: Record<MessageStatus, string> = {
       }
     </ng-template>
   `,
-  styleUrl: './message.css',
 })
 export class SocMessage {
   readonly status = input<MessageStatus>('info');

@@ -34,7 +34,6 @@ import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../sel
       [id]="id()"
     />
   `,
-  styleUrl: './table-filter-select.css',
 })
 export class SocTableFilterSelect {
   readonly label = input<string>();

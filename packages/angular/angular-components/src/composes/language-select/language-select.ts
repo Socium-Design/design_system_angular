@@ -54,7 +54,6 @@ export interface LanguageOption {
       </soc-menu>
     </soc-popover>
   `,
-  styleUrl: './language-select.css',
 })
 export class SocLanguageSelect {
   readonly options = input.required<LanguageOption[]>();

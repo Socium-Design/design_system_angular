@@ -39,7 +39,6 @@ const paddingClasses = 'py-[var(--index-selection-chips-pad-v)] pl-[var(--index-
       </button>
     }
   `,
-  styleUrl: './chips.css',
 })
 export class SocChips {
   readonly label = input.required<string>();
@@ -77,7 +76,6 @@ export class SocChips {
       {{ label() }}
     </button>
   `,
-  styleUrl: './chips.css',
 })
 export class SocSelectableChips {
   readonly label = input.required<string>();
@@ -115,7 +113,6 @@ export class SocSelectableChips {
       </button>
     }
   `,
-  styleUrl: './chips.css',
 })
 export class SocInputChip {
   readonly label = input.required<string>();

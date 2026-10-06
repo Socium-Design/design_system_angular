@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build angular-components && node scripts/build-styles.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "storybook": "NODE_OPTIONS=--max-old-space-size=6144 ng run angular-components:storybook",

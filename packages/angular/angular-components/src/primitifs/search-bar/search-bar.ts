@@ -40,7 +40,6 @@ import { LucideSearch, LucideX } from '@lucide/angular';
       </button>
     }
   `,
-  styleUrl: './search-bar.css',
 })
 export class SocSearchBar {
   readonly placeholder = input('Rechercher...');

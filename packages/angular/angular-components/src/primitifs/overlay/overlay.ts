@@ -18,7 +18,6 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, output } from '@
     '(click)': 'overlayClick.emit()',
   },
   template: ``,
-  styleUrl: './overlay.css',
 })
 export class SocOverlay {
   readonly overlayClick = output<void>();

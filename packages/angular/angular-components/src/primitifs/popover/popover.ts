@@ -95,7 +95,6 @@ function computePosition(position: PopoverPosition, triggerRect: DOMRect, panelR
       <ng-content />
     </div>
   `,
-  styleUrl: './popover.css',
 })
 export class SocPopover {
   readonly position = input<PopoverPosition>('bottom');

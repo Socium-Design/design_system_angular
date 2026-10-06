@@ -71,7 +71,6 @@ export interface MultiSelectOption {
       </div>
     }
   `,
-  styleUrl: './multi-select.css',
 })
 export class SocMultiSelect {
   readonly label = input<string>();

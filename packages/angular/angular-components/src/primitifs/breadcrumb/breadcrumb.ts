@@ -77,7 +77,6 @@ export interface BreadcrumbItemData {
       </span>
     </ng-template>
   `,
-  styleUrl: './breadcrumb.css',
 })
 export class SocBreadcrumb {
   readonly items = input.required<BreadcrumbItemData[]>();

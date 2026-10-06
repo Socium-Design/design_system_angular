@@ -54,7 +54,6 @@ const LEVEL_PADDING: Record<MenuItemLevel, string> = {
       {{ label() }}
     </span>
   `,
-  styleUrl: './menu.css',
 })
 export class SocMenuItem {
   readonly label = input.required<string>();
@@ -83,6 +82,5 @@ export class SocMenuItem {
   encapsulation: ViewEncapsulation.None,
   host: { class: 'flex w-full flex-col items-start gap-[var(--index-conteneur-menu-items-gap)]' },
   template: `<ng-content />`,
-  styleUrl: './menu.css',
 })
 export class SocMenu {}

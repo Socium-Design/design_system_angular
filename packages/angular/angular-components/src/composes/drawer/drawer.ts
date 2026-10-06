@@ -82,7 +82,6 @@ const ANCHOR_CLASSES: Record<DrawerAnchor, string> = {
       </div>
     }
   `,
-  styleUrl: './drawer.css',
 })
 export class SocDrawer {
   readonly open = input(false);
@@ -139,7 +138,6 @@ export class SocDrawer {
       {{ value() }}
     </p>
   `,
-  styleUrl: './drawer.css',
 })
 export class SocDrawerDetailItem {
   readonly label = input.required<string>();

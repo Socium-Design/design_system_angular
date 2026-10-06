@@ -76,7 +76,6 @@ import { nextUniqueId } from '../../internal/unique-id';
       </div>
     }
   `,
-  styleUrl: './input-number.css',
 })
 export class SocInputNumber {
   readonly label = input<string>();

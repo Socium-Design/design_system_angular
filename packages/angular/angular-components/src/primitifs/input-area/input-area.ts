@@ -48,7 +48,6 @@ import { nextUniqueId } from '../../internal/unique-id';
       </div>
     }
   `,
-  styleUrl: './input-area.css',
 })
 export class SocInputArea {
   readonly label = input<string>();

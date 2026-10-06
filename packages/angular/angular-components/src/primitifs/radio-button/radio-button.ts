@@ -33,7 +33,6 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input,
       }
     </label>
   `,
-  styleUrl: './radio-button.css',
 })
 export class SocRadioButton {
   readonly selected = input(false);

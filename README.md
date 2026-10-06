@@ -40,12 +40,21 @@ Correspondance avec le dépôt React (`packages/react/src/`) :
 | `components/<Composé>/` (13, dépend d'autres composants) | `packages/angular/angular-components/src/composes/<compose>/` |
 | `templates/<Template>/` | `packages/angular/angular-components/src/templates/<template>/` |
 
+## Utiliser la librairie
+
+Ajouter la feuille de style compilée une fois dans l'application consommatrice (tokens, polices
+auto-hébergées, utilitaires Tailwind de tous les composants) :
+
+```json
+"styles": ["node_modules/@socium-ds/angular-components/styles.css"]
+```
+
 ## Commandes
 
 Depuis `packages/angular/` :
 
 ```bash
 npm install
-npx ng build angular-components   # build la librairie (ng-packagr)
+npm run build                       # librairie (ng-packagr) + dist/angular-components/styles.css
 npx ng run angular-components:storybook   # Storybook, http://localhost:6006
 ```

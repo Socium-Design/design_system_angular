@@ -39,7 +39,6 @@ export type StepperOrientation = 'horizontal' | 'vertical';
       </div>
     }
   `,
-  styleUrl: './stepper.css',
 })
 export class SocStepper {
   readonly items = input.required<StepperItemData[]>();

@@ -90,7 +90,6 @@ const chevronColorVar: Record<ButtonVariant, string> = {
       </span>
     </button>
   `,
-  styleUrl: './split-button.css',
 })
 export class SocSplitButton {
   readonly variant = input<ButtonVariant>('primary');

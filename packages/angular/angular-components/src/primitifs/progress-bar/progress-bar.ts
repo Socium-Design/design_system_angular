@@ -78,7 +78,6 @@ const barHeightClasses: Record<ProgressBarSize, string> = {
       </div>
     }
   `,
-  styleUrl: './progress-bar.css',
 })
 export class SocProgressBar {
   readonly value = input<number>(0);

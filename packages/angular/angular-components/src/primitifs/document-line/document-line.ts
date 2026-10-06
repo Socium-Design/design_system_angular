@@ -38,7 +38,6 @@ import { LucideFileText } from '@lucide/angular';
       </div>
     </div>
   `,
-  styleUrl: './document-line.css',
 })
 export class SocDocumentLine {
   readonly title = input.required<string>();

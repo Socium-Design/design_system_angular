@@ -51,7 +51,6 @@ const thumbTranslateClasses: Record<SwitchSize, string> = {
       }
     </label>
   `,
-  styleUrl: './switch.css',
 })
 export class SocSwitch {
   readonly checked = model(false);

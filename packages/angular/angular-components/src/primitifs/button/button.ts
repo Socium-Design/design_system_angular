@@ -120,7 +120,6 @@ const sizeClasses: Record<ButtonSize, string> = {
       </span>
     }
   `,
-  styleUrl: './button.css',
 })
 export class SocButton {
   readonly variant = input<ButtonVariant>('primary');

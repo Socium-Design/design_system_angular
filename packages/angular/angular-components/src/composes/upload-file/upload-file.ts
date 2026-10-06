@@ -30,7 +30,6 @@ import { SocButton } from '../../primitifs/button/button';
       <p [class]="helperClass()">{{ helperText() }}</p>
     }
   `,
-  styleUrl: './upload-file.css',
 })
 export class SocUploadFile {
   readonly error = input(false);

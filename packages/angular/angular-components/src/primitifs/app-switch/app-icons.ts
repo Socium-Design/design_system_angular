@@ -101,7 +101,6 @@ const SELECTED_ACCENT_CLASS = 'fill-[var(--index-navigation-appicon-icon-accent)
       }
     }
   `,
-  styleUrl: './app-icons.css',
 })
 export class SocAppIconGlyph {
   readonly name = input.required<AppIconName>();
@@ -128,6 +127,5 @@ export class SocAppIconGlyph {
       />
     </svg>
   `,
-  styleUrl: './app-icons.css',
 })
 export class SocSwitchLogo {}

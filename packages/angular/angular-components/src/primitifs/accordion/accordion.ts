@@ -40,7 +40,6 @@ export class SocAccordionRightSlot {}
       </div>
     }
   `,
-  styleUrl: './accordion.css',
 })
 export class SocAccordion {
   readonly label = input.required<string>();

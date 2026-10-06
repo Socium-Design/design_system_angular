@@ -343,7 +343,6 @@ const CARD_ACTION_BUTTON_CLASS =
       }
     }
   `,
-  styleUrl: './data-table.css',
 })
 export class SocDataTable<T> {
   readonly mode = input<DataTableMode>('table');

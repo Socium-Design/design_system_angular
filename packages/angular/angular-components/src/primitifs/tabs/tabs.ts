@@ -69,7 +69,6 @@ export type TabsVariant = 'underline' | 'pill';
       }
     }
   `,
-  styleUrl: './tabs.css',
 })
 export class SocTabs {
   readonly items = input.required<TabItem[]>();

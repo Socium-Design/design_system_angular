@@ -103,7 +103,6 @@ export class SocHeaderAppLanguageSelect {}
       </div>
     </ng-template>
   `,
-  styleUrl: './header-app.css',
 })
 export class SocHeaderApp {
   /** The signed-in user's display name, rendered inside HeaderApp's own AvatarZone next to the

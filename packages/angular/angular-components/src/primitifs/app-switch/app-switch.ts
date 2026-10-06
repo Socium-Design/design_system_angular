@@ -28,7 +28,6 @@ export class SocAppSwitchLogo {}
     '[class]': 'hostClasses()',
   },
   template: `<soc-app-icon-glyph [name]="name()" [selected]="selected()" />`,
-  styleUrl: './app-switch.css',
 })
 export class SocAppIcon {
   readonly name = input.required<AppIconName>();
@@ -72,7 +71,6 @@ export class SocAppIcon {
       }
     </div>
   `,
-  styleUrl: './app-switch.css',
 })
 export class SocAppSwitch {
   readonly product = input<NavigationProduct>();
