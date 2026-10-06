@@ -114,6 +114,35 @@ below for why explicit), then `@import "./tokens.generated.css";` — a copy of 
 from the React repo when tokens change there, until this repo has its own sync step — never hand-edit
 `tokens.generated.css` directly, same rule as on the React side.
 
+### React idioms with no Angular equivalent — how they were resolved (Lot 2)
+
+- **`cloneElement` rewriting a child's props** (`CardGrid` forcing `colSpan`): the parent provides a
+  context via an `InjectionToken` (`src/internal/card-grid-context.ts`) and each child resolves its
+  own effective values from it. Element injectors follow the *declaring* template, so projected
+  children find it. Keep the token in `internal/` so a lower-level component never imports a
+  higher-level one.
+- **Presence of a callback prop turns a feature on** (`onSearch`, `onRowClick`, `onRowAction`,
+  `onViewProfile`): an `output()` can't report whether it has a subscriber, so add an explicit
+  boolean input next to the output (`searchable`, `rowClickable`, `rowActions`, `showViewProfile`),
+  default `false` = "handler omitted". Flag it as a GAP-DECISION in the docstring.
+- **`ReactNode`-returning function props** (`render`, `cardContent.body`, `rowActionsMenu`): a
+  `TemplateRef` the consumer owns, with the row as context; a plain `string`-returning function is
+  also accepted where text is the common case.
+- **A prop that must appear in two mutually exclusive branches** (an avatar in or out of a button):
+  one `<ng-template>` holding the single `<ng-content>`, rendered via `ngTemplateOutlet` from each
+  branch (only ONE physical `<ng-content>` per selector works reliably).
+- **React fragments** (`Popover`, `LanguageSelect`, `TableFilterSelect` return no root element):
+  host `class: 'contents'`. A React `className` that targeted an inner element becomes an explicit
+  input (`triggerClass`, `panelClass`), since a `class` on a `display: contents` host does nothing.
+- **Custom-element hosts are `display: inline`**: anything needing a box (`container-type`, `w-full`,
+  `width`) must set `block`/`flex` on the host (`CardGrid` needs `@container block`).
+- **`id` inputs** meant for an inner element: add `'[attr.id]': 'null'` to the host so a static
+  `id="…"` isn't duplicated on the host element.
+- **Portaled overlays** (`Dialog`, `Drawer`, `Popover`, `Tooltip`): `viewChild` + `effect()` →
+  `document.body.appendChild`, and remove the node in `DestroyRef.onDestroy`.
+- **Storybook args**: bind every input in the story template; an arg left `undefined` overrides the
+  component's own default (`[mode]="mode"` with no `mode` arg disabled `Select`'s label).
+
 ## Tooling gotchas already hit and fixed — don't re-debug these
 
 All already fixed at the workspace level; a newly migrated component doesn't need to touch any of

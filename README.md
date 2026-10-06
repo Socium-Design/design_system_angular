@@ -7,13 +7,17 @@ analogie avec un équivalent HTML natif), pas traduit ligne à ligne.
 
 ## État actuel
 
-Lot 1 (primitifs) en cours — voir la spec de migration (lots par niveau, primitifs avant composés)
-pour l'ordre de traitement. Migrés jusqu'ici :
-
-- `Button` / `SplitButton` (`src/primitifs/button/`)
+- **Lot 1 — primitifs : terminé** (27 composants, `src/primitifs/`). `Menu`/`MenuItem`, d'abord
+  classés primitifs, dépendent de `Checkbox`/`RadioButton` : ils sont donc traités dans le Lot 2.
+- **Lot 2 — composés : terminé** (14 composants, `src/composes/`) : `Menu`/`MenuItem`, `Select`,
+  `MultiSelect`, `LanguageSelect`, `EnterpriseSelect`, `TableFilterSelect`, `AvatarMenu`, `Dialog`,
+  `Drawer` (+ `DrawerDetailItem`), `UploadFile`, `ProfileLine`, `HeaderApp`, `CardGrid`, `DataTable`.
+- **Lot 3 — templates** (`AppShell`, `PageHome`, `PageList`, `PageDetails`, `PageForm`,
+  `PageProfile`) : pas démarré.
 
 Voir `CLAUDE.md` pour les conventions établies (sélecteur d'attribut, `ViewEncapsulation.None`,
-projection de contenu pour les slots d'icône) à réutiliser pour les composants suivants.
+projection de contenu, équivalents Angular des idiomes React sans équivalent direct) à réutiliser
+pour les composants suivants.
 
 ## Structure
 
