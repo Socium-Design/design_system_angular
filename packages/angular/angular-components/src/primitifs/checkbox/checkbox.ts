@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model } from '@angular/core';
 import { LucideCheck } from '@lucide/angular';
+import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 
 /** GAP-DECISION (flagged, not decided silently): the migration spec's rule for Checkbox was
@@ -20,6 +21,7 @@ import { nextUniqueId } from '../../internal/unique-id';
   selector: 'soc-checkbox',
   standalone: true,
   imports: [LucideCheck],
+  providers: [provideFormControl(() => SocCheckbox)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // `id` targets the inner control (the `<label for>` target), like React — a static `id="…"` on
@@ -34,6 +36,7 @@ import { nextUniqueId } from '../../internal/unique-id';
         [attr.aria-checked]="checked()"
         [disabled]="disabled()"
         (click)="toggle()"
+        (blur)="onTouched()"
         [class]="buttonClass()"
       >
         @if (checked()) {
@@ -46,9 +49,13 @@ import { nextUniqueId } from '../../internal/unique-id';
     </label>
   `,
 })
-export class SocCheckbox {
+export class SocCheckbox extends SocFormControl<boolean> {
   readonly checked = model(false);
-  readonly disabled = input(false);
+
+  protected readonly valueModel = this.checked;
+  protected coerce(value: unknown): boolean {
+    return !!value;
+  }
   readonly label = input<string>();
   readonly id = input<string>();
 

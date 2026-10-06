@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model } from '@angular/core';
 import { LucideChevronDown, LucideInfo } from '@lucide/angular';
+import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 import { SocInputChip } from '../../primitifs/chips/chips';
 import { SocPopover, SocPopoverTrigger } from '../../primitifs/popover/popover';
@@ -17,14 +18,15 @@ export interface MultiSelectOption {
  * in design_system (React reference repo, read only). Plain wrapper (`soc-multi-select`) built on
  * `soc-popover` + `soc-menu` (checkbox mode), same as React.
  *
- * `value`/`onChange` are both required in React (purely controlled, no internal fallback) — plain
- * `input()` + `output()` (`valueChange`), not `model()`, same as `RadioButton`/`SideNavigation`;
- * `[(value)]` two-way binding still works on such a pair.
+ * `value`/`onChange` are both required in React (purely controlled). A `model()` here (`[(value)]`
+ * or `[value]` + `(valueChange)`) so the component is also a form control (`formControl`,
+ * `formControlName`, `ngModel`).
  */
 @Component({
   selector: 'soc-multi-select',
   standalone: true,
   imports: [SocPopover, SocPopoverTrigger, SocMenu, SocMenuItem, SocInputChip, LucideChevronDown, LucideInfo],
+  providers: [provideFormControl(() => SocMultiSelect)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // `id` is forwarded to the inner trigger button (label `for` target), like React — a static
@@ -40,7 +42,7 @@ export interface MultiSelectOption {
         }
       </label>
     }
-    <soc-popover [matchTriggerWidth]="true">
+    <soc-popover [matchTriggerWidth]="true" (openChange)="onOpenChange($event)">
       <button socPopoverTrigger type="button" [id]="fieldId" [disabled]="disabled()" [class]="fieldClass()">
         @if (value().length === 0) {
           <span class="text-[length:var(--index-selection-select-value-size)] text-[var(--index-selection-select-placeholder-color)]">
@@ -72,7 +74,7 @@ export interface MultiSelectOption {
     }
   `,
 })
-export class SocMultiSelect {
+export class SocMultiSelect extends SocFormControl<string[]> {
   readonly label = input<string>();
   readonly required = input(false);
   readonly error = input(false);
@@ -80,10 +82,13 @@ export class SocMultiSelect {
   readonly helperText = input<string>();
   readonly placeholder = input('Select options');
   readonly options = input.required<MultiSelectOption[]>();
-  readonly value = input.required<string[]>();
-  readonly valueChange = output<string[]>();
-  readonly disabled = input(false);
+  readonly value = model<string[]>([]);
   readonly id = input<string>();
+
+  protected readonly valueModel = this.value;
+  protected coerce(value: unknown): string[] {
+    return Array.isArray(value) ? value : [];
+  }
 
   protected readonly iconThickness = 'var(--index-selection-select-icon-thickness)';
   protected readonly helpIconThickness = 'var(--index-selection-select-icon-help-thickness)';
@@ -95,9 +100,13 @@ export class SocMultiSelect {
 
   protected readonly selectedOptions = computed(() => this.options().filter((option) => this.value().includes(option.value)));
 
+  protected onOpenChange(open: boolean): void {
+    if (!open) this.onTouched();
+  }
+
   protected toggle(optionValue: string): void {
     const current = this.value();
-    this.valueChange.emit(current.includes(optionValue) ? current.filter((v) => v !== optionValue) : [...current, optionValue]);
+    this.value.set(current.includes(optionValue) ? current.filter((v) => v !== optionValue) : [...current, optionValue]);
   }
 
   protected readonly labelClass = computed(

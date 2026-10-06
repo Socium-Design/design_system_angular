@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, model } from '@angular/core';
+import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../select/select';
 
 /**
@@ -15,6 +16,7 @@ import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../sel
   selector: 'soc-table-filter-select',
   standalone: true,
   imports: [SocSelect],
+  providers: [provideFormControl(() => SocTableFilterSelect)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // `id` is forwarded to the inner soc-select (see SocSelect) — don't also leave it on this host.
@@ -36,7 +38,7 @@ import { SELECT_DEFAULT_PLACEHOLDER, SocSelect, type SelectOption } from '../sel
     />
   `,
 })
-export class SocTableFilterSelect {
+export class SocTableFilterSelect extends SocFormControl<string | undefined> {
   readonly label = input<string>();
   readonly required = input(false);
   readonly error = input(false);
@@ -46,6 +48,10 @@ export class SocTableFilterSelect {
   readonly options = input.required<SelectOption[]>();
   readonly value = model<string>();
   readonly defaultValue = input<string>();
-  readonly disabled = input(false);
+
+  protected readonly valueModel = this.value;
+  protected coerce(value: unknown): string | undefined {
+    return value == null || value === '' ? undefined : String(value);
+  }
   readonly id = input<string>();
 }

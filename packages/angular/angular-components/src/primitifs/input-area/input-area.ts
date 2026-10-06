@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, computed, effect, input, model, viewChild } from '@angular/core';
 import { LucideInfo } from '@lucide/angular';
+import { SocTextFieldBase, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 
 /** Same structural GAP-DECISION as InputText — see that component's own docstring, not repeated
@@ -13,6 +14,7 @@ import { nextUniqueId } from '../../internal/unique-id';
   selector: 'soc-input-area',
   standalone: true,
   imports: [LucideInfo],
+  providers: [provideFormControl(() => SocInputArea)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -31,11 +33,18 @@ import { nextUniqueId } from '../../internal/unique-id';
       <textarea
         #textareaEl
         [id]="inputId"
+        [attr.name]="name()"
+        [attr.autocomplete]="autocomplete()"
+        [attr.maxlength]="maxlength()"
+        [readOnly]="readonly()"
         [disabled]="disabled()"
+        [required]="required()"
         [value]="value()"
         (input)="value.set($any($event.target).value)"
+        (blur)="onTouched()"
         [rows]="rows()"
-        [placeholder]="placeholder()"
+        [placeholder]="placeholder() ?? ''"
+        [class]="inputClass()"
         class="w-full min-w-0 flex-1 resize-none bg-transparent text-[var(--index-input-input-area-value-color)] outline-none placeholder:text-[var(--index-input-input-area-placeholder-color)] disabled:cursor-not-allowed [font-family:var(--index-input-input-area-value-font-family)] [font-weight:var(--index-input-input-area-value-font-weight)] text-[length:var(--index-input-input-area-value-font-size)]"
       ></textarea>
     </div>
@@ -49,22 +58,27 @@ import { nextUniqueId } from '../../internal/unique-id';
     }
   `,
 })
-export class SocInputArea {
-  readonly label = input<string>();
-  readonly required = input(false);
-  readonly error = input(false);
-  readonly helperText = input<string>();
-  readonly disabled = input(false);
-  readonly placeholder = input<string>();
+export class SocInputArea extends SocTextFieldBase<string> {
   readonly rows = input(3);
+  readonly maxlength = input<number>();
   readonly value = model('');
 
-  protected readonly inputId = nextUniqueId('soc-input-area');
+  protected readonly valueModel = this.value;
+  protected nativeField = () => this.textareaRef()?.nativeElement;
+  protected coerce(value: unknown): string {
+    return value == null ? '' : String(value);
+  }
+
+  private readonly generatedId = nextUniqueId('soc-input-area');
+  protected get inputId(): string {
+    return this.id() ?? this.generatedId;
+  }
   protected readonly helpIconThickness = 'var(--index-input-input-area-icon-help-thickness)';
 
   private readonly textareaRef = viewChild<ElementRef<HTMLTextAreaElement>>('textareaEl');
 
   constructor() {
+    super();
     effect(() => {
       this.value();
       const el = this.textareaRef()?.nativeElement;

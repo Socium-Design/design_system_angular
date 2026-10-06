@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, Directive, ViewEncapsulation, computed, contentChild, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ElementRef, ViewEncapsulation, computed, contentChild, input, model, viewChild } from '@angular/core';
 import { LucideInfo } from '@lucide/angular';
+import { SocTextFieldBase, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 
 /** GAP-DECISION (flagged, not decided silently): the migration spec's rule says text-input-like
@@ -11,11 +12,11 @@ import { nextUniqueId } from '../../internal/unique-id';
  * component's template can only fill the CONTENT of the element it decorates, and `<input>` is a
  * void element — it can't have any injected content at all, so there is no way to make an
  * attribute selector on `<input>` also render a sibling `<label>`/helper text. Used a wrapper
- * component instead (`soc-input-text`), with explicit `input()`/`model()` for the native behaviors
- * React's own InputText.stories.tsx actually exercises (placeholder, type, value, disabled,
- * required, autofocus) — arbitrary other native `<input>` attributes are NOT automatically passed
- * through the way `Button`'s `...props` spread allows. Same shape applies to InputArea, InputNumber,
- * Password, SearchBar — not re-explained on each, see this component's own migration commit.
+ * component instead (`soc-input-text`). What an attribute selector would have given for free is
+ * rebuilt explicitly (see `SocTextFieldBase`): dedicated inputs for `id`/`name`/`autocomplete`/
+ * `readonly`/`maxlength`, `inputClass` (React's `className` on the `<input>`), and `inputAttrs`
+ * for any other native attribute; it is also a `ControlValueAccessor` (`formControl`,
+ * `formControlName`, `ngModel`). Same shape applies to InputArea, InputNumber, Password.
  */
 @Directive({ selector: '[socInputTextLeftIcon]', standalone: true })
 export class SocInputTextLeftIcon {}
@@ -29,6 +30,7 @@ export class SocInputTextRightIcon {}
   selector: 'soc-input-text',
   standalone: true,
   imports: [LucideInfo, SocInputTextLeftIcon, SocInputTextRightIcon],
+  providers: [provideFormControl(() => SocInputText)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -50,13 +52,20 @@ export class SocInputTextRightIcon {}
         </span>
       }
       <input
+        #field
         [id]="inputId"
         [type]="type()"
-        [placeholder]="placeholder()"
+        [attr.name]="name()"
+        [attr.autocomplete]="autocomplete()"
+        [attr.maxlength]="maxlength()"
+        [readOnly]="readonly()"
+        [placeholder]="placeholder() ?? ''"
         [disabled]="disabled()"
         [required]="required()"
         [value]="value()"
         (input)="value.set($any($event.target).value)"
+        (blur)="onTouched()"
+        [class]="inputClass()"
         class="w-full min-w-0 flex-1 bg-transparent text-[var(--index-input-input-text-value-color)] outline-none placeholder:text-[var(--index-input-input-text-placeholder-color)] disabled:cursor-not-allowed [font-family:var(--index-input-input-text-value-font-family)] [font-weight:var(--index-input-input-text-value-font-weight)] text-[length:var(--index-input-input-text-value-font-size)]"
       />
       @if (hasRightIcon()) {
@@ -75,20 +84,25 @@ export class SocInputTextRightIcon {}
     }
   `,
 })
-export class SocInputText {
-  readonly label = input<string>();
-  readonly required = input(false);
-  readonly error = input(false);
-  readonly helperText = input<string>();
-  readonly disabled = input(false);
-  readonly placeholder = input<string>();
+export class SocInputText extends SocTextFieldBase<string> {
   readonly type = input('text');
+  readonly maxlength = input<number>();
   /** The one property that actually needs two-way sync — `model()` gives `[(value)]` plus a
    * `valueChange` output for free, the Angular equivalent of React's `value`+`onChange` pair
    * (or `defaultValue` for the uncontrolled case, via the initial signal value). */
   readonly value = model('');
 
-  protected readonly inputId = nextUniqueId('soc-input-text');
+  protected readonly valueModel = this.value;
+  private readonly fieldRef = viewChild<ElementRef<HTMLInputElement>>('field');
+  protected nativeField = () => this.fieldRef()?.nativeElement;
+  protected coerce(value: unknown): string {
+    return value == null ? '' : String(value);
+  }
+
+  private readonly generatedId = nextUniqueId('soc-input-text');
+  protected get inputId(): string {
+    return this.id() ?? this.generatedId;
+  }
   protected readonly helpIconThickness = 'var(--index-input-input-text-icon-help-thickness)';
 
   private readonly leftIconContent = contentChild(SocInputTextLeftIcon);

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model } from '@angular/core';
+import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
@@ -29,6 +30,7 @@ const thumbTranslateClasses: Record<SwitchSize, string> = {
 @Component({
   selector: 'soc-switch',
   standalone: true,
+  providers: [provideFormControl(() => SocSwitch)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // `id` targets the inner control (the `<label for>` target), like React — a static `id="…"` on
@@ -43,6 +45,7 @@ const thumbTranslateClasses: Record<SwitchSize, string> = {
         [attr.aria-checked]="checked()"
         [disabled]="disabled()"
         (click)="toggle()"
+        (blur)="onTouched()"
         class="inline-flex shrink-0 items-center justify-center rounded-[var(--index-contrôleur-switch-radius-track)] p-[var(--index-contrôleur-switch-outer-padding)] focus-visible:outline-none focus-visible:ring-[length:var(--index-contrôleur-switch-border-focus-stroke)] focus-visible:ring-[var(--index-contrôleur-switch-border-focus-color)]"
       >
         <span [class]="trackClass()">
@@ -55,10 +58,14 @@ const thumbTranslateClasses: Record<SwitchSize, string> = {
     </label>
   `,
 })
-export class SocSwitch {
+export class SocSwitch extends SocFormControl<boolean> {
   readonly checked = model(false);
   readonly size = input<SwitchSize>('sm');
-  readonly disabled = input(false);
+
+  protected readonly valueModel = this.checked;
+  protected coerce(value: unknown): boolean {
+    return !!value;
+  }
   readonly label = input<string>();
   readonly id = input<string>();
 

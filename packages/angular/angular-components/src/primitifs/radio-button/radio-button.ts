@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Injector, ViewEncapsulation, afterNextRender, computed, inject, input, model, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { provideFormControl } from '../../internal/form-control';
 
 /** Same structural GAP-DECISION as Checkbox — see that component's own docstring, not repeated
  * here. Maps 1:1 to "Index/Contrôleur/Radio/*" tokens — see
@@ -10,6 +13,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input,
 @Component({
   selector: 'soc-radio-button',
   standalone: true,
+  providers: [provideFormControl(() => SocRadioButton)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // `id` targets the inner control (the `<label for>` target), like React — a static `id="…"` on
@@ -25,6 +29,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input,
         [attr.aria-checked]="selected()"
         [disabled]="disabled()"
         (click)="handleClick()"
+        (blur)="onTouched()"
         [class]="buttonClass()"
       >
         @if (selected()) {
@@ -37,16 +42,55 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input,
     </label>
   `,
 })
-export class SocRadioButton {
-  readonly selected = input(false);
-  readonly disabled = input(false);
+export class SocRadioButton implements ControlValueAccessor {
+  /** Controlled like React (`selected` + `(select)`), but a `model()` so a form can drive it too. */
+  readonly selected = model(false);
+  readonly disabled = model(false);
   readonly label = input<string>();
   readonly name = input<string>();
   readonly id = input<string>();
   readonly select = output<void>();
 
+  /** Forms: the value this radio stands for. Give every radio of a group the same `formControlName`/
+   * `[formControl]`/`ngModel` and its own `value` — the group's value selects the matching radio, and
+   * clicking one writes its `value` back to the control (the standard pattern for custom radios). */
+  readonly value = input<unknown>();
+
+  private onChange: (value: unknown) => void = () => {};
+  protected onTouched: () => void = () => {};
+
+  constructor() {
+    // Angular only calls `writeValue` on the radio that was clicked (the one whose view changed the
+    // control); its siblings sharing the same FormControl hear nothing (native radios use a
+    // dedicated registry for this). Listening to the control itself keeps the whole group in sync.
+    // Deferred: `NgControl` injects this accessor, and the control is only attached once the form
+    // directive has initialised.
+    const injector = inject(Injector);
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const control = injector.get(NgControl, null)?.control;
+      control?.valueChanges.pipe(takeUntilDestroyed(destroyRef)).subscribe((groupValue) => this.writeValue(groupValue));
+    });
+  }
+
   protected handleClick(): void {
-    if (!this.disabled()) this.select.emit();
+    if (this.disabled()) return;
+    this.selected.set(true);
+    this.select.emit();
+    this.onChange(this.value());
+  }
+
+  writeValue(groupValue: unknown): void {
+    this.selected.set(this.value() !== undefined && groupValue === this.value());
+  }
+  registerOnChange(fn: (value: unknown) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 
   protected readonly hostClass = computed(() => `inline-flex items-center gap-2 ${this.disabled() ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`);

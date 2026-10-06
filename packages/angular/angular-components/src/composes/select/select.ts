@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model, signal } from '@angular/core';
 import { LucideCheck, LucideChevronDown, LucideInfo } from '@lucide/angular';
+import { SocFormControl, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 import { SocPopover, SocPopoverTrigger } from '../../primitifs/popover/popover';
 import { SocMenu, SocMenuItem, SocMenuItemIcon } from '../menu/menu';
@@ -31,6 +32,7 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
   selector: 'soc-select',
   standalone: true,
   imports: [SocPopover, SocPopoverTrigger, SocMenu, SocMenuItem, SocMenuItemIcon, LucideCheck, LucideChevronDown, LucideInfo],
+  providers: [provideFormControl(() => SocSelect)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // `id` is forwarded to the inner trigger button (label `for` target), like React — a static
@@ -46,7 +48,7 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
         }
       </label>
     }
-    <soc-popover [matchTriggerWidth]="true" [open]="isOpen()" (openChange)="open.set($event)">
+    <soc-popover [matchTriggerWidth]="true" [open]="isOpen()" (openChange)="onOpenChange($event)">
       <button socPopoverTrigger type="button" [id]="selectId" [disabled]="disabled()" [class]="fieldClass()">
         @if (mode() === 'labelHeader') {
           <span class="flex min-w-0 flex-1 flex-col items-start">
@@ -95,7 +97,7 @@ export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
     }
   `,
 })
-export class SocSelect {
+export class SocSelect extends SocFormControl<string | undefined> {
   readonly label = input<string>();
   readonly mode = input<SelectMode>('formulaire');
   readonly required = input(false);
@@ -105,8 +107,12 @@ export class SocSelect {
   readonly placeholder = input(SELECT_DEFAULT_PLACEHOLDER);
   readonly options = input.required<SelectOption[]>();
   readonly value = model<string>();
+
+  protected readonly valueModel = this.value;
+  protected coerce(value: unknown): string | undefined {
+    return value == null || value === '' ? undefined : String(value);
+  }
   readonly defaultValue = input<string>();
-  readonly disabled = input(false);
   readonly id = input<string>();
 
   protected readonly iconThickness = 'var(--index-selection-select-icon-thickness)';
@@ -125,6 +131,11 @@ export class SocSelect {
 
   private readonly helperIsError = computed(() => this.error());
   private readonly helperIsWarning = computed(() => !this.error() && this.warning());
+
+  protected onOpenChange(open: boolean): void {
+    this.open.set(open);
+    if (!open) this.onTouched();
+  }
 
   protected selectOption(optionValue: string): void {
     this.value.set(optionValue);

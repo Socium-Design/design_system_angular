@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, computed, input, model, signal, viewChild } from '@angular/core';
 import { LucideEye, LucideEyeOff, LucideInfo } from '@lucide/angular';
+import { SocTextFieldBase, provideFormControl } from '../../internal/form-control';
 import { nextUniqueId } from '../../internal/unique-id';
 
 /** Same structural GAP-DECISION as InputText — see that component's own docstring, not repeated
@@ -13,6 +14,7 @@ import { nextUniqueId } from '../../internal/unique-id';
   selector: 'soc-password',
   standalone: true,
   imports: [LucideEye, LucideEyeOff, LucideInfo],
+  providers: [provideFormControl(() => SocPassword)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -29,11 +31,20 @@ import { nextUniqueId } from '../../internal/unique-id';
     }
     <div [class]="fieldClass()">
       <input
+        #field
         [id]="inputId"
         [type]="visible() ? 'text' : 'password'"
+        [attr.name]="name()"
+        [attr.autocomplete]="autocomplete()"
+        [attr.maxlength]="maxlength()"
+        [readOnly]="readonly()"
+        [placeholder]="placeholder() ?? ''"
+        [required]="required()"
         [disabled]="disabled()"
         [value]="value()"
         (input)="value.set($any($event.target).value)"
+        (blur)="onTouched()"
+        [class]="inputClass()"
         class="w-full min-w-0 flex-1 bg-transparent text-[var(--index-input-input-password-value-color)] outline-none placeholder:text-[var(--index-input-input-password-placeholder-color)] disabled:cursor-not-allowed [font-family:var(--index-input-input-password-value-font-family)] [font-weight:var(--index-input-input-password-value-font-weight)] text-[length:var(--index-input-input-password-value-font-size)]"
       />
       <button
@@ -60,16 +71,22 @@ import { nextUniqueId } from '../../internal/unique-id';
     }
   `,
 })
-export class SocPassword {
-  readonly label = input<string>();
-  readonly required = input(false);
-  readonly error = input(false);
-  readonly helperText = input<string>();
-  readonly disabled = input(false);
+export class SocPassword extends SocTextFieldBase<string> {
+  readonly maxlength = input<number>();
   readonly value = model('');
 
+  protected readonly valueModel = this.value;
+  private readonly fieldRef = viewChild<ElementRef<HTMLInputElement>>('field');
+  protected nativeField = () => this.fieldRef()?.nativeElement;
+  protected coerce(value: unknown): string {
+    return value == null ? '' : String(value);
+  }
+
   protected readonly visible = signal(false);
-  protected readonly inputId = nextUniqueId('soc-password');
+  private readonly generatedId = nextUniqueId('soc-password');
+  protected get inputId(): string {
+    return this.id() ?? this.generatedId;
+  }
   protected readonly helpIconThickness = 'var(--index-input-input-password-icon-help-thickness)';
   protected readonly eyeThickness = 'var(--index-input-input-password-icon-eye-thickness)';
 

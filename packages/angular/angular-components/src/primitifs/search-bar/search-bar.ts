@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, computed, input, model, output, viewChild } from '@angular/core';
 import { LucideSearch, LucideX } from '@lucide/angular';
+import { SocFormControl, provideFormControl } from '../../internal/form-control';
 
 /** Same structural GAP-DECISION as InputText — its outer element is a `<div>` with a sibling icon
  * before and a sibling clear button after the `<input>`, not the `<input>` itself, so an attribute
@@ -16,6 +17,7 @@ import { LucideSearch, LucideX } from '@lucide/angular';
   selector: 'soc-search-bar',
   standalone: true,
   imports: [LucideSearch, LucideX],
+  providers: [provideFormControl(() => SocSearchBar)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -30,8 +32,10 @@ import { LucideSearch, LucideX } from '@lucide/angular';
       #inputEl
       type="text"
       [placeholder]="placeholder()"
+      [disabled]="disabled()"
       [value]="value()"
       (input)="value.set($any($event.target).value)"
+      (blur)="onTouched()"
       class="w-full min-w-0 flex-1 bg-transparent text-[var(--index-input-searchbar-value-color)] outline-none placeholder:text-[var(--index-input-searchbar-placeholder-color)] [font-family:var(--index-input-searchbar-value-font-family)] [font-weight:var(--index-input-searchbar-value-font-weight)] text-[length:var(--index-input-searchbar-value-font-size)]"
     />
     @if (hasValue()) {
@@ -41,9 +45,14 @@ import { LucideSearch, LucideX } from '@lucide/angular';
     }
   `,
 })
-export class SocSearchBar {
+export class SocSearchBar extends SocFormControl<string> {
   readonly placeholder = input('Rechercher...');
   readonly value = model('');
+
+  protected readonly valueModel = this.value;
+  protected coerce(value: unknown): string {
+    return value == null ? '' : String(value);
+  }
   readonly clear = output<void>();
 
   private readonly inputRef = viewChild<ElementRef<HTMLInputElement>>('inputEl');

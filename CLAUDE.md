@@ -119,6 +119,28 @@ below for why explicit), then `@import "./tokens.generated.css";` — a copy of 
 from the React repo when tokens change there, until this repo has its own sync step — never hand-edit
 `tokens.generated.css` directly, same rule as on the React side.
 
+### Every input-like component is a form control (`ControlValueAccessor`)
+
+`InputText`, `InputArea`, `InputNumber`, `Password`, `SearchBar`, `Checkbox`, `Switch`, `RadioButton`,
+`Select`, `MultiSelect`, `TableFilterSelect` work with `formControl`, `formControlName` and `ngModel`
+(see Storybook → Guides/Formulaires, which doubles as the integration test). The pattern, all in
+`src/internal/form-control.ts`:
+
+- The component's value already lives in a `model()` (`value`/`checked`); extend `SocFormControl<T>`,
+  point `valueModel` at it, implement `coerce()` (what `null` after `reset()` means), and add
+  `providers: [provideFormControl(() => MyComponent)]`. The base subscribes to the model's change
+  stream, so templates never call `onChange` by hand; `writeValue` mutes it.
+- `disabled` is a `model(false)` inherited from the base (`setDisabledState` writes it); never
+  redeclare it as an `input()`.
+- Call `onTouched()` on blur (inputs, checkbox, switch) or when the menu closes (selects).
+- Text fields extend `SocTextFieldBase<T>`: `id`/`name`/`autocomplete`/`readonly`/`maxlength` inputs,
+  `inputClass` (React's `className` on the inner control — a plain `class` is `wrapperClassName`) and
+  `inputAttrs` (any other native attribute). `id`/`name` are cleared from the host element.
+- `RadioButton` is one CVA *per radio* (standard custom-radio pattern): each gets its own `value` and the
+  same `formControlName`; it listens to the control's `valueChanges` so siblings stay in sync
+  (Angular only calls `writeValue` on the clicked radio).
+- `@angular/forms` is a peer dependency of the library.
+
 ### React idioms with no Angular equivalent — how they were resolved (Lot 2)
 
 - **`cloneElement` rewriting a child's props** (`CardGrid` forcing `colSpan`): the parent provides a
