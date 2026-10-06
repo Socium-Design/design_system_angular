@@ -1,5 +1,5 @@
 /*
- * Public API Surface of @socium-ds/angular-components
+ * Public API Surface of @socium-design/angular-components
  *
  * Miroir de packages/react/src/index.ts dans le dépôt design_system (React) — chaque composant
  * migré doit être ré-exporté ici, dans le même ordre de lots que la spec de migration :

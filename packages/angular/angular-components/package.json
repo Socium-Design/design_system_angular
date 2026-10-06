@@ -1,5 +1,5 @@
 {
-  "name": "@socium-ds/angular-components",
+  "name": "@socium-design/angular-components",
   "version": "0.1.0",
   "peerDependencies": {
     "@angular/common": "^19.2.0",
@@ -13,5 +13,16 @@
   "sideEffects": false,
   "exports": {
     "./styles.css": "./styles.css"
+  },
+  "description": "Design system Socium pour Angular 19 — composants standalone, tokens, polices et templates de page.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Socium-Design/design_system_angular.git",
+    "directory": "packages/angular/angular-components"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }

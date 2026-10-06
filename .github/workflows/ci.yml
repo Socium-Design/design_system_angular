@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/angular/package-lock.json
+      - run: npm --prefix packages/angular ci
+      # Chrome headless is preinstalled on ubuntu-latest runners.
+      - run: npm --prefix packages/angular test
+      - run: npm --prefix packages/angular run build
+      - run: npm --prefix packages/angular run build-storybook

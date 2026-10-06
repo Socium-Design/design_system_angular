@@ -1,63 +1,32 @@
-# AngularComponents
+# @socium-design/angular-components
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+Design system Socium pour **Angular 19** : composants standalone, tokens, polices, templates de page.
 
-## Code scaffolding
+- **Guide d'utilisation** : [`docs/USAGE.md`](docs/USAGE.md)
+- **Référence de tous les composants** (inputs, outputs, slots, types) : [`docs/generated/components.md`](docs/generated/components.md) — générée depuis le code, source de vérité.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Installation
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Le paquet est **privé**, publié sur GitHub Packages (organisation `Socium-Design`).
 
 ```bash
-ng generate --help
+# une fois par machine : authentifier npm auprès de GitHub Packages (voir le guide d'équipe de sirh_prototype)
+npm install @socium-design/angular-components @lucide/angular
 ```
 
-## Building
+Puis ajouter la feuille de style dans `angular.json` (cibles `build` et `test`) :
 
-To build the library, run:
-
-```bash
-ng build angular-components
+```json
+"styles": ["node_modules/@socium-design/angular-components/styles.css", "src/styles.scss"]
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+## Exemple
 
-### Publishing the Library
+```ts
+import { SocButton } from '@socium-design/angular-components';
 
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/angular-components
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+@Component({ imports: [SocButton], template: `<button socButton variant="primary">Enregistrer</button>` })
+export class Exemple {}
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Dépôt du design system : <https://github.com/Socium-Design/design_system_angular>

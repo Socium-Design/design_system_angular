@@ -4,5 +4,11 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "allowedNonPeerDependencies": ["@lucide/angular"]
+  "allowedNonPeerDependencies": [
+    "@lucide/angular"
+  ],
+  "assets": [
+    "./docs/USAGE.md",
+    "./docs/generated"
+  ]
 }
