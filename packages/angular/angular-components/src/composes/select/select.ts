@@ -11,6 +11,8 @@ export interface SelectOption {
 
 export type SelectMode = 'formulaire' | 'labelHeader';
 
+export const SELECT_DEFAULT_PLACEHOLDER = 'Select an option';
+
 /**
  * No native HTML equivalent (label + custom trigger + popover list + helper row) — plain wrapper
  * (`soc-select`). Maps 1:1 to "Index/Selection/Select/*" tokens — see
@@ -98,7 +100,7 @@ export class SocSelect {
   readonly error = input(false);
   readonly warning = input(false);
   readonly helperText = input<string>();
-  readonly placeholder = input('Select an option');
+  readonly placeholder = input(SELECT_DEFAULT_PLACEHOLDER);
   readonly options = input.required<SelectOption[]>();
   readonly value = model<string>();
   readonly defaultValue = input<string>();
