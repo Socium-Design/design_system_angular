@@ -25,7 +25,7 @@ pour les composants suivants.
 
 ```
 packages/angular/                        Workspace Angular CLI (tooling, non publié)
-  angular-components/                    Librairie publiable : @socium-ds/angular-components
+  angular-components/                    Librairie publiable : @socium-design/angular-components
     src/
       primitifs/                         Miroir des composants sans dépendance interne
       composes/                          Miroir des composants qui en composent d'autres
@@ -48,7 +48,7 @@ Ajouter la feuille de style compilée une fois dans l'application consommatrice 
 auto-hébergées, utilitaires Tailwind de tous les composants) :
 
 ```json
-"styles": ["node_modules/@socium-ds/angular-components/styles.css"]
+"styles": ["node_modules/@socium-design/angular-components/styles.css"]
 ```
 
 ## Commandes

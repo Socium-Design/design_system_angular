@@ -109,7 +109,7 @@ package was ~35MB. Don't reintroduce a per-component `styleUrl`.)
 - Storybook loads `src/styles/tailwind-entry.css` through the `styles` option of `angular.json`.
 - The library build is `npm run build` (`ng build angular-components` + `scripts/build-styles.mjs`),
   which compiles that same entry into `dist/angular-components/styles.css` (exposed as
-  `@socium-ds/angular-components/styles.css`). Consumers add it once to their app's `styles`.
+  `@socium-design/angular-components/styles.css`). Consumers add it once to their app's `styles`.
   Running `ng build` alone doesn't produce it.
 
 `src/styles/tailwind-entry.css` does `@import "tailwindcss";`, explicit `@source` directives (see
