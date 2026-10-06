@@ -27,7 +27,10 @@ export interface MultiSelectOption {
   imports: [SocPopover, SocPopoverTrigger, SocMenu, SocMenuItem, SocInputChip, LucideChevronDown, LucideInfo],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'flex w-full flex-col gap-[var(--index-selection-select-label-gap)]' },
+  // `id` is forwarded to the inner trigger button (label `for` target), like React — a static
+  // `id="..."` on <soc-*> would otherwise also land on this host element as a duplicate DOM id,
+  // and `<label for>` would resolve to the host (not labelable) instead of the button.
+  host: { class: 'flex w-full flex-col gap-[var(--index-selection-select-label-gap)]', '[attr.id]': 'null' },
   template: `
     @if (label()) {
       <label [for]="fieldId" [class]="labelClass()">
