@@ -45,6 +45,8 @@ export * from './composes/enterprise-select/enterprise-select';
 export * from './composes/language-select/language-select';
 export * from './composes/menu/menu';
 export * from './composes/multi-select/multi-select';
+export * from './composes/profile-line/profile-line';
 export * from './composes/select/select';
 export * from './composes/table-filter-select/table-filter-select';
+export * from './composes/upload-file/upload-file';
 // export * from './templates/page-home/page-home';
