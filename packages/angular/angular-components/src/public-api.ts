@@ -4,7 +4,7 @@
  * Miroir de packages/react/src/index.ts dans le dépôt design_system (React) — chaque composant
  * migré doit être ré-exporté ici, dans le même ordre de lots que la spec de migration :
  * primitifs d'abord (src/primitifs/*), puis composés (src/composes/*), puis templates
- * (src/templates/*). Lots 1 (primitifs) et 2 (composés) migrés; les templates (lot 3) ne le sont pas encore.
+ * (src/templates/*). Les trois lots sont migrés (primitifs, composés, templates).
  */
 
 export * from './primitifs/accordion/accordion';
@@ -52,3 +52,10 @@ export * from './composes/profile-line/profile-line';
 export * from './composes/select/select';
 export * from './composes/table-filter-select/table-filter-select';
 export * from './composes/upload-file/upload-file';
+export * from './templates/page-slots';
+export * from './templates/app-shell/app-shell';
+export * from './templates/page-details/page-details';
+export * from './templates/page-form/page-form';
+export * from './templates/page-home/page-home';
+export * from './templates/page-list/page-list';
+export * from './templates/page-profile/page-profile';

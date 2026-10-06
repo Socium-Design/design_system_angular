@@ -141,6 +141,25 @@ from the React repo when tokens change there, until this repo has its own sync s
   (Angular only calls `writeValue` on the clicked radio).
 - `@angular/forms` is a peer dependency of the library.
 
+### Page templates (`src/templates/`)
+
+- Content slots: one shared set of marker directives in `templates/page-slots.ts` (`socPageBreadcrumb`,
+  `socPageBadge`, `socPageActions`, `socPageTabs`, …); each template ignores markers it has no slot for.
+  The default slot is always React's `children`. Slot presence → `contentChild(marker)` + `computed()`.
+- `onBack` (presence = show the button) → `showBack` input + `back` output, same rule as everywhere.
+- **Re-exposing a slot through another component** (`AppShell` → `HeaderApp`): a bare `<ng-content>`
+  doesn't carry the inner component's marker attribute, and content queries only see nodes declared in
+  the *current* template. Declare a `display: contents` wrapper in the outer template that carries the
+  inner marker and holds the `<ng-content>`.
+- `@if (x; as y)` works only on the primary `@if` block (not `@else if`), and a control-flow block
+  projects into a named slot only if its single root is an element — don't nest `@if` inside `@else`
+  around projected elements; use `x()!` instead of `as`.
+- Containers that own a piece of state React left to the parent (`AppShell`'s `product`, `navSelectedId`,
+  `navCollapsed`, `language`) use `model()` so they follow the user's click by themselves; the consumer
+  still reacts to `…Change` to route the page.
+- Images referenced from CSS are re-encoded and embedded as data URIs in `styles/images.css` (same
+  reason as `fonts.css`).
+
 ### React idioms with no Angular equivalent — how they were resolved (Lot 2)
 
 - **`cloneElement` rewriting a child's props** (`CardGrid` forcing `colSpan`): the parent provides a

@@ -12,8 +12,10 @@ analogie avec un équivalent HTML natif), pas traduit ligne à ligne.
 - **Lot 2 — composés : terminé** (14 composants, `src/composes/`) : `Menu`/`MenuItem`, `Select`,
   `MultiSelect`, `LanguageSelect`, `EnterpriseSelect`, `TableFilterSelect`, `AvatarMenu`, `Dialog`,
   `Drawer` (+ `DrawerDetailItem`), `UploadFile`, `ProfileLine`, `HeaderApp`, `CardGrid`, `DataTable`.
-- **Lot 3 — templates** (`AppShell`, `PageHome`, `PageList`, `PageDetails`, `PageForm`,
-  `PageProfile`) : pas démarré.
+- **Lot 3 — templates : terminé** (6 composants, `src/templates/`) : `AppShell`, `PageHome`, `PageList`,
+  `PageDetails`, `PageForm`, `PageProfile` (+ marqueurs de slots partagés `page-slots.ts`).
+- **Formulaires** : tous les champs de saisie sont des `ControlValueAccessor` (`formControl`,
+  `formControlName`, `ngModel`) — voir Storybook → Guides/Formulaires.
 
 Voir `CLAUDE.md` pour les conventions établies (sélecteur d'attribut, `ViewEncapsulation.None`,
 projection de contenu, équivalents Angular des idiomes React sans équivalent direct) à réutiliser

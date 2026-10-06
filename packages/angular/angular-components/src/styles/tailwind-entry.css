@@ -32,6 +32,7 @@
  * registered that family.
  */
 @import "./fonts.css";
+@import "./images.css";
 
 /* Copied from design_system (React)'s src/index.css — Tailwind v4's own preflight/theme defines
  * --font-sans (and, in a consumer app that also runs its own Tailwind instance, that app's
