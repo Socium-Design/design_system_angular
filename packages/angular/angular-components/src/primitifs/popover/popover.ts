@@ -73,6 +73,10 @@ function computePosition(position: PopoverPosition, triggerRect: DOMRect, panelR
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  // React's Popover returns a fragment (no wrapper element of its own) — `contents` keeps the
+  // trigger wrapper a direct layout child of the consumer's container, e.g. a `w-full` trigger
+  // inside a flex column (Select) still fills the column.
+  host: { class: 'contents' },
   template: `
     <div #triggerWrapper class="relative inline-flex" (click)="toggle()">
       <ng-content select="[socPopoverTrigger]" />
