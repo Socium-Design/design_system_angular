@@ -42,6 +42,7 @@ export * from './composes/avatar-menu/avatar-menu';
 export * from './composes/dialog/dialog';
 export * from './composes/drawer/drawer';
 export * from './composes/enterprise-select/enterprise-select';
+export * from './composes/header-app/header-app';
 export * from './composes/language-select/language-select';
 export * from './composes/menu/menu';
 export * from './composes/multi-select/multi-select';
