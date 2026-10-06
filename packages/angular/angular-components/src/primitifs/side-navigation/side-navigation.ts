@@ -43,7 +43,7 @@ import {
             [class]="itemClass(item.id)"
           >
             <span [class]="item.id === selectedId() ? 'size-[18px] shrink-0 text-[var(--index-navigation-sidenavigation-item-icon-selected)]' : 'size-[18px] shrink-0 text-[var(--index-navigation-sidenavigation-item-icon-default)]'">
-              <ng-container [ngComponentOutlet]="item.icon" />
+              <ng-container [ngComponentOutlet]="item.icon" [ngComponentOutletInputs]="itemIconInputs" />
             </span>
             @if (!collapsed()) {
               <span class="flex-1 truncate text-left">{{ item.label }}</span>
@@ -62,6 +62,10 @@ export class SocSideNavSection {
 
   protected readonly open = signal(true);
   protected readonly chevronThickness = 'var(--index-navigation-sidenavigation-menu-title-chevron-thickness)';
+  // React's `navIcon()` helper renders every preset icon as `<Icon className="size-full"
+  // strokeWidth="…-item-icon-thickness" />`; a bare NgComponentOutlet instantiates the Lucide
+  // component with its own defaults (24px, stroke 2), so the same two inputs are passed explicitly.
+  protected readonly itemIconInputs = { class: 'size-full', strokeWidth: 'var(--index-navigation-sidenavigation-item-icon-thickness)' };
 
   protected itemClick(item: SideNavItemData): void {
     item.onClick?.();
@@ -142,7 +146,7 @@ export class SocSideNavSection {
               >
                 <span class="flex size-[var(--index-navigation-sidenavigation-action-icon-square)] shrink-0 items-center justify-center rounded-[var(--index-navigation-sidenavigation-action-icon-radius)] bg-[var(--index-navigation-sidenavigation-action-icon-bg)] text-[var(--index-navigation-sidenavigation-action-icon-color)]">
                   <span class="size-3.5">
-                    <ng-container [ngComponentOutlet]="action.icon" />
+                    <ng-container [ngComponentOutlet]="action.icon" [ngComponentOutletInputs]="actionIconInputs" />
                   </span>
                 </span>
                 @if (!collapsed()) {
@@ -169,6 +173,7 @@ export class SocSideNavigation {
   readonly toggleCollapse = output<void>();
 
   protected readonly titleIconThickness = 'var(--index-navigation-sidenavigation-title-icon-thickness)';
+  protected readonly actionIconInputs = { class: 'size-full', strokeWidth: 'var(--index-navigation-sidenavigation-action-icon-thickness)' };
 
   private readonly preset = computed(() => {
     const product = this.product();
