@@ -89,6 +89,7 @@ function computePosition(position: PopoverPosition, triggerRect: DOMRect, panelR
       [style.left.px]="leftPx()"
       [style.width.px]="matchTriggerWidth() && open() ? triggerWidthPx() : null"
       [style.visibility]="open() ? 'visible' : 'hidden'"
+      [class]="panelClass()"
       class="z-20 flex min-w-[200px] flex-col items-start rounded-[var(--index-conteneur-menu-popover-radius)] bg-[var(--index-conteneur-menu-popover-bg)] py-[var(--index-conteneur-menu-popover-pad)] drop-shadow-[0px_var(--index-conteneur-menu-popover-shadow-y)_var(--index-conteneur-menu-popover-shadow-blur)_rgba(68,84,111,var(--index-conteneur-menu-popover-shadow-opacity))]"
     >
       <ng-content />
@@ -100,6 +101,10 @@ export class SocPopover {
   readonly position = input<PopoverPosition>('bottom');
   readonly open = model(false);
   readonly matchTriggerWidth = input(false);
+  /** React `Popover`'s `className` — extra classes merged onto the portaled panel (e.g.
+   * `EnterpriseSelect`'s explicit `w-[400px]`). A literal `class` on `<soc-popover>` can't do this:
+   * the panel is portaled out to `document.body`, away from the host element. */
+  readonly panelClass = input<string>();
 
   private readonly triggerWrapperRef = viewChild<ElementRef<HTMLElement>>('triggerWrapper');
   private readonly panelRef = viewChild<ElementRef<HTMLElement>>('panel');
