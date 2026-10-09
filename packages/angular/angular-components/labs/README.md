@@ -24,6 +24,7 @@ pour `/labs`).
 | `soc-labs-pill-toggle` (`SocLabsPillToggle`) | Proposé | [#16](https://github.com/Socium-Design/design_system_angular/issues/16) | — (cible : statut d'un tableau de bord, ET / OU des populations) |
 | `soc-labs-chart-type-chip` (`SocLabsChartTypeChip`) | Proposé | [#24](https://github.com/Socium-Design/design_system_angular/issues/24) (voir #7) | — (cible : catalogue de la Bibliothèque, cartes de composition ; remplace `app-icone-graphique`) |
 | `soc-labs-inline-edit` (`SocLabsInlineEdit`) | Proposé | [#23](https://github.com/Socium-Design/design_system_angular/issues/23) | — (cible : renommage des sections dans la composition) |
+| `soc-labs-compact-field` (`SocLabsCompactField`) | Proposé | [#25](https://github.com/Socium-Design/design_system_angular/issues/25) | — (cible : panneau « Informations » de la composition) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).
