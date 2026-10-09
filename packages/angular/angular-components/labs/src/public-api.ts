@@ -4,3 +4,4 @@
  * Composants expérimentaux (zone Labs) — voir labs/README.md pour le cycle de vie. Rien ici n'est
  * exporté par le point d'entrée principal ; tout peut changer sans garantie de compatibilité.
  */
+export * from './icon-button/icon-button';

@@ -20,6 +20,7 @@ pour `/labs`).
 
 | Composant | Statut | Issue GAP-DS | Pages qui l'utilisent |
 |---|---|---|---|
+| `soc-labs-icon-button` (`SocLabsIconButton`) | Proposé | [#22](https://github.com/Socium-Design/design_system_angular/issues/22) | — (cible : composition de tableau de bord, Bibliothèque) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).
