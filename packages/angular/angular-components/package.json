@@ -1,19 +1,22 @@
 {
   "name": "@socium-design/angular-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "peerDependencies": {
     "@angular/common": "^19.2.0",
     "@angular/core": "^19.2.0",
-    "@angular/forms": "^19.2.0"
+    "@angular/forms": "^19.2.0",
+    "@angular/cdk": "^19.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/cdk": {
+      "optional": true
+    }
   },
   "dependencies": {
     "tslib": "^2.3.0",
     "@lucide/angular": "^1.48.0"
   },
   "sideEffects": false,
-  "exports": {
-    "./styles.css": "./styles.css"
-  },
   "description": "Design system Socium pour Angular 19 — composants standalone, tokens, polices et templates de page.",
   "license": "UNLICENSED",
   "repository": {

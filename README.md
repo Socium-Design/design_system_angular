@@ -31,6 +31,8 @@ packages/angular/                        Workspace Angular CLI (tooling, non pub
       composes/                          Miroir des composants qui en composent d'autres
       templates/                         Miroir de packages/react/src/templates/
       public-api.ts                      Point d'entrée public — un export par composant migré
+    labs/                                Composants expérimentaux : @socium-design/angular-components/labs
+                                         (voir labs/README.md — statut, issues GAP-DS, cycle de vie)
     .storybook/                          Storybook pour Angular (@storybook/angular, webpack5)
 ```
 

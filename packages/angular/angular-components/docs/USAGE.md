@@ -81,3 +81,11 @@ l'application relie ces valeurs au routeur.
 
 Si un besoin n'est couvert par aucun composant, **ne pas improviser un faux composant** : le signaler comme `GAP-DS`
 (composant manquant, prop manquante, écart visuel) dans le dépôt `Socium-Design/design_system_angular`.
+
+## Labs (composants expérimentaux)
+
+`import { SocLabsWorkspaceLayout } from '@socium-design/angular-components/labs';` — jamais depuis le point
+d'entrée principal. Ces composants (`soc-labs-*`) comblent un écart du kit (issue GAP-DS) le temps d'une
+revue par l'équipe design : ils peuvent changer ou disparaître sans garantie de compatibilité, puis être
+promus dans le kit (renommés sans « Labs »). Installer `@angular/cdk` (^19.2) pour les utiliser. La
+feuille `styles.css` contient déjà leurs styles.

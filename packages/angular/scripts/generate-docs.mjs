@@ -9,6 +9,9 @@ import ts from 'typescript';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'angular-components/src');
+// Secondary entry point @socium-design/angular-components/labs (experimental components) — documented
+// in its own "Labs" section, never mixed with the stable kit.
+const labsSrc = join(root, 'angular-components/labs/src');
 const out = join(root, 'angular-components/docs/generated');
 const pkg = JSON.parse(await readFile(join(root, 'angular-components/package.json'), 'utf8'));
 
@@ -18,7 +21,9 @@ async function walk(dir) {
   return files.flat();
 }
 
-const files = (await walk(src)).filter((f) => f.endsWith('.ts') && !/\.(spec|stories)\.ts$/.test(f) && !f.includes('/testing/') && !f.endsWith('public-api.ts'));
+const files = [...(await walk(src)), ...(await walk(labsSrc))].filter(
+  (f) => f.endsWith('.ts') && !/\.(spec|stories)\.ts$/.test(f) && !f.includes('/testing/') && !f.includes('/stories/') && !f.endsWith('public-api.ts'),
+);
 
 const classes = new Map(); // name -> info
 const types = []; // exported types/interfaces
@@ -62,7 +67,7 @@ function callInfo(init) {
 function parseFile(path) {
   const text = ts.sys.readFile(path);
   const sf = ts.createSourceFile(path, text, ts.ScriptTarget.ES2022, true);
-  const rel = relative(src, path);
+  const rel = path.startsWith(labsSrc) ? join('labs', relative(labsSrc, path)) : relative(src, path);
   for (const stmt of sf.statements) {
     const exported = stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
     if ((ts.isTypeAliasDeclaration(stmt) || ts.isInterfaceDeclaration(stmt)) && exported) {
@@ -118,8 +123,10 @@ const resolveMembers = (info, key) => {
 };
 const isCva = (info) => info.cva || (info.extends && classes.get(info.extends) ? isCva(classes.get(info.extends)) || /SocFormControl|SocTextFieldBase/.test(info.extends) : /SocFormControl|SocTextFieldBase/.test(info.extends ?? ''));
 
-const level = (file) => (file.startsWith('primitifs') ? 'primitifs' : file.startsWith('composes') ? 'composes' : file.startsWith('templates') ? 'templates' : 'autres');
-const levelLabel = { primitifs: 'Primitifs (niveau 0)', composes: 'Composés (niveau 1)', templates: 'Templates de page' };
+const level = (file) =>
+  file.startsWith('labs/') ? 'labs' : file.startsWith('primitifs') ? 'primitifs' : file.startsWith('composes') ? 'composes' : file.startsWith('templates') ? 'templates' : 'autres';
+const levelLabel = { primitifs: 'Primitifs (niveau 0)', composes: 'Composés (niveau 1)', templates: 'Templates de page', labs: 'Labs (expérimental)' };
+const entryPointOf = (file) => (file.startsWith('labs/') ? `${pkg.name}/labs` : pkg.name);
 
 const all = [...classes.values()].filter((c) => c.exported && c.selector);
 const markers = all.filter((c) => c.isDirective && !c.template);
@@ -147,6 +154,8 @@ const json = components.map((c) => ({
   name: c.name,
   selector: c.selector,
   level: level(c.file),
+  entryPoint: entryPointOf(c.file),
+  experimental: level(c.file) === 'labs',
   file: c.file,
   description: c.doc,
   formControl: isCva(c),
@@ -164,12 +173,24 @@ md += `- **Slots** : le contenu projeté se range avec un attribut marqueur (ex.
 md += `- **Formulaire** : « oui » = \`formControl\`, \`formControlName\` et \`ngModel\` fonctionnent dessus.\n`;
 md += `- Les inputs booléens acceptent l'attribut nu (\`<soc-input-text required disabled>\`). Les inputs \`model\` (↔) se lient en \`[(x)]\`.\n\n`;
 md += `## Index\n\n| Composant | Sélecteur | Niveau |\n|---|---|---|\n`;
-for (const c of json) md += `| [${c.name}](#${c.name.toLowerCase()}) | \`${esc(c.selector)}\` | ${c.level} |\n`;
-for (const lvl of ['primitifs', 'composes', 'templates']) {
+for (const c of json.filter((x) => !x.experimental)) md += `| [${c.name}](#${c.name.toLowerCase()}) | \`${esc(c.selector)}\` | ${c.level} |\n`;
+const labs = json.filter((x) => x.experimental);
+if (labs.length) {
+  md += `\n**Labs (expérimental)** — point d'entrée séparé \`${pkg.name}/labs\`, voir la section [Labs](#labs-expérimental) :\n\n`;
+  md += `| Composant | Sélecteur |\n|---|---|\n`;
+  for (const c of labs) md += `| [${c.name}](#${c.name.toLowerCase()}) | \`${esc(c.selector)}\` |\n`;
+}
+for (const lvl of ['primitifs', 'composes', 'templates', 'labs']) {
   md += `\n---\n\n## ${levelLabel[lvl]}\n`;
+  if (lvl === 'labs') {
+    md += `\n> **Composants expérimentaux — non stabilisés.** Importés depuis \`${pkg.name}/labs\` (jamais depuis le point d'entrée principal). `;
+    md += `Ils peuvent changer ou disparaître sans garantie de compatibilité, jusqu'à leur promotion dans le kit (renommés sans « Labs ») après accord de l'équipe design. `;
+    md += `Requiert \`@angular/cdk\` (glisser-déposer). Statut de chaque composant : \`labs/README.md\` du dépôt.\n`;
+  }
   for (const c of json.filter((x) => x.level === lvl)) {
     md += `\n### ${c.name}\n\n`;
     md += `- **Sélecteur** : \`${esc(c.selector)}\` — \`${usage(components.find((k) => k.name === c.name))}\`\n`;
+    if (c.experimental) md += `- **Import** : \`import { ${c.name} } from '${c.entryPoint}';\`\n`;
     md += `- **Formulaire (ControlValueAccessor)** : ${c.formControl ? 'oui' : 'non'}\n`;
     md += `- **Fichier** : \`${c.file}\`\n`;
     if (c.description) md += `\n${clip(c.description, 600)}\n`;

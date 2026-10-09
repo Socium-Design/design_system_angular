@@ -21,3 +21,14 @@ const { code } = transform({ filename: 'styles.css', code: Buffer.from(result.cs
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, code);
 console.log(`styles.css: ${(code.length / 1024).toFixed(0)} KiB -> ${output}`);
+
+// Expose it as `@socium-design/angular-components/styles.css`. Added to the built package.json here
+// rather than declared in the source one: an `exports` field in angular-components/package.json makes
+// webpack resolve the package's own name through it (self-reference) in Karma/Storybook, which breaks
+// the `labs` entry point's `import … from '@socium-design/angular-components'` (tsconfig `paths`
+// never get a chance). ng-packagr already wrote the `.` and `./labs` entries.
+const pkgPath = resolve(root, 'dist/angular-components/package.json');
+const pkg = JSON.parse(await readFile(pkgPath, 'utf8'));
+pkg.exports = { './styles.css': './styles.css', ...pkg.exports };
+await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+console.log(`exports: ${Object.keys(pkg.exports).join(', ')}`);
