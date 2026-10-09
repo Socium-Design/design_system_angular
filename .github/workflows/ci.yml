@@ -20,3 +20,9 @@ jobs:
       - run: npm --prefix packages/angular test
       - run: npm --prefix packages/angular run build
       - run: npm --prefix packages/angular run build-storybook
+      # Built Storybook, downloadable from the run page (reviewers, PR screenshots).
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: packages/angular/storybook-static
+          retention-days: 14
