@@ -5,3 +5,4 @@
  * exporté par le point d'entrée principal ; tout peut changer sans garantie de compatibilité.
  */
 export * from './icon-button/icon-button';
+export * from './pill-toggle/pill-toggle';
