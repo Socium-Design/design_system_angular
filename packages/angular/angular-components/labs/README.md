@@ -22,6 +22,7 @@ pour `/labs`).
 |---|---|---|---|
 | `soc-labs-icon-button` (`SocLabsIconButton`) | Proposé | [#22](https://github.com/Socium-Design/design_system_angular/issues/22) | — (cible : composition de tableau de bord, Bibliothèque) |
 | `soc-labs-pill-toggle` (`SocLabsPillToggle`) | Proposé | [#16](https://github.com/Socium-Design/design_system_angular/issues/16) | — (cible : statut d'un tableau de bord, ET / OU des populations) |
+| `soc-labs-chart-type-chip` (`SocLabsChartTypeChip`) | Proposé | [#24](https://github.com/Socium-Design/design_system_angular/issues/24) (voir #7) | — (cible : catalogue de la Bibliothèque, cartes de composition ; remplace `app-icone-graphique`) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).

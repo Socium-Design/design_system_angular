@@ -6,3 +6,4 @@
  */
 export * from './icon-button/icon-button';
 export * from './pill-toggle/pill-toggle';
+export * from './chart-type-chip/chart-type-chip';
