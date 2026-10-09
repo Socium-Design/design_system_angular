@@ -27,6 +27,7 @@ pour `/labs`).
 | `soc-labs-compact-field` (`SocLabsCompactField`) | Proposé | [#25](https://github.com/Socium-Design/design_system_angular/issues/25) | — (cible : panneau « Informations » de la composition) |
 | `soc-labs-list-row` (`SocLabsListRow`) | Proposé | [#21](https://github.com/Socium-Design/design_system_angular/issues/21) (glisser : #8) | — (cible : catalogue de la Bibliothèque) |
 | `soc-labs-drop-zone` (`SocLabsDropZone`) | Proposé | [#8](https://github.com/Socium-Design/design_system_angular/issues/8) | — (cible : sections de la composition, glisser depuis la Bibliothèque) |
+| `soc-labs-fullscreen-overlay` (`SocLabsFullscreenOverlay`) | Proposé | [#20](https://github.com/Socium-Design/design_system_angular/issues/20) | — (cible : « Prévisualiser » un tableau de bord) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).

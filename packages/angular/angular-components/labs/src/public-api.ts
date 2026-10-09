@@ -11,3 +11,4 @@ export * from './inline-edit/inline-edit';
 export * from './compact-field/compact-field';
 export * from './list-row/list-row';
 export * from './drop-zone/drop-zone';
+export * from './fullscreen-overlay/fullscreen-overlay';
