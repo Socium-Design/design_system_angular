@@ -29,4 +29,11 @@ import { SocButton } from '@socium-design/angular-components';
 export class Exemple {}
 ```
 
+## Labs (expérimental)
+
+Les composants expérimentaux sont dans un point d'entrée séparé, `@socium-design/angular-components/labs`
+(sélecteurs `soc-labs-*`, classes `SocLabs*`). **Non stabilisés** : ils peuvent changer sans garantie de
+compatibilité jusqu'à leur promotion dans le kit. Ils requièrent `@angular/cdk` (glisser-déposer).
+Référence : section « Labs » de `docs/generated/components.md`.
+
 Dépôt du design system : <https://github.com/Socium-Design/design_system_angular>
