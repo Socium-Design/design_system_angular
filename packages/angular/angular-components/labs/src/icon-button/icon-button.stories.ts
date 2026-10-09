@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
 import { LucideGripVertical, LucidePencil, LucidePlus, LucideX } from '@lucide/angular';
-import { LABS_SECTION, labsBanner } from '../stories/labs-story';
+import { labsBanner } from '../stories/labs-story';
 import { SocLabsIconButton, type LabsIconButtonShape, type LabsIconButtonSize, type LabsIconButtonVariant } from './icon-button';
 
 const SIZES: LabsIconButtonSize[] = ['xs', 'sm', 'md'];
@@ -9,7 +9,7 @@ const VARIANTS: LabsIconButtonVariant[] = ['ghost', 'primary-subtle'];
 const SHAPES: LabsIconButtonShape[] = ['square', 'round'];
 
 const meta: Meta<SocLabsIconButton> = {
-  title: `${LABS_SECTION}/Icon Button`,
+  title: 'Labs (expérimental)/Icon Button',
   component: SocLabsIconButton,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [SocLabsIconButton, LucidePlus, LucidePencil, LucideX, LucideGripVertical] }), labsBanner],

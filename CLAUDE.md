@@ -233,7 +233,8 @@ Wiring (already done — don't redo):
   the package's own name through it (self-reference) and skip the tsconfig paths. `scripts/build-styles.mjs`
   adds `./styles.css` to the built `dist/…/package.json`; ng-packagr writes `.` and `./labs`.
 - Tests: `angular.json` → `test.options.include` adds `../labs/**/*.spec.ts` (Karma only looks under
-  `src/` by default). Storybook: `labs/**/*.stories.ts`, title prefix `LABS_SECTION`, decorator
+  `src/` by default). Storybook: `labs/**/*.stories.ts`, literal title `'Labs (expérimental)/<Name>'` (Storybook's
+  indexer rejects a computed `title`), decorator
   `labsBanner` (`labs/src/stories/labs-story.ts`). Tailwind: `@source "../../labs/**/*.ts"`.
 - `@angular/cdk` is an optional peer dependency (drag-and-drop in Labs only).
 - Generated docs: `scripts/generate-docs.mjs` puts Labs components in a separate "Labs" section.

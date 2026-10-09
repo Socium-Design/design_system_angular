@@ -1,8 +1,5 @@
 import { componentWrapperDecorator } from '@storybook/angular';
 
-/** Storybook section every Labs component lives under. */
-export const LABS_SECTION = 'Labs (expérimental)';
-
 /**
  * Banner shown above every Labs story (canvas and docs). Labs components can change without any
  * compatibility guarantee until the design team promotes them — the banner makes that explicit to
