@@ -11,6 +11,8 @@
 @source "../primitifs/**/*.ts";
 @source "../composes/**/*.ts";
 @source "../templates/**/*.ts";
+/* Labs (secondary entry point @socium-design/angular-components/labs) ships in the same styles.css. */
+@source "../../labs/**/*.ts";
 
 /*
  * Copied verbatim from design_system (React)'s packages/react/src/tokens.generated.css — itself

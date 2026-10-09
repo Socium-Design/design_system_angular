@@ -4,9 +4,15 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
+    "baseUrl": ".",
     "types": [
       "jasmine"
-    ]
+    ],
+    "paths": {
+      "@socium-design/angular-components": [
+        "./src/public-api.ts"
+      ]
+    }
   },
   "include": [
     "**/*.spec.ts",

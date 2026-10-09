@@ -3,9 +3,13 @@
   "compilerOptions": {
     "types": ["node"],
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@socium-design/angular-components": ["../src/public-api.ts"]
+    }
   },
-  "exclude": ["../src/test.ts", "../src/**/*.spec.ts"],
-  "include": ["../src/**/*.ts", "../src/**/*.stories.*", "./preview.ts"],
+  "exclude": ["../src/test.ts", "../src/**/*.spec.ts", "../labs/**/*.spec.ts"],
+  "include": ["../src/**/*.ts", "../src/**/*.stories.*", "../labs/**/*.ts", "./preview.ts"],
   "files": ["./typings.d.ts"]
 }

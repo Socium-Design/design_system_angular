@@ -35,7 +35,11 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "karmaConfig": "karma.conf.js"
+            "karmaConfig": "karma.conf.js",
+            "include": [
+              "**/*.spec.ts",
+              "../labs/**/*.spec.ts"
+            ]
           }
         },
         "storybook": {

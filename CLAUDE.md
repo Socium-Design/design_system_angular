@@ -211,6 +211,33 @@ controls is therefore an `input()` + the form's own state (`SocFormControl.disab
 - **Storybook args**: bind every input in the story template; an arg left `undefined` overrides the
   component's own default (`[mode]="mode"` with no `mode` arg disabled `Select`'s label).
 
+## Labs — experimental components (`angular-components/labs/`)
+
+Secondary entry point `@socium-design/angular-components/labs` (ng-packagr, `labs/ng-package.json`,
+`labs/src/public-api.ts`). Selectors `soc-labs-*`, classes `SocLabs*`; nothing from Labs is exported by
+the primary entry point. Status table and details: `labs/README.md`.
+
+**Lifecycle**: GAP-DS spotted (issue `GAP-DS`) → created in Labs (label `labs` on the issue) → used in
+the prototype → reviewed (Storybook + prototype) → **Validated**: promoted into the official kit (renamed
+without "labs", moved into `src/…`, exported from the primary entry point, issue closed) / **Abandoned**:
+deleted. **A promotion never happens without explicit approval from the design team.** Labs components
+may change without any compatibility guarantee.
+
+Wiring (already done — don't redo):
+- Labs imports the kit **only** as `@socium-design/angular-components` (ng-packagr refuses relative
+  imports into another entry point). `tsconfig.spec.json` and `.storybook/tsconfig.json` map that name
+  to `src/public-api.ts` (with `baseUrl: "."` — Angular's webpack paths plugin resolves against the
+  cwd otherwise). Kit internals (`SocFormControl`, `nextUniqueId`) aren't public: Labs has its own copies
+  in `labs/src/internal/`.
+- The source `angular-components/package.json` must **not** declare `exports`: webpack would resolve
+  the package's own name through it (self-reference) and skip the tsconfig paths. `scripts/build-styles.mjs`
+  adds `./styles.css` to the built `dist/…/package.json`; ng-packagr writes `.` and `./labs`.
+- Tests: `angular.json` → `test.options.include` adds `../labs/**/*.spec.ts` (Karma only looks under
+  `src/` by default). Storybook: `labs/**/*.stories.ts`, title prefix `LABS_SECTION`, decorator
+  `labsBanner` (`labs/src/stories/labs-story.ts`). Tailwind: `@source "../../labs/**/*.ts"`.
+- `@angular/cdk` is an optional peer dependency (drag-and-drop in Labs only).
+- Generated docs: `scripts/generate-docs.mjs` puts Labs components in a separate "Labs" section.
+
 ## Tooling gotchas already hit and fixed — don't re-debug these
 
 All already fixed at the workspace level; a newly migrated component doesn't need to touch any of
