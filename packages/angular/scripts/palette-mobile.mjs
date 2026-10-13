@@ -66,6 +66,7 @@ const PALETTE = {
   // SideNavigation (aliases surface.neutral-inverse-dark), selected item: white 12 %, lime icon.
   'index.navigation.sidenavigation.nav-bg': '#162D65',
   'index.navigation.sidenavigation.item-bg-hover': '#FFFFFF0F',
+  'index.navigation.sidenavigation.action-bg-hover': '#FFFFFF0F',
   'index.navigation.sidenavigation.item-bg-selected': '#FFFFFF1F',
   'index.navigation.sidenavigation.item-text-selected': '#FFFFFF',
   'index.navigation.sidenavigation.item-icon-selected': '#E8FF8C',
