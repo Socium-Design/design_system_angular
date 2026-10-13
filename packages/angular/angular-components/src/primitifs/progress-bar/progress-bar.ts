@@ -11,7 +11,9 @@ export class SocProgressBarTag {}
 const fillClasses: Record<ProgressBarStatus, string> = {
   information: 'bg-[var(--index-feedback-progressbar-fill-information)]',
   success: 'bg-[var(--index-feedback-progressbar-fill-success)]',
-  warning: 'bg-[var(--index-feedback-progressbar-fill-warning)]',
+  // White is under 3:1 on the warning fill: re-point the in-bar label to the dark on-warning color.
+  warning:
+    'bg-[var(--index-feedback-progressbar-fill-warning)] [--index-feedback-progressbar-fill-text-color:var(--index-feedback-progressbar-fill-text-on-warning)]',
   error: 'bg-[var(--index-feedback-progressbar-fill-error)]',
 };
 

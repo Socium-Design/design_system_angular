@@ -68,7 +68,7 @@ export class SocEnterpriseSelect {
 
   protected readonly triggerClasses = computed(
     () =>
-      `flex w-[400px] items-center justify-between rounded-[var(--index-selection-select-enterprise-radius)] bg-[var(--index-selection-select-enterprise-bg)] px-[var(--index-selection-select-enterprise-pad-h)] py-[var(--index-selection-select-enterprise-pad-v)] text-left text-[length:var(--index-selection-select-enterprise-size)] [font-family:var(--index-selection-select-enterprise-font)] [font-weight:var(--index-selection-select-enterprise-weight)] ${this.triggerClass() ?? ''}`,
+      `flex w-[400px] items-center justify-between rounded-[var(--index-selection-select-enterprise-radius)] border border-[var(--index-selection-select-enterprise-border)] bg-[var(--index-selection-select-enterprise-bg)] px-[var(--index-selection-select-enterprise-pad-h)] py-[var(--index-selection-select-enterprise-pad-v)] text-left text-[length:var(--index-selection-select-enterprise-size)] [font-family:var(--index-selection-select-enterprise-font)] [font-weight:var(--index-selection-select-enterprise-weight)] ${this.triggerClass() ?? ''}`,
   );
 
   protected selectOption(next: string): void {
