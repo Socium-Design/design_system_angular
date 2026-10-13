@@ -137,7 +137,7 @@ export const loadLucideLibrary = () => import('./generated/lucide-library.genera
                   {{ icon.className }}
                 </span>
                 @if (icon.importedAs.length) {
-                  <span class="text-[length:var(--bridges-size-text-text-size-xs)] text-[var(--bridges-color-text-tertiary)]">
+                  <span class="text-[length:var(--bridges-size-text-text-size-xs)] text-[var(--bridges-color-text-secondary)]">
                     importée sous {{ icon.importedAs.join(', ') }} (ancien nom)
                   </span>
                 }
