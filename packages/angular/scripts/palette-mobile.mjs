@@ -65,17 +65,22 @@ const PALETTE = {
 
   // SideNavigation (aliases surface.neutral-inverse-dark), selected item: white 12 %, lime icon.
   'index.navigation.sidenavigation.nav-bg': '#162D65',
+  'index.navigation.sidenavigation.item-bg-hover': '#FFFFFF0F',
   'index.navigation.sidenavigation.item-bg-selected': '#FFFFFF1F',
   'index.navigation.sidenavigation.item-text-selected': '#FFFFFF',
   'index.navigation.sidenavigation.item-icon-selected': '#E8FF8C',
   // Enterprise selector in the header: white 12 % fill, white 24 % outline (token added below).
   'index.selection.select.enterprise-bg': '#FFFFFF1F',
   'index.selection.select.enterprise-border': '#FFFFFF3D',
-  'index.selection.select.enterprise-meta-color': '#919BAB',
+  'index.selection.select.enterprise-meta-color': '#B2B9C4',
   // Dark text on the lime and warning fills (white is under 3:1 there).
   'index.feedback.badge.text-primary': '#1F2937',
   'index.feedback.badge.text-warning': '#1F2937',
   'index.feedback.message.text-on-warning': '#1F2937',
+  'index.feedback.progressbar.fill-text-on-warning': '#1F2937',
+  // Avatar solid uses the soft background as its text color: make it opaque (same render on white).
+  'index.social.avatar.blue-bg': '#C7DCFF',
+  'index.social.avatar.green-bg': '#C3E4DE',
   // Badge success: tinted like the tags instead of lime.
   'index.feedback.badge.bg-2': '#038D763D',
   'index.feedback.badge.text-success': '#026F5D',
@@ -92,7 +97,7 @@ const PALETTE = {
   'index.conteneur.accordion.header-stroke-warning': '#FF7300',
   'index.selection.select.field-stroke-warning': '#FF7300',
 };
-const ADDED = new Set(['index.selection.select.enterprise-border', 'index.feedback.message.text-on-warning']);
+const ADDED = new Set(['index.selection.select.enterprise-border', 'index.feedback.message.text-on-warning', 'index.feedback.progressbar.fill-text-on-warning']);
 
 const source = process.argv[2];
 if (!source) {

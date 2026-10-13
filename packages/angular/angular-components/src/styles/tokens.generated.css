@@ -631,6 +631,7 @@
   --index-feedback-progressbar-tiny-label-weight: 400;
   --index-feedback-progressbar-tiny-label-size: 12px;
   --index-feedback-progressbar-tiny-radius: 9999px;
+  --index-feedback-progressbar-fill-text-on-warning: #1F2937;
   --index-feedback-tooltip-bg: #364153;
   --index-feedback-tooltip-text-color: #FFFFFF;
   --index-feedback-tooltip-font-family: DM Sans;
@@ -1110,7 +1111,7 @@
   --index-navigation-sidenavigation-item-icon-default: #99a1af;
   --index-navigation-sidenavigation-item-icon-hover: #FFFFFF;
   --index-navigation-sidenavigation-item-icon-selected: #E8FF8C;
-  --index-navigation-sidenavigation-item-bg-hover: #364153;
+  --index-navigation-sidenavigation-item-bg-hover: #FFFFFF0F;
   --index-navigation-sidenavigation-item-border-selected: #eaff90;
   --index-navigation-sidenavigation-item-icon-thickness: 1.5px;
   --index-navigation-sidenavigation-item-font: DM Sans;
@@ -1235,7 +1236,7 @@
   --index-selection-select-icon-help-warning: #A64B00;
   --index-selection-select-enterprise-bg: #FFFFFF1F;
   --index-selection-select-enterprise-text-color: #FFFFFF;
-  --index-selection-select-enterprise-meta-color: #919BAB;
+  --index-selection-select-enterprise-meta-color: #B2B9C4;
   --index-selection-select-enterprise-radius: 4px;
   --index-selection-select-enterprise-pad-h: 12px;
   --index-selection-select-enterprise-pad-v: 10px;
@@ -1302,9 +1303,9 @@
   --index-social-avatar-text-font: DM Sans;
   --index-social-avatar-text-weight: 500;
   --index-social-avatar-radius: 9999px;
-  --index-social-avatar-blue-bg: #166DFF3D;
+  --index-social-avatar-blue-bg: #C7DCFF;
   --index-social-avatar-blue-text: #0052DD;
-  --index-social-avatar-green-bg: #038D763D;
+  --index-social-avatar-green-bg: #C3E4DE;
   --index-social-avatar-green-text: #026F5D;
   --index-social-avatar-purple-bg: #efe9fe;
   --index-social-avatar-purple-text: #713aed;
