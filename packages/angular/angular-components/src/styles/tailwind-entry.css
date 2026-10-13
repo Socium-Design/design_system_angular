@@ -13,6 +13,8 @@
 @source "../templates/**/*.ts";
 /* Labs (secondary entry point @socium-design/angular-components/labs) ships in the same styles.css. */
 @source "../../labs/**/*.ts";
+/* Storybook-only "Fondations/Icônes" page (generated data excluded: plain SVG paths, no classes). */
+@source "../stories/icons/*.ts";
 
 /*
  * Copied verbatim from design_system (React)'s packages/react/src/tokens.generated.css — itself
