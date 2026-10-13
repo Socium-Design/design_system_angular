@@ -1,48 +1,77 @@
 // Preview only (branch feature/palette-mobile): regenerates src/styles/tokens.generated.css with the
 // mobile app's palette. The token source is design_system (React)'s packages/tokens (read-only from
-// here), so this copies it to a temp dir, overrides a few bridge tokens in tokens/bridges.json, and
-// runs its own style-dictionary build. Component tokens alias the bridges, so they follow.
+// here), so this copies it to a temp dir, overrides the tokens below in its JSON sources, and runs
+// its own style-dictionary build.
 //
 //   node scripts/palette-mobile.mjs <path to design_system/packages/tokens>
 //
 // The tokens package must have its dependencies installed (npm install there).
-import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// Keys are full token paths: bridges (semantic layer, component tokens alias them and follow) or
+// index.* component tokens, for the few components whose token doesn't go through the bridge we change.
 const PALETTE = {
-  'background.canvas': '#162D65',
-  'surface.nav-bg': '#162D65',
-  'surface.primary-default': '#166DFF',
-  'surface.primary-pressed': '#003DA5',
-  'surface.success-default': '#038D76',
-  'surface.danger-default': '#ED4C5C',
-  'surface.warning-default': '#FF7300',
-  'surface.selected': '#CCE1FF',
-  'text.primary': '#1F2937',
-  'text.secondary': '#6B7280',
-  'text.action': '#166DFF',
-  'text.success': '#038D76',
-  'text.danger': '#ED4C5C',
-  'text.warning': '#FF7300',
-  'icon.success': '#038D76',
-  'icon.danger': '#ED4C5C',
-  'icon.warning': '#FF7300',
-  'border.focus': '#166DFF',
-  'border.tertiary': '#D1D5DB',
-  'accent.green-bg': '#038D763D',
-  'accent.green-text': '#038D76',
-  'accent.amber-bg': '#FF73003D',
-  'accent.amber-text': '#FF7300',
-  'accent.red-bg': '#ED4C5C3D',
-  'accent.red-text': '#ED4C5C',
-  'accent.blue-bg': '#166DFF3D',
-  'accent.blue-text': '#166DFF',
-  'accent.indigo-bg': '#7C4DFF3D',
-  'accent.indigo-text': '#7C4DFF',
-  'accent.lime-bg': '#E8FF8C',
+  'bridges.color.background.canvas': '#162D65',
+  'bridges.color.surface.nav-bg': '#162D65',
+  'bridges.color.surface.primary-default': '#166DFF',
+  'bridges.color.surface.primary-hover': '#0058EC',
+  'bridges.color.surface.primary-pressed': '#003DA5',
+  'bridges.color.surface.success-default': '#038D76',
+  'bridges.color.surface.success-hover': '#037563',
+  'bridges.color.surface.success-pressed': '#026F5D',
+  'bridges.color.surface.danger-default': '#ED4C5C',
+  'bridges.color.surface.danger-hover': '#E62E40',
+  'bridges.color.surface.danger-pressed': '#C93545',
+  'bridges.color.surface.warning-default': '#FF7300',
+  'bridges.color.surface.warning-hover': '#E06500',
+  'bridges.color.surface.warning-pressed': '#C75A00',
+  'bridges.color.surface.selected': '#CCE1FF',
+  'bridges.color.text.primary': '#1F2937',
+  'bridges.color.text.secondary': '#6B7280',
+  'bridges.color.text.action': '#166DFF',
+  'bridges.color.text.success': '#026F5D',
+  'bridges.color.text.danger': '#AD3743',
+  'bridges.color.text.warning': '#A64B00',
+  'bridges.color.icon.action': '#166DFF',
+  'bridges.color.icon.success': '#038D76',
+  'bridges.color.icon.danger': '#ED4C5C',
+  'bridges.color.icon.warning': '#FF7300',
+  'bridges.color.border.focus': '#166DFF',
+  'bridges.color.border.danger': '#ED4C5C',
+  'bridges.color.border.tertiary': '#D1D5DB',
+  'bridges.color.accent.green-bg': '#038D763D',
+  'bridges.color.accent.green-text': '#026F5D',
+  'bridges.color.accent.amber-bg': '#FF73003D',
+  'bridges.color.accent.amber-text': '#A64B00',
+  'bridges.color.accent.red-bg': '#ED4C5C3D',
+  'bridges.color.accent.red-text': '#AD3743',
+  'bridges.color.accent.blue-bg': '#166DFF3D',
+  'bridges.color.accent.blue-text': '#166DFF',
+  'bridges.color.accent.indigo-bg': '#7C4DFF3D',
+  'bridges.color.accent.indigo-text': '#6841D6',
+  'bridges.color.accent.lime-bg': '#E8FF8C',
+
+  // SideNavigation (aliases surface.neutral-inverse-dark) and the enterprise selector (surface.nav-field).
+  'index.navigation.sidenavigation.nav-bg': '#162D65',
+  'index.selection.select.enterprise-bg': '#162D65',
+  // Badge success: tinted like the tags instead of lime.
+  'index.feedback.badge.bg-2': '#038D763D',
+  'index.feedback.badge.text-success': '#026F5D',
+  // Tooltip message: opaque equivalent of the 24 % tint over white.
+  'index.feedback.tooltip.msg-bg-success': '#C3E4DE',
+  'index.feedback.tooltip.msg-bg-error': '#FBD4D8',
+  'index.feedback.tooltip.msg-bg-warning': '#FFDEC2',
+  'index.feedback.tooltip.msg-bg-info': '#C7DCFF',
+  // Backgrounds and borders that alias accent.*-text: keep them on the mobile color, only text darkens.
+  'index.feedback.badge.bg-3': '#FF7300',
+  'index.feedback.badge.bg-4': '#ED4C5C',
+  'index.input.uploadfile.zone-border-warning': '#FF7300',
+  'index.conteneur.accordion.header-stroke-warning': '#FF7300',
+  'index.selection.select.field-stroke-warning': '#FF7300',
 };
 
 const source = process.argv[2];
@@ -56,14 +85,14 @@ const output = resolve(root, 'angular-components/src/styles/tokens.generated.css
 const work = await mkdtemp(join(tmpdir(), 'tokens-'));
 try {
   await cp(resolve(source), work, { recursive: true, filter: (p) => !p.includes(`${join(source, 'dist')}`) });
-  const bridgesPath = join(work, 'tokens/bridges.json');
-  const bridges = JSON.parse(await readFile(bridgesPath, 'utf8'));
+  const files = [join(work, 'tokens/bridges.json'), ...(await readdir(join(work, 'tokens/components'))).map((f) => join(work, 'tokens/components', f))];
+  const trees = await Promise.all(files.map(async (f) => JSON.parse(await readFile(f, 'utf8'))));
   for (const [path, value] of Object.entries(PALETTE)) {
-    const token = path.split('.').reduce((node, key) => node?.[key], bridges.bridges.color);
-    if (!token?.value) throw new Error(`Unknown bridge token: color.${path}`);
+    const token = trees.map((tree) => path.split('.').reduce((node, key) => node?.[key], tree)).find((t) => t?.value);
+    if (!token) throw new Error(`Unknown token: ${path}`);
     token.value = value;
   }
-  await writeFile(bridgesPath, JSON.stringify(bridges, null, 2));
+  await Promise.all(files.map((f, i) => writeFile(f, JSON.stringify(trees[i], null, 2))));
   execFileSync('npx', ['style-dictionary', 'build', '--config', 'style-dictionary.config.js'], { cwd: work, stdio: 'inherit' });
   await cp(join(work, 'dist/css/variables.css'), output);
   console.log(`tokens.generated.css regenerated with ${Object.keys(PALETTE).length} mobile palette overrides`);
