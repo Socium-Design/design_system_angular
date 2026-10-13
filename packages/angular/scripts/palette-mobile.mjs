@@ -14,18 +14,19 @@ import { fileURLToPath } from 'node:url';
 
 // Keys are full token paths: bridges (semantic layer, component tokens alias them and follow) or
 // index.* component tokens, for the few components whose token doesn't go through the bridge we change.
+// ADDED tokens don't exist in the source yet; they're created next to their siblings.
 const PALETTE = {
   'bridges.color.background.canvas': '#162D65',
   'bridges.color.surface.nav-bg': '#162D65',
   'bridges.color.surface.primary-default': '#166DFF',
   'bridges.color.surface.primary-hover': '#0058EC',
   'bridges.color.surface.primary-pressed': '#003DA5',
-  'bridges.color.surface.success-default': '#038D76',
-  'bridges.color.surface.success-hover': '#037563',
-  'bridges.color.surface.success-pressed': '#026F5D',
-  'bridges.color.surface.danger-default': '#ED4C5C',
-  'bridges.color.surface.danger-hover': '#E62E40',
-  'bridges.color.surface.danger-pressed': '#C93545',
+  'bridges.color.surface.success-default': '#038670',
+  'bridges.color.surface.success-hover': '#026D5B',
+  'bridges.color.surface.success-pressed': '#025446',
+  'bridges.color.surface.danger-default': '#D24351',
+  'bridges.color.surface.danger-hover': '#CB3140',
+  'bridges.color.surface.danger-pressed': '#B62C39',
   'bridges.color.surface.warning-default': '#FF7300',
   'bridges.color.surface.warning-hover': '#E06500',
   'bridges.color.surface.warning-pressed': '#C75A00',
@@ -33,6 +34,12 @@ const PALETTE = {
   'bridges.color.text.primary': '#1F2937',
   'bridges.color.text.secondary': '#6B7280',
   'bridges.color.text.action': '#166DFF',
+  'bridges.color.text.on-primary': '#FFFFFF',
+  'bridges.color.text.on-success': '#FFFFFF',
+  'bridges.color.text.on-danger': '#FFFFFF',
+  'bridges.color.text.on-warning': '#FFFFFF',
+  'bridges.color.text.on-info': '#FFFFFF',
+  'bridges.color.icon.on-primary': '#FFFFFF',
   'bridges.color.text.success': '#026F5D',
   'bridges.color.text.danger': '#AD3743',
   'bridges.color.text.warning': '#A64B00',
@@ -50,14 +57,25 @@ const PALETTE = {
   'bridges.color.accent.red-bg': '#ED4C5C3D',
   'bridges.color.accent.red-text': '#AD3743',
   'bridges.color.accent.blue-bg': '#166DFF3D',
-  'bridges.color.accent.blue-text': '#166DFF',
+  'bridges.color.accent.blue-text': '#0052DD',
   'bridges.color.accent.indigo-bg': '#7C4DFF3D',
   'bridges.color.accent.indigo-text': '#6841D6',
   'bridges.color.accent.lime-bg': '#E8FF8C',
+  'bridges.color.accent.lime-text': '#537800',
 
-  // SideNavigation (aliases surface.neutral-inverse-dark) and the enterprise selector (surface.nav-field).
+  // SideNavigation (aliases surface.neutral-inverse-dark), selected item: white 12 %, lime icon.
   'index.navigation.sidenavigation.nav-bg': '#162D65',
-  'index.selection.select.enterprise-bg': '#162D65',
+  'index.navigation.sidenavigation.item-bg-selected': '#FFFFFF1F',
+  'index.navigation.sidenavigation.item-text-selected': '#FFFFFF',
+  'index.navigation.sidenavigation.item-icon-selected': '#E8FF8C',
+  // Enterprise selector in the header: white 12 % fill, white 24 % outline (token added below).
+  'index.selection.select.enterprise-bg': '#FFFFFF1F',
+  'index.selection.select.enterprise-border': '#FFFFFF3D',
+  'index.selection.select.enterprise-meta-color': '#919BAB',
+  // Dark text on the lime and warning fills (white is under 3:1 there).
+  'index.feedback.badge.text-primary': '#1F2937',
+  'index.feedback.badge.text-warning': '#1F2937',
+  'index.feedback.message.text-on-warning': '#1F2937',
   // Badge success: tinted like the tags instead of lime.
   'index.feedback.badge.bg-2': '#038D763D',
   'index.feedback.badge.text-success': '#026F5D',
@@ -67,12 +85,14 @@ const PALETTE = {
   'index.feedback.tooltip.msg-bg-warning': '#FFDEC2',
   'index.feedback.tooltip.msg-bg-info': '#C7DCFF',
   // Backgrounds and borders that alias accent.*-text: keep them on the mobile color, only text darkens.
+  'index.feedback.badge.bg-1': '#7FB800',
   'index.feedback.badge.bg-3': '#FF7300',
-  'index.feedback.badge.bg-4': '#ED4C5C',
+  'index.feedback.badge.bg-4': '#D24351',
   'index.input.uploadfile.zone-border-warning': '#FF7300',
   'index.conteneur.accordion.header-stroke-warning': '#FF7300',
   'index.selection.select.field-stroke-warning': '#FF7300',
 };
+const ADDED = new Set(['index.selection.select.enterprise-border', 'index.feedback.message.text-on-warning']);
 
 const source = process.argv[2];
 if (!source) {
@@ -88,7 +108,13 @@ try {
   const files = [join(work, 'tokens/bridges.json'), ...(await readdir(join(work, 'tokens/components'))).map((f) => join(work, 'tokens/components', f))];
   const trees = await Promise.all(files.map(async (f) => JSON.parse(await readFile(f, 'utf8'))));
   for (const [path, value] of Object.entries(PALETTE)) {
-    const token = trees.map((tree) => path.split('.').reduce((node, key) => node?.[key], tree)).find((t) => t?.value);
+    const keys = path.split('.');
+    if (ADDED.has(path)) {
+      const parent = trees.map((tree) => keys.slice(0, -1).reduce((node, key) => node?.[key], tree)).find(Boolean);
+      parent[keys.at(-1)] = { value, type: 'COLOR' };
+      continue;
+    }
+    const token = trees.map((tree) => keys.reduce((node, key) => node?.[key], tree)).find((t) => t?.value);
     if (!token) throw new Error(`Unknown token: ${path}`);
     token.value = value;
   }

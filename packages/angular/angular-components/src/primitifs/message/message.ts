@@ -28,7 +28,10 @@ export class SocMessageContent {}
 const bannerBgClasses: Record<MessageStatus, string> = {
   success: 'bg-[var(--index-feedback-message-bg-success)]',
   error: 'bg-[var(--index-feedback-message-bg-error)]',
-  warning: 'bg-[var(--index-feedback-message-bg-warning)]',
+  // White is under 3:1 on the warning fill: re-point the banner's text, icon and outline-button
+  // tokens to the dark on-warning color for this status only.
+  warning:
+    'bg-[var(--index-feedback-message-bg-warning)] [--index-feedback-message-title-color:var(--index-feedback-message-text-on-warning)] [--index-feedback-message-content-color:var(--index-feedback-message-text-on-warning)] [--index-feedback-message-icon-color:var(--index-feedback-message-text-on-warning)] [--index-button-oncolor-secondary-text:var(--index-feedback-message-text-on-warning)] [--index-button-oncolor-secondary-border:var(--index-feedback-message-text-on-warning)]',
   info: 'bg-[var(--index-feedback-message-bg-info)]',
 };
 
