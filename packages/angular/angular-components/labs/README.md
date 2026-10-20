@@ -28,7 +28,7 @@ pour `/labs`).
 | `soc-labs-list-row` (`SocLabsListRow`) | Proposé | [#21](https://github.com/Socium-Design/design_system_angular/issues/21) (glisser : #8) | — (cible : catalogue de la Bibliothèque) |
 | `soc-labs-drop-zone` (`SocLabsDropZone`) | Proposé | [#8](https://github.com/Socium-Design/design_system_angular/issues/8) | — (cible : sections de la composition, glisser depuis la Bibliothèque) |
 | `soc-labs-fullscreen-overlay` (`SocLabsFullscreenOverlay`) | Proposé | [#20](https://github.com/Socium-Design/design_system_angular/issues/20) | — (cible : « Prévisualiser » un tableau de bord) |
-| `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page`) |
+| `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) — panneaux repliables sous une largeur d'écran (`collapsibleBelow`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13), repli : [#34](https://github.com/Socium-Design/design_system_angular/issues/34) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page` ; repli pour PC portables 1280×720 / 1366×768) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).
