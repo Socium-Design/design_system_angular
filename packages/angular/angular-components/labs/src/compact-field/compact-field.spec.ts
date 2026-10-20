@@ -2,18 +2,19 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { q, type } from '../../../src/testing/helpers';
-import { SocLabsCompactField, type LabsCompactFieldControl, type LabsCompactFieldMode } from './compact-field';
+import { SocLabsCompactField, type LabsCompactFieldControl, type LabsCompactFieldMode, type LabsCompactFieldSize } from './compact-field';
 
 @Component({
   standalone: true,
   imports: [SocLabsCompactField, ReactiveFormsModule],
   template: `
-    <soc-labs-compact-field id="f" label="Libellé" [mode]="mode()" [control]="control()" [options]="options" [formControl]="form" placeholder="Choisir" />
+    <soc-labs-compact-field id="f" label="Libellé" [mode]="mode()" [control]="control()" [options]="options" [formControl]="form" placeholder="Choisir" [size]="size()" />
   `,
 })
 class Host {
   mode = signal<LabsCompactFieldMode>('read');
   control = signal<LabsCompactFieldControl>('text');
+  size = signal<LabsCompactFieldSize>('md');
   options = [
     { value: 'actif', label: 'Actif' },
     { value: 'inactif', label: 'Inactif' },
@@ -97,5 +98,94 @@ describe('Labs / CompactField', () => {
     host.form.reset();
     fixture.detectChanges();
     expect(q<HTMLInputElement>(el(), 'input').value).toBe('');
+  });
+
+  describe('size', () => {
+    const MD_TEXT = 'text-[length:var(--bridges-size-text-text-size-sm)]';
+    const SM_TEXT = 'text-[length:var(--bridges-size-text-text-size-xs)]';
+    const MD_HEIGHT = 'h-[calc(var(--bridges-size-icon-lg)+var(--bridges-position-gap-2xs))]';
+    const SM_HEIGHT = 'h-[var(--bridges-size-icon-lg)]';
+    const host = (el: HTMLElement) => q(el, 'soc-labs-compact-field');
+
+    it('defaults to md: data-size="md", 14px value, 28px controls (unchanged rendering)', () => {
+      const { fixture, host: h, el } = setup();
+      expect(host(el()).getAttribute('data-size')).toBe('md');
+      expect(q(el(), 'p').className).toContain(MD_TEXT);
+      h.mode.set('edit');
+      fixture.detectChanges();
+      const input = q(el(), 'input');
+      expect(input.className).toContain(MD_TEXT);
+      expect(input.className).toContain(MD_HEIGHT);
+      expect(input.className).toContain('px-[var(--bridges-position-padding-3xs)]');
+      expect(host(el()).className).toContain('gap-[var(--bridges-position-gap-2xs)]');
+      expect(host(el()).className).toContain('pb-[var(--bridges-position-padding-3xs)]');
+    });
+
+    it('sm: data-size="sm", read value in 12px, label still small caps 10px', () => {
+      const { fixture, host: h, el } = setup();
+      h.size.set('sm');
+      fixture.detectChanges();
+      expect(host(el()).getAttribute('data-size')).toBe('sm');
+      const text = q(el(), 'p');
+      expect(text.className).toContain(SM_TEXT);
+      expect(text.className).not.toContain(MD_TEXT);
+      const label = q(el(), 'soc-labs-compact-field > span');
+      expect(label.className).toContain('uppercase');
+      expect(label.className).toContain('text-[length:var(--bridges-size-text-text-size-tiny)]');
+      expect(host(el()).className).toContain('gap-[var(--bridges-position-gap-xs)]');
+      expect(host(el()).className).toContain('pb-[var(--bridges-position-padding-xs)]');
+    });
+
+    it('sm / text: 12px, 24px high input', () => {
+      const { fixture, host: h, el } = setup();
+      h.size.set('sm');
+      h.mode.set('edit');
+      fixture.detectChanges();
+      const input = q(el(), 'input');
+      expect(input.className).toContain(SM_TEXT);
+      expect(input.className).toContain(SM_HEIGHT);
+      expect(input.className).not.toContain(MD_HEIGHT);
+      expect(q(el(), 'label').className).toContain('uppercase');
+    });
+
+    it('sm / textarea: 12px text, xs line height', () => {
+      const { fixture, host: h, el } = setup();
+      h.size.set('sm');
+      h.mode.set('edit');
+      h.control.set('textarea');
+      fixture.detectChanges();
+      const area = q(el(), 'textarea');
+      expect(area.className).toContain(SM_TEXT);
+      expect(area.className).toContain('[line-height:var(--bridges-size-text-line-height-xs)]');
+      expect(area.className).not.toContain(MD_TEXT);
+    });
+
+    it('sm / select: 12px, 24px high, smaller chevron', () => {
+      const { fixture, host: h, el } = setup();
+      h.size.set('sm');
+      h.mode.set('edit');
+      h.control.set('select');
+      fixture.detectChanges();
+      const select = q(el(), 'select');
+      expect(select.className).toContain(SM_TEXT);
+      expect(select.className).toContain(SM_HEIGHT);
+      expect(select.className).toContain('appearance-none');
+      const chevron = q(el(), 'svg');
+      expect(chevron.getAttribute('class')).toContain('size-[var(--bridges-size-icon-xs)]');
+      expect(chevron.getAttribute('class')).toContain('pointer-events-none');
+    });
+
+    it('switching size back to md restores md classes', () => {
+      const { fixture, host: h, el } = setup();
+      h.size.set('sm');
+      h.mode.set('edit');
+      fixture.detectChanges();
+      h.size.set('md');
+      fixture.detectChanges();
+      const input = q(el(), 'input');
+      expect(input.className).toContain(MD_HEIGHT);
+      expect(input.className).not.toContain(SM_TEXT);
+      expect(host(el()).getAttribute('data-size')).toBe('md');
+    });
   });
 });
