@@ -15,6 +15,8 @@ import { SocLabsIconButton, type LabsIconButtonShape, type LabsIconButtonSize, t
       [tooltip]="tooltip()"
       [disabled]="disabled()"
       [pressed]="pressed()"
+      [ariaExpanded]="expanded()"
+      [ariaControls]="controls()"
       (click)="clicks = clicks + 1"
     >
       <svg class="icon"></svg>
@@ -29,6 +31,8 @@ class Host {
   tooltip = signal<string | undefined>(undefined);
   disabled = signal(false);
   pressed = signal<boolean | undefined>(undefined);
+  expanded = signal<boolean | undefined>(undefined);
+  controls = signal<string | undefined>(undefined);
 }
 
 describe('Labs / IconButton', () => {
@@ -102,5 +106,19 @@ describe('Labs / IconButton', () => {
     fixture.detectChanges();
     expect(bubble.style.visibility).toBe('visible');
     fixture.destroy();
+  });
+
+  it('sets aria-expanded / aria-controls on the native button only when given', () => {
+    const { fixture, host, button } = setup();
+    expect(button().hasAttribute('aria-expanded')).toBeFalse();
+    expect(button().hasAttribute('aria-controls')).toBeFalse();
+    host.expanded.set(false);
+    host.controls.set('panel-1');
+    fixture.detectChanges();
+    expect(button().getAttribute('aria-expanded')).toBe('false');
+    expect(button().getAttribute('aria-controls')).toBe('panel-1');
+    host.expanded.set(true);
+    fixture.detectChanges();
+    expect(button().getAttribute('aria-expanded')).toBe('true');
   });
 });

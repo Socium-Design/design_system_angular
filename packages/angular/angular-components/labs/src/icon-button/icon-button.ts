@@ -41,6 +41,7 @@ const shapeClasses: Record<LabsIconButtonShape, string> = {
  * ## Accessibilité
  * - `ariaLabel` est **obligatoire** (input requis : le build échoue sans lui) — un bouton sans texte
  *   visible n'a pas d'autre nom accessible.
+ * - `ariaExpanded` / `ariaControls` (optionnels) : bouton de divulgation (ex. replier un panneau).
  * - `tooltip` (optionnel) affiche une info-bulle du kit (`soc-tooltip`) au survol et au focus.
  *
  * ## Écart avec la convention du kit (GAP-DECISION)
@@ -64,6 +65,8 @@ const shapeClasses: Record<LabsIconButtonShape, string> = {
         [attr.type]="type()"
         [attr.aria-label]="ariaLabel()"
         [attr.aria-pressed]="pressed() ?? null"
+        [attr.aria-expanded]="ariaExpanded() ?? null"
+        [attr.aria-controls]="ariaControls() ?? null"
         [disabled]="disabled()"
         [class]="buttonClasses()"
       >
@@ -93,6 +96,10 @@ export class SocLabsIconButton {
   readonly type = input<'button' | 'submit' | 'reset'>('button');
   /** Bouton bascule : `true`/`false` posent `aria-pressed` ; absent = bouton simple. */
   readonly pressed = input<boolean | undefined>(undefined);
+  /** Bouton de divulgation (repli d'un panneau…) : `true`/`false` posent `aria-expanded` ; absent = rien. */
+  readonly ariaExpanded = input<boolean | undefined>(undefined);
+  /** `id` de l'élément contrôlé (`aria-controls`), avec `ariaExpanded`. */
+  readonly ariaControls = input<string | undefined>(undefined);
 
   protected readonly buttonClasses = computed(
     () =>

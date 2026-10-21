@@ -24,14 +24,19 @@ pour `/labs`).
 | `soc-labs-pill-toggle` (`SocLabsPillToggle`) | Proposé | [#16](https://github.com/Socium-Design/design_system_angular/issues/16) | — (cible : statut d'un tableau de bord, ET / OU des populations) |
 | `soc-labs-chart-type-chip` (`SocLabsChartTypeChip`) | Proposé | [#24](https://github.com/Socium-Design/design_system_angular/issues/24) (voir #7) | — (cible : catalogue de la Bibliothèque, cartes de composition ; remplace `app-icone-graphique`) |
 | `soc-labs-inline-edit` (`SocLabsInlineEdit`) | Proposé | [#23](https://github.com/Socium-Design/design_system_angular/issues/23) | — (cible : renommage des sections dans la composition) |
-| `soc-labs-compact-field` (`SocLabsCompactField`) | Proposé | [#25](https://github.com/Socium-Design/design_system_angular/issues/25) | — (cible : panneau « Informations » de la composition) |
+| `soc-labs-compact-field` (`SocLabsCompactField`) | Proposé | [#25](https://github.com/Socium-Design/design_system_angular/issues/25) (taille `sm` : [#38](https://github.com/Socium-Design/design_system_angular/issues/38)) | — (cible : panneau « Informations » de la composition) |
 | `soc-labs-list-row` (`SocLabsListRow`) | Proposé | [#21](https://github.com/Socium-Design/design_system_angular/issues/21) (glisser : #8 ; apparence `flush` : [#37](https://github.com/Socium-Design/design_system_angular/issues/37)) | — (cible : catalogue de la Bibliothèque) |
 | `soc-labs-drop-zone` (`SocLabsDropZone`) | Proposé | [#8](https://github.com/Socium-Design/design_system_angular/issues/8) | — (cible : sections de la composition, glisser depuis la Bibliothèque) |
 | `soc-labs-fullscreen-overlay` (`SocLabsFullscreenOverlay`) | Proposé | [#20](https://github.com/Socium-Design/design_system_angular/issues/20) | — (cible : « Prévisualiser » un tableau de bord) |
-| `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page`) |
+| `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) — panneaux repliables sous une largeur d'écran (`collapsibleBelow`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13), repli : [#34](https://github.com/Socium-Design/design_system_angular/issues/34) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page` ; repli pour PC portables 1280×720 / 1366×768) |
 | `soc-data-table[socLabsFitWidth]` (`SocLabsDataTableFit`, `LabsDataTableColumn`) | Proposé | [#4](https://github.com/Socium-Design/design_system_angular/issues/4) | — (cible : liste « Gestion des tableaux de bord », 6 colonnes + actions à 1440 px) |
 | `button[socLabsButton]` (`SocLabsButton`) | Proposé | [#43](https://github.com/Socium-Design/design_system_angular/issues/43) | — (cible : bouton « Visualiser » de la liste « Gestion des tableaux de bord ») |
-| `soc-labs-widget-card` (`SocLabsWidgetCard`) | Proposé | [#36](https://github.com/Socium-Design/design_system_angular/issues/36) | — (cible : cartes KPI / graphiques de la composition et de l'aperçu d'un tableau de bord, à la place de `soc-card`) |
+feature/labs-widget-card
+ `soc-labs-icon-tile` (`SocLabsIconTile`) | Proposé | [#42](https://github.com/Socium-Design/design_system_angular/issues/42) | — (cible : liste « Gestion des tableaux de bord », tuile devant le nom) |
+ main
+
+ `soc-labs-widget-card` (`SocLabsWidgetCard`) | Proposé | [#36](https://github.com/Socium-Design/design_system_angular/issues/36) | — (cible : cartes KPI / graphiques de la composition et de l'aperçu d'un tableau de bord, à la place de `soc-card`) |
+
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).

@@ -14,13 +14,13 @@ const meta: Meta<SocLabsCompactField> = {
   component: SocLabsCompactField,
   tags: ['autodocs'],
   decorators: [moduleMetadata({ imports: [SocLabsCompactField] }), labsBanner],
-  argTypes: { mode: { control: 'inline-radio', options: ['read', 'edit'] }, control: { control: 'select', options: ['text', 'textarea', 'select'] } },
-  args: { label: 'Libellé', mode: 'edit', control: 'text', value: 'Tableau de bord RH', placeholder: 'Saisir…', emptyText: '—', separator: true, disabled: false, options: POPULATIONS },
+  argTypes: { mode: { control: 'inline-radio', options: ['read', 'edit'] }, control: { control: 'select', options: ['text', 'textarea', 'select'] }, size: { control: 'inline-radio', options: ['md', 'sm'] } },
+  args: { label: 'Libellé', mode: 'edit', control: 'text', value: 'Tableau de bord RH', placeholder: 'Saisir…', emptyText: '—', separator: true, disabled: false, options: POPULATIONS, size: 'md' },
   render: (args) => ({
     props: args,
     template: `
       <div class="w-[220px] bg-[var(--bridges-color-surface-neutral-white)] p-[var(--bridges-position-padding-md)]">
-        <soc-labs-compact-field [label]="label" [mode]="mode" [control]="control" [(value)]="value" [options]="options" [placeholder]="placeholder" [emptyText]="emptyText" [separator]="separator" [disabled]="disabled" />
+        <soc-labs-compact-field [label]="label" [mode]="mode" [control]="control" [(value)]="value" [options]="options" [placeholder]="placeholder" [emptyText]="emptyText" [separator]="separator" [disabled]="disabled" [size]="size" />
       </div>
     `,
   }),
@@ -33,6 +33,33 @@ export const Textarea: Story = { args: { label: 'Description', control: 'textare
 export const Select: Story = { args: { label: 'Population', control: 'select', value: 'managers' } };
 export const Read: Story = { args: { mode: 'read' } };
 export const Disabled: Story = { args: { disabled: true } };
+export const SmallText: Story = { name: 'Small / Text', args: { size: 'sm' } };
+export const SmallTextarea: Story = { name: 'Small / Textarea', args: { size: 'sm', label: 'Description', control: 'textarea', value: 'Suivi mensuel des effectifs\net des absences.' } };
+export const SmallSelect: Story = { name: 'Small / Select', args: { size: 'sm', label: 'Population', control: 'select', value: 'managers' } };
+export const SmallRead: Story = { name: 'Small / Read', args: { size: 'sm', mode: 'read' } };
+export const SmallDisabled: Story = { name: 'Small / Disabled', args: { size: 'sm', disabled: true } };
+
+/** `md` et `sm` côte à côte : les trois contrôles, en lecture puis en édition. */
+export const SizesSideBySide: Story = {
+  name: 'Tailles md / sm (lecture et édition)',
+  render: () => ({
+    props: { populations: POPULATIONS, d: { libelle: 'Tableau de bord RH', description: 'Suivi mensuel des effectifs et des absences, par établissement.', population: 'siege' } },
+    template: `
+      <div class="flex flex-wrap gap-6">
+        @for (size of ['md', 'sm']; track size) {
+          @for (mode of ['read', 'edit']; track mode) {
+            <div class="flex w-[220px] flex-col gap-[var(--bridges-position-gap-md)] border border-[var(--bridges-color-border-subtle)] bg-[var(--bridges-color-surface-neutral-white)] p-[var(--bridges-position-padding-md)]">
+              <p class="text-[length:var(--bridges-size-text-text-size-xs)] text-[var(--bridges-color-text-secondary)]">size="{{ size }}" — {{ mode }}</p>
+              <soc-labs-compact-field label="Libellé" [size]="$any(size)" [mode]="$any(mode)" [(value)]="d.libelle" />
+              <soc-labs-compact-field label="Description" [size]="$any(size)" [mode]="$any(mode)" control="textarea" [(value)]="d.description" />
+              <soc-labs-compact-field label="Population" [size]="$any(size)" [mode]="$any(mode)" control="select" [options]="populations" [(value)]="d.population" [separator]="false" />
+            </div>
+          }
+        }
+      </div>
+    `,
+  }),
+};
 
 /** Le panneau « Informations » de 220 px, en lecture puis en édition, avec valeurs vides. */
 export const SidePanel: Story = {
