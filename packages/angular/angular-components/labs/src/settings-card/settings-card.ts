@@ -14,7 +14,8 @@ export class SocLabsSettingsCardFootnote {}
  * ## Rôle
  * Carte d'un **bloc de réglages** dans une page de configuration : sur-titre en petites capitales
  * (« BARÈME »), titre, contrôle à droite du titre (interrupteur), corps libre (champs du kit), puis une
- * note optionnelle dans un encadré pointillé (« Règle de calcul »).
+ * note optionnelle dans un encadré pointillé (« Règle de calcul »), sur le fond de la carte : `text-secondary` y garde
+ * 4,8:1 (sur `background-layer-1`, il tomberait à 4,4:1).
  *
  * Diffère de `soc-card` du kit : sur-titre, titre jamais tronqué, pas de bouton « ••• » (#15), état
  * **désactivé** (#11) et encadré de note.
@@ -74,7 +75,7 @@ export class SocLabsSettingsCardFootnote {}
       <ng-content />
       @if (hasFootnote()) {
         <div
-          class="rounded-[var(--bridges-shape-figure-radius-md)] border-[length:var(--bridges-shape-figure-border-stroke-default)] border-dashed border-[var(--bridges-color-border-secondary)] bg-[var(--bridges-color-background-layer-1)] px-[var(--bridges-position-padding-lg)] py-[var(--bridges-position-padding-md)] text-[length:var(--bridges-size-text-text-size-sm)] text-[var(--bridges-color-text-secondary)] [font-family:var(--bridges-shape-text-body-font)]"
+          class="rounded-[var(--bridges-shape-figure-radius-md)] border-[length:var(--bridges-shape-figure-border-stroke-default)] border-dashed border-[var(--bridges-color-border-secondary)] px-[var(--bridges-position-padding-lg)] py-[var(--bridges-position-padding-md)] text-[length:var(--bridges-size-text-text-size-sm)] text-[var(--bridges-color-text-secondary)] [font-family:var(--bridges-shape-text-body-font)]"
           data-region="footnote"
         >
           <ng-content select="[socLabsSettingsCardFootnote]" />
