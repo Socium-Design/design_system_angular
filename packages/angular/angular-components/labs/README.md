@@ -25,7 +25,7 @@ pour `/labs`).
 | `soc-labs-chart-type-chip` (`SocLabsChartTypeChip`) | Proposé | [#24](https://github.com/Socium-Design/design_system_angular/issues/24) (voir #7) | — (cible : catalogue de la Bibliothèque, cartes de composition ; remplace `app-icone-graphique`) |
 | `soc-labs-inline-edit` (`SocLabsInlineEdit`) | Proposé | [#23](https://github.com/Socium-Design/design_system_angular/issues/23) | — (cible : renommage des sections dans la composition) |
 | `soc-labs-compact-field` (`SocLabsCompactField`) | Proposé | [#25](https://github.com/Socium-Design/design_system_angular/issues/25) | — (cible : panneau « Informations » de la composition) |
-| `soc-labs-list-row` (`SocLabsListRow`) | Proposé | [#21](https://github.com/Socium-Design/design_system_angular/issues/21) (glisser : #8) | — (cible : catalogue de la Bibliothèque) |
+| `soc-labs-list-row` (`SocLabsListRow`) | Proposé | [#21](https://github.com/Socium-Design/design_system_angular/issues/21) (glisser : #8 ; apparence `flush` : [#37](https://github.com/Socium-Design/design_system_angular/issues/37)) | — (cible : catalogue de la Bibliothèque) |
 | `soc-labs-drop-zone` (`SocLabsDropZone`) | Proposé | [#8](https://github.com/Socium-Design/design_system_angular/issues/8) | — (cible : sections de la composition, glisser depuis la Bibliothèque) |
 | `soc-labs-fullscreen-overlay` (`SocLabsFullscreenOverlay`) | Proposé | [#20](https://github.com/Socium-Design/design_system_angular/issues/20) | — (cible : « Prévisualiser » un tableau de bord) |
 | `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page`) |
