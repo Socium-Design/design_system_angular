@@ -238,6 +238,12 @@ describe('Labs / SettingsCard — repliable', () => {
     expect(region('body')!.hasAttribute('inert')).toBeTrue();
   });
 
+  it('chevron : anneau de focus visible (style d’outline explicite, sinon Tailwind v4 n’en dessine aucun)', () => {
+    const { toggle } = setup();
+    expect(toggle().className).toContain('focus-visible:outline-solid');
+    expect(toggle().className).toContain('focus-visible:outline-[var(--bridges-color-border-focus)]');
+  });
+
   it('animation courte, désactivée si prefers-reduced-motion', () => {
     const { panel } = setup();
     expect(panel().className).toContain('transition-[grid-template-rows]');
