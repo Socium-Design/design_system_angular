@@ -31,6 +31,7 @@ pour `/labs`).
 | `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page`) |
 | `soc-data-table[socLabsFitWidth]` (`SocLabsDataTableFit`, `LabsDataTableColumn`) | Proposé | [#4](https://github.com/Socium-Design/design_system_angular/issues/4) | — (cible : liste « Gestion des tableaux de bord », 6 colonnes + actions à 1440 px) |
 | `button[socLabsButton]` (`SocLabsButton`) | Proposé | [#43](https://github.com/Socium-Design/design_system_angular/issues/43) | — (cible : bouton « Visualiser » de la liste « Gestion des tableaux de bord ») |
+| `soc-labs-icon-tile` (`SocLabsIconTile`) | Proposé | [#42](https://github.com/Socium-Design/design_system_angular/issues/42) | — (cible : liste « Gestion des tableaux de bord », tuile devant le nom) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).
