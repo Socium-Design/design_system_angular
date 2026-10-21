@@ -63,6 +63,34 @@ export const Skeleton: Story = {
   }),
 };
 
+/**
+ * **Panneaux repliables** (écrans de PC portables, 1280×720 / 1366×768) : sous `collapsibleBelow` px
+ * de largeur de fenêtre, les panneaux se replient en rail (bouton « Déplier le panneau … » et libellé
+ * vertical) et chacun peut être déplié / replié ; au-dessus, ils redeviennent fixes et dépliés.
+ * Ici `collapsibleBelow: 5000` pour que le mode étroit soit toujours actif dans Storybook ; dans le
+ * prototype, une valeur comme `1440`. Le contenu replié est conservé (saisie de recherche, etc.).
+ */
+export const CollapsiblePanels: Story = {
+  name: 'Panneaux repliables',
+  args: { collapsibleBelow: 5000 },
+  render: (args) => ({
+    props: { ...args, state: { gauche: true, droite: true } },
+    template: `
+      <div class="h-[600px]">
+        <soc-labs-workspace-layout [leftWidth]="leftWidth" [rightWidth]="rightWidth" [leftLabel]="leftLabel" [rightLabel]="rightLabel" [centerLabel]="centerLabel"
+          [collapsibleBelow]="collapsibleBelow" [(leftCollapsed)]="state.gauche" [(rightCollapsed)]="state.droite">
+          <soc-labs-icon-button socLabsWorkspaceBack ariaLabel="Retour" tooltip="Retour" size="md"><svg lucideArrowLeft class="size-full" [strokeWidth]="2"></svg></soc-labs-icon-button>
+          <span socLabsWorkspaceTitle>Tableau de bord RH</span>
+          <span socLabsWorkspaceHint>Gauche : {{ state.gauche ? 'replié' : 'déplié' }} · droite : {{ state.droite ? 'replié' : 'déplié' }}</span>
+          <div socLabsWorkspaceLeft>${placeholder('Informations')}</div>
+          <div socLabsWorkspaceRight>${placeholder('Bibliothèque')}</div>
+          ${placeholder('Zone centrale')}
+        </soc-labs-workspace-layout>
+      </div>
+    `,
+  }),
+};
+
 export const WithoutPanels: Story = {
   render: () => ({
     template: `
