@@ -67,12 +67,8 @@ export class SocChips {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: {
-    '[attr.aria-pressed]': 'selected()',
-    '(click)': 'click.emit()',
-  },
   template: `
-    <button type="button" [class]="hostClasses()">
+    <button type="button" [attr.aria-pressed]="selected()" [class]="hostClasses()">
       {{ label() }}
     </button>
   `,
@@ -81,7 +77,10 @@ export class SocSelectableChips {
   readonly label = input.required<string>();
   readonly size = input<ChipsSize>('sm');
   readonly selected = input(false, { transform: booleanAttribute });
-  readonly click = output<void>();
+  // No `click` output: a host listener `(click)` re-emitting an output named `click` subscribes to that
+  // same output (Angular resolves a host listener against the host's own outputs first) and recursed
+  // until the stack overflowed on every click. The native click of the inner <button> bubbles to the
+  // host, so a consumer's `(click)="…"` on `<soc-selectable-chips>` still fires — exactly once.
 
   protected readonly hostClasses = computed(
     () =>
