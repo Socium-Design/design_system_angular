@@ -69,7 +69,7 @@
   --bridges-color-text-warning: #973c00;
   --bridges-color-text-info: #4f39f6;
   --bridges-color-text-disabled: #99a1af;
-  --bridges-color-text-action: #067eff;
+  --bridges-color-text-action: #0851c5;
   --bridges-color-text-tertiary: #99a1af;
   --bridges-color-text-special: #eaff90;
   --bridges-color-text-nav-meta: #8590a2;
@@ -212,14 +212,14 @@
   --index-button-button-stroke-tertiary: #e5e7eb;
   --index-button-button-stroke-tertiary-disabled: #e5e7eb;
   --index-button-button-text-on-fill: #f9fafb;
-  --index-button-button-text-action: #067eff;
+  --index-button-button-text-action: #0851c5;
   --index-button-button-text-default: #364153;
   --index-button-button-text-disabled: #99a1af;
   --index-button-button-icon-on-fill: #f9fafb;
   --index-button-button-icon-action: #067eff;
   --index-button-button-icon-default: #364153;
   --index-button-button-icon-disabled: #6a7282;
-  --index-button-button-text-action-hover: #006aff;
+  --index-button-button-text-action-hover: #0851c5;
   --index-button-button-icon-action-hover: #006aff;
   --index-button-button-padding-v-sm: 8px;
   --index-button-button-padding-h-sm: 8px;
@@ -989,7 +989,7 @@
   --index-navigation-tab-bg-focus: #f9fafb;
   --index-navigation-tab-text-default: #6a7282;
   --index-navigation-tab-text-hover: #6a7282;
-  --index-navigation-tab-text-selected: #067eff;
+  --index-navigation-tab-text-selected: #0851c5;
   --index-navigation-tab-text-focus: #6a7282;
   --index-navigation-tab-icon-default: #6a7282;
   --index-navigation-tab-icon-hover: #6a7282;
@@ -1070,7 +1070,7 @@
   --index-navigation-stepper-circle-text-default: #364153;
   --index-navigation-stepper-circle-text-activated: #f9fafb;
   --index-navigation-stepper-label-default: #364153;
-  --index-navigation-stepper-label-activated: #067eff;
+  --index-navigation-stepper-label-activated: #0851c5;
   --index-navigation-stepper-separator-color-default: #e5e7eb;
   --index-navigation-stepper-circle-size: 28px;
   --index-navigation-stepper-circle-radius: 9999px;
@@ -1258,7 +1258,7 @@
   --index-selection-chips-bg-hover: #d6efff;
   --index-selection-chips-bg-selected: #067eff;
   --index-selection-chips-bg-focus: #d6efff;
-  --index-selection-chips-text-color: #067eff;
+  --index-selection-chips-text-color: #0851c5;
   --index-selection-chips-text-color-selected: #f9fafb;
   --index-selection-chips-icon-close-color: #067eff;
   --index-selection-chips-icon-close-color-selected: #f9fafb;
