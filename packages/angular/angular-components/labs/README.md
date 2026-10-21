@@ -33,6 +33,7 @@ pour `/labs`).
 | `button[socLabsButton]` (`SocLabsButton`) | Proposé | [#43](https://github.com/Socium-Design/design_system_angular/issues/43) | — (cible : bouton « Visualiser » de la liste « Gestion des tableaux de bord ») |
 | `soc-labs-icon-tile` (`SocLabsIconTile`) | Proposé | [#42](https://github.com/Socium-Design/design_system_angular/issues/42) | — (cible : liste « Gestion des tableaux de bord », tuile devant le nom) |
 | `soc-labs-widget-card` (`SocLabsWidgetCard`) | Proposé | [#36](https://github.com/Socium-Design/design_system_angular/issues/36) | — (cible : cartes KPI / graphiques de la composition et de l'aperçu d'un tableau de bord, à la place de `soc-card`) |
+| `soc-labs-settings-card` (`SocLabsSettingsCard`) | Proposé | [#49](https://github.com/Socium-Design/design_system_angular/issues/49) (voir #11, #15) | — (cible : Perfs > Configurations > Notes d'évaluation, cartes de barème) |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).
