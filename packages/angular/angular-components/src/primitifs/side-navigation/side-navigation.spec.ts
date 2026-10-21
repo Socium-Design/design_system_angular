@@ -2,15 +2,17 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { q, qa } from '../../testing/helpers';
 import { SocSideNavigation } from './side-navigation';
-import type { NavigationProduct } from './navigation-presets';
+import { LucidePlus } from '@lucide/angular';
+import { NAVIGATION_PRESETS, type NavigationProduct, type SideNavActionData } from './navigation-presets';
 
 @Component({
   standalone: true,
   imports: [SocSideNavigation],
-  template: `<soc-side-navigation [product]="product()" [selectedId]="selected()" [collapsed]="collapsed()" (select)="selected.set($event)" (toggleCollapse)="toggles = toggles + 1" />`,
+  template: `<soc-side-navigation [product]="product()" [actionSection]="actionSection()" [selectedId]="selected()" [collapsed]="collapsed()" (select)="selected.set($event)" (toggleCollapse)="toggles = toggles + 1" />`,
 })
 class NavHost {
   product = signal<NavigationProduct>('workspace');
+  actionSection = signal<{ title: string; items: SideNavActionData[] } | undefined>(undefined);
   selected = signal<string | undefined>(undefined);
   collapsed = signal(false);
   toggles = 0;
@@ -37,7 +39,8 @@ describe('SideNavigation', () => {
       expect(svg.getAttribute('class')).toContain('size-full');
       expect(svg.getAttribute('stroke-width')).toBe('var(--index-navigation-sidenavigation-item-icon-thickness)');
     }
-    f.componentInstance.product.set('perfs'); // the only preset with an action section
+    // No preset has an action section any more: pass one explicitly.
+    f.componentInstance.actionSection.set({ title: 'ACTIONS RAPIDES', items: [{ id: 'ajouter', label: 'Ajouter', icon: LucidePlus }] });
     f.detectChanges();
     const actionIcons = qa<SVGElement>(f, 'span.size-3\\.5 svg');
     expect(actionIcons.length).toBeGreaterThan(0);
@@ -61,6 +64,22 @@ describe('SideNavigation', () => {
     f.detectChanges();
     expect(q(f, 'soc-side-navigation').textContent).not.toContain('Tableau de bord');
     expect(qa(f, 'button[aria-label="Déplier le menu"]').length).toBe(1);
+  });
+
+  it('perfs preset: the production menu (Configurations, Catalogue, Mon espace), no quick actions', () => {
+    const f = setup();
+    f.componentInstance.product.set('perfs');
+    f.detectChanges();
+    const labels = (title: string) => NAVIGATION_PRESETS.perfs.sections.find((s) => s.title === title)!.items.map((i) => i.label);
+    expect(labels('MENU PRINCIPAL')).toEqual([
+      'Tableau de bord', 'Objectifs', 'Évaluations', 'Compétences', 'Carrières', 'Catalogue', 'Matrice 9-box', 'Employés', 'Configurations', 'Historiques',
+    ]);
+    expect(labels('MON ESPACE')).toEqual(['Mes objectifs', 'Mes contrats', 'Mes plans']);
+    expect(NAVIGATION_PRESETS.perfs.actionSection).toBeUndefined();
+    const item = qa<HTMLButtonElement>(f, 'soc-side-nav-section button').find((b) => b.textContent!.includes('Configurations'))!;
+    item.click();
+    expect(f.componentInstance.selected()).toBe('perfs-configurations');
+    expect(q(f, 'soc-side-navigation').textContent).not.toContain('ACTIONS RAPIDES');
   });
 
   it('switching product swaps the whole menu', () => {
