@@ -13,3 +13,4 @@ export * from './list-row/list-row';
 export * from './drop-zone/drop-zone';
 export * from './fullscreen-overlay/fullscreen-overlay';
 export * from './workspace-layout/workspace-layout';
+export * from './icon-tile/icon-tile';
