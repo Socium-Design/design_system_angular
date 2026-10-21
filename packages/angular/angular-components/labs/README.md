@@ -29,6 +29,7 @@ pour `/labs`).
 | `soc-labs-drop-zone` (`SocLabsDropZone`) | Proposé | [#8](https://github.com/Socium-Design/design_system_angular/issues/8) | — (cible : sections de la composition, glisser depuis la Bibliothèque) |
 | `soc-labs-fullscreen-overlay` (`SocLabsFullscreenOverlay`) | Proposé | [#20](https://github.com/Socium-Design/design_system_angular/issues/20) | — (cible : « Prévisualiser » un tableau de bord) |
 | `soc-labs-workspace-layout` (`SocLabsWorkspaceLayout`) | Proposé | [#13](https://github.com/Socium-Design/design_system_angular/issues/13) | — (cible : composition de tableau de bord, remplace la grille SCSS de `tableau-de-bord-composition-page`) |
+| `button[socLabsButton]` (`SocLabsButton`) | Proposé | [#43](https://github.com/Socium-Design/design_system_angular/issues/43) | — (cible : bouton « Visualiser » de la liste « Gestion des tableaux de bord ») |
 
 Statuts : **Proposé** (créé dans Labs, pas encore dans le prototype) · **En test** (utilisé dans le
 prototype, en revue) · **Validé** (promu dans le kit) · **Abandonné** (supprimé).
