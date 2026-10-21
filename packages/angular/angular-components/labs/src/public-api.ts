@@ -14,3 +14,4 @@ export * from './drop-zone/drop-zone';
 export * from './fullscreen-overlay/fullscreen-overlay';
 export * from './workspace-layout/workspace-layout';
 export * from './data-table-fit/data-table-fit';
+export * from './button/button';
