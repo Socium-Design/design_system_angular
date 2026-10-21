@@ -5,6 +5,15 @@ import { LucideGripVertical } from '@lucide/angular';
 import { SocTooltip, SocTooltipLabel } from '@socium-design/angular-components';
 import { labsFocusRing } from '../internal/classes';
 
+export type LabsListRowAppearance = 'card' | 'flush';
+
+/**
+ * Fond « sélectionné » de l'apparence `flush` : aucun token de bleu plus clair que `surface-selected`
+ * n'existe — il est éclairci de moitié vers le blanc du kit (dérivé des tokens, aucune valeur en dur).
+ */
+const flushSelectedBg =
+  'bg-[color-mix(in_srgb,var(--bridges-color-surface-selected)_50%,var(--bridges-color-surface-neutral-white))]';
+
 /** Slot à gauche de la ligne : icône, pastille (`soc-labs-chart-type-chip`), avatar… */
 @Directive({ selector: '[socLabsListRowLeading]', standalone: true })
 export class SocLabsListRowLeading {}
@@ -31,7 +40,16 @@ export class SocLabsListRowAction {}
  * reste libre). Désactiver le glisser d'une ligne verrouillée avec `[cdkDragDisabled]="locked"`. Le
  * glisser n'est pas accessible au clavier : l'action à droite reste le chemin principal.
  *
+ * ## Apparence (`appearance`)
+ * - **`card`** (défaut) : bloc arrondi, titre 14 px — les lignes s'espacent avec un `gap` sur le conteneur.
+ * - **`flush`** : liste dense de panneau (catalogue de la Bibliothèque) — sans arrondi ni espacement, les
+ *   lignes se touchent, séparées par un filet fin (`border-subtle`) ; padding vertical réduit, titre
+ *   12 px, sous-titre 11 px. Survol : fond léger. Sélectionné : fond bleu très clair (le bleu
+ *   `surface-selected` éclairci de moitié vers le blanc, `color-mix`), titre bleu action en demi-gras.
+ *   Verrouillé : inchangé. Placer les lignes dans un conteneur sans `gap`.
+ *
  * L'hôte porte `role="listitem"` : placer les lignes dans un conteneur `role="list"` (ou `<ul>`).
+ * Il expose `data-state` (`default` | `selected` | `locked`) et `data-appearance` (`card` | `flush`).
  */
 @Component({
   selector: 'soc-labs-list-row',
@@ -44,6 +62,7 @@ export class SocLabsListRowAction {}
     '[class]': 'hostClasses()',
     '[attr.aria-disabled]': 'locked() || null',
     '[attr.data-state]': 'state()',
+    '[attr.data-appearance]': 'appearance()',
   },
   template: `
     <ng-template #content>
@@ -64,7 +83,7 @@ export class SocLabsListRowAction {}
         <span [class]="titleClasses()" [attr.title]="locked() ? null : title()">{{ title() }}</span>
         @if (subtitle()) {
           <span
-            class="truncate text-[length:var(--bridges-size-text-text-size-xs)] text-[var(--bridges-color-text-secondary)] [line-height:var(--bridges-size-text-line-height-xs)]"
+            [class]="subtitleClasses()"
             [attr.title]="locked() ? null : subtitle()"
           >{{ subtitle() }}</span>
         }
@@ -99,6 +118,8 @@ export class SocLabsListRow {
   readonly draggable = input(false, { transform: booleanAttribute });
   /** Texte lu par les lecteurs d'écran pour l'état sélectionné. */
   readonly selectedLabel = input('Ajouté');
+  /** `card` (défaut, bloc arrondi) ou `flush` (liste dense : lignes jointives séparées par un filet). */
+  readonly appearance = input<LabsListRowAppearance>('card');
 
   protected readonly focusRing = labsFocusRing;
   private readonly leading = contentChild(SocLabsListRowLeading);
@@ -109,6 +130,13 @@ export class SocLabsListRow {
   protected readonly state = computed(() => (this.locked() ? 'locked' : this.selected() ? 'selected' : 'default'));
 
   protected readonly hostClasses = computed(() => {
+    if (this.appearance() === 'flush') {
+      const flush =
+        'group/row flex w-full min-w-0 items-center gap-[var(--bridges-position-gap-sm)] border-b-[length:var(--bridges-shape-line-hairline)] border-[var(--bridges-color-border-subtle)] px-[var(--bridges-position-padding-3xs)] py-[var(--bridges-position-padding-xs)] [font-family:var(--bridges-shape-text-body-font)] transition-colors';
+      if (this.locked()) return `${flush} cursor-not-allowed opacity-50`;
+      if (this.selected()) return `${flush} ${flushSelectedBg}`;
+      return `${flush} hover:bg-[var(--bridges-color-background-layer-1)]`;
+    }
     const base =
       'group/row flex w-full min-w-0 items-center gap-[var(--bridges-position-gap-sm)] rounded-[var(--bridges-shape-figure-radius-md)] px-[var(--bridges-position-padding-3xs)] py-[var(--bridges-position-padding-2xs)] [font-family:var(--bridges-shape-text-body-font)] transition-colors';
     if (this.locked()) return `${base} cursor-not-allowed opacity-50`;
@@ -116,12 +144,25 @@ export class SocLabsListRow {
     return `${base} hover:bg-[var(--bridges-color-background-layer-1)]`;
   });
 
-  protected readonly titleClasses = computed(
-    () =>
-      `truncate text-[length:var(--bridges-size-text-text-size-sm)] [line-height:var(--bridges-size-text-line-height-sm)] ${
-        this.selected() && !this.locked()
-          ? 'text-[var(--bridges-color-text-action)] [font-weight:var(--bridges-shape-text-label-weight)]'
+  protected readonly titleClasses = computed(() => {
+    const active = this.selected() && !this.locked();
+    if (this.appearance() === 'flush') {
+      return `truncate text-[length:var(--bridges-size-text-text-size-xs)] [line-height:var(--bridges-size-text-line-height-xs)] ${
+        active
+          ? 'text-[var(--bridges-color-text-action)] [font-weight:var(--bridges-shape-text-heading-2-weight)]'
           : 'text-[var(--bridges-color-text-primary)]'
-      }`,
+      }`;
+    }
+    return `truncate text-[length:var(--bridges-size-text-text-size-sm)] [line-height:var(--bridges-size-text-line-height-sm)] ${
+      active
+        ? 'text-[var(--bridges-color-text-action)] [font-weight:var(--bridges-shape-text-label-weight)]'
+        : 'text-[var(--bridges-color-text-primary)]'
+    }`;
+  });
+
+  protected readonly subtitleClasses = computed(() =>
+    this.appearance() === 'flush'
+      ? 'truncate text-[length:calc((var(--bridges-size-text-text-size-tiny)+var(--bridges-size-text-text-size-xs))/2)] text-[var(--bridges-color-text-secondary)] [line-height:var(--bridges-size-text-line-height-xs)]'
+      : 'truncate text-[length:var(--bridges-size-text-text-size-xs)] text-[var(--bridges-color-text-secondary)] [line-height:var(--bridges-size-text-line-height-xs)]',
   );
 }

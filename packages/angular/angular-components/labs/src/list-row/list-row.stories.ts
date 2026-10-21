@@ -17,12 +17,13 @@ const meta: Meta<SocLabsListRow> = {
     }),
     labsBanner,
   ],
-  args: { title: 'Effectif total', subtitle: 'Nombre de salariés actifs à fin de mois', selected: false, locked: false, lockedReason: 'Indisponible pour cette population', draggable: true },
+  args: { title: 'Effectif total', subtitle: 'Nombre de salariés actifs à fin de mois', selected: false, locked: false, lockedReason: 'Indisponible pour cette population', draggable: true, appearance: 'card' },
+  argTypes: { appearance: { control: 'inline-radio', options: ['card', 'flush'] } },
   render: (args) => ({
     props: args,
     template: `
       <div role="list" class="w-[240px] bg-[var(--bridges-color-surface-neutral-white)] p-[var(--bridges-position-padding-3xs)]">
-        <soc-labs-list-row [title]="title" [subtitle]="subtitle" [selected]="selected" [locked]="locked" [lockedReason]="lockedReason" [draggable]="draggable">
+        <soc-labs-list-row [title]="title" [subtitle]="subtitle" [selected]="selected" [locked]="locked" [lockedReason]="lockedReason" [draggable]="draggable" [appearance]="appearance">
           <soc-labs-chart-type-chip socLabsListRowLeading type="courbe" decorative />
           <soc-labs-icon-button socLabsListRowAction [ariaLabel]="'Ajouter ' + title" tooltip="Ajouter" size="xs" variant="primary-subtle" shape="round">
             <svg lucidePlus class="size-full" [strokeWidth]="2"></svg>
@@ -61,6 +62,45 @@ export const Catalogue: Story = {
         <div role="list" cdkDropList (cdkDropListDropped)="drop($event)" class="flex w-[240px] flex-col gap-[var(--bridges-position-gap-xs)] border border-[var(--bridges-color-border-subtle)] bg-[var(--bridges-color-surface-neutral-white)] p-[var(--bridges-position-padding-3xs)]">
           @for (it of items; track it.id) {
             <soc-labs-list-row cdkDrag [cdkDragDisabled]="!!it.verrou" [title]="it.titre" [subtitle]="it.sous" [selected]="it.ajoute" [locked]="!!it.verrou" [lockedReason]="it.verrou" draggable>
+              <soc-labs-chart-type-chip socLabsListRowLeading [type]="$any(it.type)" decorative />
+              <soc-labs-icon-button socLabsListRowAction [ariaLabel]="(it.ajoute ? 'Retirer ' : 'Ajouter ') + it.titre" [tooltip]="it.ajoute ? 'Ajouté' : 'Ajouter'" size="xs" shape="round" [variant]="it.ajoute ? 'primary-subtle' : 'ghost'" (click)="it.ajoute = !it.ajoute">
+                @if (it.ajoute) { <svg lucideCheck class="size-full" [strokeWidth]="2"></svg> } @else { <svg lucidePlus class="size-full" [strokeWidth]="2"></svg> }
+              </soc-labs-icon-button>
+            </soc-labs-list-row>
+          }
+        </div>
+      `,
+    };
+  },
+};
+
+/** Apparence `flush` seule, sélectionnée (fond bleu très clair, titre demi-gras). */
+export const FlushSelected: Story = { args: { appearance: 'flush', selected: true } };
+
+/**
+ * Liste **flush** (catalogue de la Bibliothèque) : lignes jointives séparées par un filet, titre 12 px,
+ * sous-titre 11 px ; états normal, survol, ajouté (sélectionné) et verrouillé. Conteneur sans `gap`.
+ */
+export const ListeFlushBibliotheque: Story = {
+  name: 'Liste flush (Bibliothèque)',
+  render: () => {
+    const items = [
+      { id: 1, titre: 'Effectif total', sous: 'Salariés actifs à fin de mois', type: 'kpi', ajoute: true },
+      { id: 2, titre: 'Entrées et sorties', sous: 'Mouvements du personnel', type: 'histogramme', ajoute: false },
+      { id: 3, titre: 'Pyramide des âges', sous: 'Répartition par tranche', type: 'barres-horizontales', ajoute: true },
+      { id: 4, titre: 'Masse salariale', sous: 'Réservé à la paie', type: 'courbe', ajoute: false, verrou: 'Indisponible pour cette population' },
+      { id: 5, titre: 'Répartition par contrat', sous: 'CDI, CDD, alternance', type: 'camembert', ajoute: false },
+      { id: 6, titre: 'Taux d’absentéisme pour maladie de courte durée', sous: 'Moyenne glissante sur douze mois', type: 'courbe', ajoute: false },
+    ];
+    return {
+      props: {
+        items,
+        drop: (e: CdkDragDrop<unknown>) => moveItemInArray(items, e.previousIndex, e.currentIndex),
+      },
+      template: `
+        <div role="list" cdkDropList (cdkDropListDropped)="drop($event)" class="flex w-[240px] flex-col border-[length:var(--bridges-shape-line-hairline)] border-[var(--bridges-color-border-subtle)] bg-[var(--bridges-color-surface-neutral-white)]">
+          @for (it of items; track it.id) {
+            <soc-labs-list-row appearance="flush" cdkDrag [cdkDragDisabled]="!!it.verrou" [title]="it.titre" [subtitle]="it.sous" [selected]="it.ajoute" [locked]="!!it.verrou" [lockedReason]="it.verrou" draggable>
               <soc-labs-chart-type-chip socLabsListRowLeading [type]="$any(it.type)" decorative />
               <soc-labs-icon-button socLabsListRowAction [ariaLabel]="(it.ajoute ? 'Retirer ' : 'Ajouter ') + it.titre" [tooltip]="it.ajoute ? 'Ajouté' : 'Ajouter'" size="xs" shape="round" [variant]="it.ajoute ? 'primary-subtle' : 'ghost'" (click)="it.ajoute = !it.ajoute">
                 @if (it.ajoute) { <svg lucideCheck class="size-full" [strokeWidth]="2"></svg> } @else { <svg lucidePlus class="size-full" [strokeWidth]="2"></svg> }
