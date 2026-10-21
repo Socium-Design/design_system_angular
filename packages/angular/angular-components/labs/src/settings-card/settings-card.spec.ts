@@ -104,3 +104,149 @@ describe('Labs / SettingsCard', () => {
     expect(card().className).toContain('border-[var(--index-conteneur-card-border)]');
   });
 });
+
+@Component({
+  standalone: true,
+  imports: [SocLabsSettingsCard, SocLabsSettingsCardAction, SocLabsSettingsCardFootnote, SocSwitch],
+  template: `
+    <soc-labs-settings-card
+      title="Note finale"
+      overline="BARÈME"
+      collapsible
+      [(expanded)]="expanded"
+      [summary]="summary()"
+      [badge]="badge()"
+      [badgeTone]="tone()"
+      [lockExpanded]="locked()"
+      [disabled]="disabled()"
+      disabledNote="Barème désactivé"
+    >
+      <soc-switch socLabsSettingsCardAction label="Visible" [checked]="visible()" (checkedChange)="visible.set($event)" />
+      <button type="button" class="corps">5</button>
+      <p socLabsSettingsCardFootnote>Règle</p>
+    </soc-labs-settings-card>
+  `,
+})
+class CollapsibleHost {
+  expanded = signal(false);
+  summary = signal<string | undefined>('/20 · 2 décimales');
+  badge = signal<string | undefined>(undefined);
+  tone = signal<'information' | 'error'>('information');
+  locked = signal(false);
+  disabled = signal(false);
+  visible = signal(true);
+}
+
+describe('Labs / SettingsCard — repliable', () => {
+  function setup() {
+    const fixture = TestBed.createComponent(CollapsibleHost);
+    fixture.detectChanges();
+    const card = () => q(fixture, 'soc-labs-settings-card');
+    const region = (name: string) => card().querySelector(`[data-region="${name}"]`) as HTMLElement | null;
+    const panel = () => card().querySelector('[data-part="panel"]') as HTMLElement;
+    const toggle = () => region('toggle') as HTMLButtonElement;
+    return { fixture, host: fixture.componentInstance, card, region, panel, toggle };
+  }
+
+  it('non repliable par défaut : pas de chevron, corps toujours ouvert (comportement inchangé)', () => {
+    const fixture = TestBed.createComponent(Host);
+    fixture.detectChanges();
+    const card = q(fixture, 'soc-labs-settings-card');
+    expect(card.querySelector('[data-region="toggle"]')).toBeNull();
+    expect(card.hasAttribute('data-expanded')).toBeFalse();
+    expect((card.querySelector('[data-part="panel"]') as HTMLElement).hasAttribute('inert')).toBeFalse();
+  });
+
+  it('fermée : résumé sous le titre, corps inerte, chevron aria-expanded="false" relié au corps', () => {
+    const { region, panel, toggle, card } = setup();
+    expect(card().getAttribute('data-expanded')).toBe('false');
+    expect(region('summary')!.textContent!.trim()).toBe('/20 · 2 décimales');
+    expect(panel().hasAttribute('inert')).toBeTrue();
+    expect(panel().className).toContain('grid-rows-[0fr]');
+    expect(toggle().getAttribute('aria-expanded')).toBe('false');
+    expect(toggle().getAttribute('aria-controls')).toBe(panel().id);
+    expect(toggle().getAttribute('aria-labelledby')).toBe(region('title')!.id);
+    expect(toggle().getAttribute('aria-describedby')).toBe(region('summary')!.id);
+  });
+
+  it('le chevron (Entrée / Espace = clic) et un clic sur l’en-tête ouvrent puis ferment ; [(expanded)] suit', () => {
+    const { fixture, host, region, panel, toggle } = setup();
+    toggle().click();
+    fixture.detectChanges();
+    expect(host.expanded()).toBeTrue();
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
+    expect(panel().hasAttribute('inert')).toBeFalse();
+    expect(region('summary')).toBeNull();
+    region('title')!.click();
+    fixture.detectChanges();
+    expect(host.expanded()).toBeFalse();
+    host.expanded.set(true);
+    fixture.detectChanges();
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('l’interrupteur d’en-tête reste utilisable carte fermée et ne replie ni ne déplie la carte', () => {
+    const { fixture, host, region } = setup();
+    (region('action')!.querySelector('[role="switch"]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(host.visible()).toBeFalse();
+    expect(host.expanded()).toBeFalse();
+    host.expanded.set(true);
+    fixture.detectChanges();
+    (region('action')!.querySelector('[role="switch"]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(host.visible()).toBeTrue();
+    expect(host.expanded()).toBeTrue();
+  });
+
+  it('lockExpanded : ouverte et impossible à refermer, chevron aria-disabled', () => {
+    const { fixture, host, toggle, panel } = setup();
+    host.locked.set(true);
+    fixture.detectChanges();
+    expect(panel().hasAttribute('inert')).toBeFalse();
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
+    expect(toggle().getAttribute('aria-disabled')).toBe('true');
+    host.expanded.set(true);
+    fixture.detectChanges();
+    toggle().click();
+    fixture.detectChanges();
+    expect(host.expanded()).toBeTrue();
+    host.locked.set(false);
+    fixture.detectChanges();
+    expect(toggle().hasAttribute('aria-disabled')).toBeFalse();
+  });
+
+  it('badge dans l’en-tête (soc-tag du kit) avec son ton, carte ouverte ou fermée', () => {
+    const { fixture, host, region } = setup();
+    expect(region('badge')).toBeNull();
+    host.badge.set('Erreur');
+    host.tone.set('error');
+    fixture.detectChanges();
+    expect(region('badge')!.tagName).toBe('SOC-TAG');
+    expect(region('badge')!.textContent!.trim()).toBe('Erreur');
+    expect(region('badge')!.className).toMatch(/error/);
+  });
+
+  it('désactivée et fermée : pas de mention (le résumé la remplace) ; ouverte : mention et corps inerte', () => {
+    const { fixture, host, region } = setup();
+    host.disabled.set(true);
+    fixture.detectChanges();
+    expect(region('disabled-note')!.closest('[inert]')).not.toBeNull();
+    host.expanded.set(true);
+    fixture.detectChanges();
+    expect(region('disabled-note')!.closest('[inert]')).toBeNull();
+    expect(region('body')!.hasAttribute('inert')).toBeTrue();
+  });
+
+  it('chevron : anneau de focus visible (style d’outline explicite, sinon Tailwind v4 n’en dessine aucun)', () => {
+    const { toggle } = setup();
+    expect(toggle().className).toContain('focus-visible:outline-solid');
+    expect(toggle().className).toContain('focus-visible:outline-[var(--bridges-color-border-focus)]');
+  });
+
+  it('animation courte, désactivée si prefers-reduced-motion', () => {
+    const { panel } = setup();
+    expect(panel().className).toContain('transition-[grid-template-rows]');
+    expect(panel().className).toContain('motion-reduce:transition-none');
+  });
+});
