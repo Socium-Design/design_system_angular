@@ -2,16 +2,20 @@ import { Component, signal } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
 import {
+  SocAccordion,
   SocInputNumber,
   SocSelect,
   SocSelectableChips,
   SocSwitch,
+  SocTag,
 } from '@socium-design/angular-components';
 import { labsBanner } from '../stories/labs-story';
 import {
   SocLabsSettingsCard,
   SocLabsSettingsCardAction,
+  SocLabsSettingsCardDetails,
   SocLabsSettingsCardFootnote,
+  SocLabsSettingsCardTags,
 } from './settings-card';
 
 const DECIMALES = [
@@ -98,6 +102,10 @@ const meta: Meta<SocLabsSettingsCard> = {
         SocLabsSettingsCard,
         SocLabsSettingsCardAction,
         SocLabsSettingsCardFootnote,
+        SocLabsSettingsCardDetails,
+        SocLabsSettingsCardTags,
+        SocAccordion,
+        SocTag,
         SocSwitch,
         BaremeDemo,
       ],
@@ -226,4 +234,26 @@ export const Accordion: Story = {
     `,
     };
   },
+};
+
+const DETAILS = (attrs: string) => `
+  <soc-labs-settings-card title="Note Potentiel" overline="BARÈME" collapsible [expanded]="true" ${attrs} class="max-w-[720px]">
+    <soc-tag socLabsSettingsCardTags color="information">Confidentialité du potentiel</soc-tag>
+    <soc-switch socLabsSettingsCardAction label="Visible par l’évalué" [checked]="false" />
+    <p class="text-sm text-[var(--bridges-color-text-primary)]">Contenu de la carte (champs du kit).</p>
+    <p socLabsSettingsCardFootnote><strong>Règle de calcul</strong> — Moyenne pondérée des blocs notés.</p>
+    <soc-accordion socLabsSettingsCardDetails label="Ce qui sera mis à jour" [open]="true">
+      <p class="text-sm text-[var(--bridges-color-text-primary)]">Matrice 9-box — Axe Potentiel ; Exports Excel / PDF.</p>
+    </soc-accordion>
+  </soc-labs-settings-card>
+`;
+
+/** Tag d'en-tête permanent (avant le badge) et zone sous l'encadré de note (ici un \`soc-accordion\` du kit) — #62. */
+export const WithDetailsAndTags: Story = {
+  render: () => ({ template: DETAILS(`badge="Modifié"`) }),
+};
+
+/** Carte désactivée : le corps et la note sont grisés et inertes, la zone de détails reste lisible et utilisable. */
+export const DetailsDisabled: Story = {
+  render: () => ({ template: DETAILS(`disabled disabledNote="Barème désactivé : affichage sur 100"`) }),
 };

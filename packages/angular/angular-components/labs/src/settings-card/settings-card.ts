@@ -13,6 +13,17 @@ export class SocLabsSettingsCardAction {}
 export class SocLabsSettingsCardFootnote {}
 
 /**
+ * Zone sous l'encadré de note (ex. un `soc-accordion` « Ce qui sera mis à jour »). Hors du corps : jamais grisée ni
+ * inerte quand la carte est désactivée ; repliée avec la carte.
+ */
+@Directive({ selector: '[socLabsSettingsCardDetails]', standalone: true })
+export class SocLabsSettingsCardDetails {}
+
+/** Tags d'en-tête (`soc-tag` du kit), avant le badge, visibles carte ouverte ou fermée. */
+@Directive({ selector: '[socLabsSettingsCardTags]', standalone: true })
+export class SocLabsSettingsCardTags {}
+
+/**
  * ## Rôle
  * Carte d'un **bloc de réglages** dans une page de configuration : sur-titre en petites capitales
  * (« BARÈME »), titre, contrôle à droite du titre (interrupteur), corps libre (champs du kit), puis une
@@ -50,9 +61,12 @@ export class SocLabsSettingsCardFootnote {}
  * ton = une couleur de `TagColor` (`information` par défaut, `error`, `warning`, `success`…).
  *
  * ## Slots
+ * - `socLabsSettingsCardTags` (optionnel) : tags permanents de l'en-tête (`soc-tag`), avant le badge (#62).
  * - `socLabsSettingsCardAction` (optionnel) : à droite du titre, aligné en haut, jamais rétréci.
  * - contenu sans marqueur : le corps (colonne, espacement `gap-lg`).
- * - `socLabsSettingsCardFootnote` (optionnel) : encadré pointillé en bas de carte.
+ * - `socLabsSettingsCardFootnote` (optionnel) : encadré pointillé en bas du corps.
+ * - `socLabsSettingsCardDetails` (optionnel) : sous l'encadré, hors du corps (#62) — ni grisé ni inerte quand la
+ *   carte est désactivée (il décrit souvent l'impact du réglage, à lire avant de le réactiver).
  */
 @Component({
   selector: 'soc-labs-settings-card',
@@ -88,6 +102,11 @@ export class SocLabsSettingsCardFootnote {}
           </p>
         }
       </div>
+      @if (hasTags()) {
+        <div class="flex shrink-0 flex-wrap items-center gap-[var(--bridges-position-gap-xs)]" data-region="tags">
+          <ng-content select="[socLabsSettingsCardTags]" />
+        </div>
+      }
       @if (badge()) {
         <soc-tag class="shrink-0" [color]="badgeTone()" data-region="badge">{{ badge() }}</soc-tag>
       }
@@ -128,6 +147,9 @@ export class SocLabsSettingsCardFootnote {}
               </div>
             }
           </div>
+          @if (hasDetails()) {
+            <div class="flex min-w-0 flex-col" data-region="details"><ng-content select="[socLabsSettingsCardDetails]" /></div>
+          }
         </div>
       </div>
     </div>
@@ -162,7 +184,11 @@ export class SocLabsSettingsCard {
   private readonly action = contentChild(SocLabsSettingsCardAction);
   private readonly footnote = contentChild(SocLabsSettingsCardFootnote);
   protected readonly hasAction = computed(() => !!this.action());
+  private readonly details = contentChild(SocLabsSettingsCardDetails);
+  private readonly tags = contentChild(SocLabsSettingsCardTags);
   protected readonly hasFootnote = computed(() => !!this.footnote());
+  protected readonly hasDetails = computed(() => !!this.details());
+  protected readonly hasTags = computed(() => !!this.tags());
 
   protected readonly isExpanded = computed(() => !this.collapsible() || this.expanded() || this.lockExpanded());
 

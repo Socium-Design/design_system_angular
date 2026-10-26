@@ -1,8 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { SocSwitch } from '@socium-design/angular-components';
+import { SocAccordion, SocSwitch, SocTag } from '@socium-design/angular-components';
 import { q } from '../../../src/testing/helpers';
-import { SocLabsSettingsCard, SocLabsSettingsCardAction, SocLabsSettingsCardFootnote } from './settings-card';
+import {
+  SocLabsSettingsCard,
+  SocLabsSettingsCardAction,
+  SocLabsSettingsCardDetails,
+  SocLabsSettingsCardFootnote,
+  SocLabsSettingsCardTags,
+} from './settings-card';
 
 @Component({
   standalone: true,
@@ -248,5 +254,93 @@ describe('Labs / SettingsCard — repliable', () => {
     const { panel } = setup();
     expect(panel().className).toContain('transition-[grid-template-rows]');
     expect(panel().className).toContain('motion-reduce:transition-none');
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [SocLabsSettingsCard, SocLabsSettingsCardAction, SocLabsSettingsCardFootnote, SocLabsSettingsCardDetails, SocLabsSettingsCardTags, SocSwitch, SocTag, SocAccordion],
+  template: `
+    <soc-labs-settings-card title="Note Potentiel" collapsible [(expanded)]="expanded" [disabled]="disabled()" badge="Modifié" summary="/20">
+      @if (withTag()) {
+        <soc-tag socLabsSettingsCardTags color="information">Confidentialité du potentiel</soc-tag>
+      }
+      <soc-switch socLabsSettingsCardAction label="Visible par l’évalué" [checked]="true" />
+      <button type="button" class="corps">5</button>
+      <p socLabsSettingsCardFootnote>Règle de calcul</p>
+      @if (withDetails()) {
+        <soc-accordion socLabsSettingsCardDetails label="Ce qui sera mis à jour" [(open)]="detailsOpen">
+          <p class="impact">Matrice 9-box</p>
+        </soc-accordion>
+      }
+    </soc-labs-settings-card>
+  `,
+})
+class DetailsHost {
+  expanded = signal(true);
+  disabled = signal(false);
+  withTag = signal(true);
+  withDetails = signal(true);
+  detailsOpen = signal(false);
+}
+
+describe('Labs / SettingsCard — détails et tags (#62)', () => {
+  function setup() {
+    const fixture = TestBed.createComponent(DetailsHost);
+    fixture.detectChanges();
+    const card = () => q(fixture, 'soc-labs-settings-card');
+    const region = (name: string) => card().querySelector(`[data-region="${name}"]`) as HTMLElement | null;
+    return { fixture, host: fixture.componentInstance, card, region };
+  }
+
+  it('détails sous la note, hors du corps ; tags avant le badge, dans l’en-tête', () => {
+    const { card, region } = setup();
+    const order = Array.from(card().querySelectorAll('[data-region]')).map((el) => el.getAttribute('data-region'));
+    expect(order).toEqual(['header', 'title', 'tags', 'badge', 'action', 'toggle', 'body', 'footnote', 'details']);
+    expect(region('body')!.contains(region('details'))).toBeFalse();
+    expect(region('details')!.querySelector('soc-accordion')).not.toBeNull();
+    expect(region('tags')!.textContent!.trim()).toBe('Confidentialité du potentiel');
+  });
+
+  it('slots absents : aucune région', () => {
+    const { fixture, host, region } = setup();
+    host.withTag.set(false);
+    host.withDetails.set(false);
+    fixture.detectChanges();
+    expect(region('tags')).toBeNull();
+    expect(region('details')).toBeNull();
+  });
+
+  it('carte désactivée : détails ni grisés ni inertes, l’accordéon s’ouvre au clavier', () => {
+    const { fixture, host, region } = setup();
+    host.disabled.set(true);
+    fixture.detectChanges();
+    expect(region('body')!.hasAttribute('inert')).toBeTrue();
+    const details = region('details')!;
+    expect(details.closest('[inert]')).toBeNull();
+    expect(details.className).not.toContain('opacity');
+    const bouton = details.querySelector('button') as HTMLButtonElement;
+    bouton.focus();
+    expect(document.activeElement).toBe(bouton);
+    expect(bouton.getAttribute('aria-expanded')).toBe('false');
+    bouton.click();
+    fixture.detectChanges();
+    expect(host.detailsOpen()).toBeTrue();
+    expect(details.querySelector('.impact')).not.toBeNull();
+  });
+
+  it('carte fermée : tags visibles, détails repliés avec le corps (inertes)', () => {
+    const { fixture, host, region } = setup();
+    host.expanded.set(false);
+    fixture.detectChanges();
+    expect(region('tags')!.closest('[inert]')).toBeNull();
+    expect(region('details')!.closest('[inert]')).not.toBeNull();
+  });
+
+  it('clic sur un tag : replie la carte comme le reste de l’en-tête', () => {
+    const { fixture, host, region } = setup();
+    (region('tags')!.querySelector('soc-tag') as HTMLElement).click();
+    fixture.detectChanges();
+    expect(host.expanded()).toBeFalse();
   });
 });
