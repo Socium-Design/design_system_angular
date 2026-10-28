@@ -82,13 +82,15 @@ describe('SideNavigation', () => {
     expect(q(f, 'soc-side-navigation').textContent).not.toContain('ACTIONS RAPIDES');
   });
 
-  it('workspace preset: the production menu (Entreprises, Rapports RH, Demandes reçues…)', () => {
+  it('workspace preset: production items (Entreprises, Rapports RH, Demandes reçues…) and the existing ones kept', () => {
     const f = setup();
     const labels = (title: string) => NAVIGATION_PRESETS.workspace.sections.find((s) => s.title === title)!.items.map((i) => i.label);
     expect(labels('MENU PRINCIPAL')).toEqual([
       'Accueil', 'Tableau de bord', 'Rapports RH', 'Entreprises', 'Imports / Exports', 'Pays', 'Historique', 'Template',
     ]);
-    expect(labels('GESTION ENTREPRISE')).toEqual(['Infos générales', 'Demandes reçues', 'Applications', 'Employés', 'Permissions']);
+    expect(labels('GESTION ENTREPRISE')).toEqual([
+      'Infos générales', 'Demandes reçues', 'Applications', 'Employés', 'Permissions', 'Postes', 'Structures', 'Organigramme', 'Configurations',
+    ]);
     const item = qa<HTMLButtonElement>(f, 'soc-side-nav-section button').find((b) => b.textContent!.includes('Entreprises'))!;
     item.click();
     expect(f.componentInstance.selected()).toBe('workspace-entreprises');
