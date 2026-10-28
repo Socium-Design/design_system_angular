@@ -23,4 +23,3 @@ export * from './tag/tag';
 export * from './nav-list/nav-list';
 export * from './changes-bar/changes-bar';
 export * from './option-row/option-row';
-export * from './action-chip/action-chip';
