@@ -135,4 +135,94 @@ describe('Labs / OptionRow', () => {
     expect(child.querySelector('[data-part="disabled-reason"]')).toBeNull();
     expect(qa(fixture, '[role="switch"]').length).toBe(2);
   });
+
+  describe('tile, highlight, button control, collapsible children', () => {
+    @Component({
+      standalone: true,
+      imports: [SocLabsOptionRow],
+      template: `
+        <div role="list">
+          <soc-labs-option-row
+            class="tuile"
+            appearance="tile"
+            label="Intranet"
+            description="Active l'espace d'information interne."
+            [highlight]="true"
+            [control]="control()"
+            [collapsible]="true"
+            [(expanded)]="expanded"
+            [(checked)]="on"
+            confirmMessage="Option payante : vérifiez qu'elle a été vendue au client."
+            (labelClick)="opened = opened + 1"
+          >
+            <soc-labs-option-row label="Sous-option" />
+          </soc-labs-option-row>
+        </div>
+      `,
+    })
+    class TileHost {
+      control = signal<'switch' | 'button'>('switch');
+      expanded = signal(false);
+      on = signal(false);
+      opened = 0;
+    }
+
+    function setupTile() {
+      const fixture = TestBed.createComponent(TileHost);
+      fixture.detectChanges();
+      const tile = () => q(fixture, 'soc-labs-option-row.tuile');
+      const part = (name: string) => tile().querySelector(`[data-part="${name}"]`) as HTMLElement | null;
+      return { fixture, host: fixture.componentInstance, tile, part };
+    }
+
+    it('tile: highlighted (border + tint), two-line description, click on the tile opens the detail', () => {
+      const { tile, part, host } = setupTile();
+      expect(tile().getAttribute('data-appearance')).toBe('tile');
+      expect(tile().hasAttribute('data-highlight')).toBeTrue();
+      expect(tile().className).toContain('accent-orange-text');
+      expect(tile().className).toContain('color-mix');
+      expect(part('description')!.className).toContain('line-clamp-2');
+      part('description')!.click();
+      expect(host.opened).toBe(1);
+      (tile().querySelector('[role="switch"]') as HTMLElement).click();
+      expect(host.opened).toBe(1);
+    });
+
+    it('collapsible children: hidden by default, toggle with aria-expanded', () => {
+      const { fixture, part, host } = setupTile();
+      const toggle = part('children-toggle') as HTMLButtonElement;
+      expect(toggle.textContent!.trim()).toBe('Afficher les 1 sous-options');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+      expect(part('children')!.hidden).toBeTrue();
+      expect(toggle.getAttribute('aria-controls')).toBe(part('children')!.id);
+      toggle.click();
+      fixture.detectChanges();
+      expect(host.expanded()).toBeTrue();
+      expect(part('children')!.hidden).toBeFalse();
+      expect(toggle.textContent!.trim()).toBe('Masquer les 1 sous-options');
+    });
+
+    it('button control: « Activer » asks for confirmation, then « Désactiver »', async () => {
+      const { fixture, part, host } = setupTile();
+      host.control.set('button');
+      fixture.detectChanges();
+      const action = () => part('action') as HTMLButtonElement;
+      expect(action().textContent!.trim()).toBe('Activer');
+      expect(action().getAttribute('aria-label')).toBe('Activer Intranet');
+      action().click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(host.on()).toBeFalse();
+      (part('confirm-ok') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(host.on()).toBeTrue();
+      expect(action().textContent!.trim()).toBe('Désactiver');
+      expect(document.activeElement).toBe(action());
+      action().click();
+      fixture.detectChanges();
+      expect(host.on()).toBeFalse();
+      expect(part('confirm')).toBeNull();
+    });
+  });
 });
