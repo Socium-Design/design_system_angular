@@ -15,7 +15,7 @@ import { SocLabsOptionRow, SocLabsOptionRowTags } from './option-row';
   imports: [SocLabsOptionRow, SocLabsOptionRowTags, SocLabsTag, SocTag, SocLabsNavList, SocLabsChangesBar],
   template: `
     <div class="flex max-w-[960px] gap-[var(--bridges-position-gap-lg)]">
-      <soc-labs-nav-list class="w-[220px]" ariaLabel="Produits" [items]="produits" [(value)]="produit" />
+      <soc-labs-nav-list class="w-[220px]" ariaLabel="Produits" [items]="produits" [(value)]="produit" iconAppearance="tile" />
       <div class="flex min-w-0 flex-1 flex-col">
         <div role="list">
           <soc-labs-option-row

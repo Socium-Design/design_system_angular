@@ -17,7 +17,8 @@ export interface LabsNavListItem {
  * ## Rôle
  * Navigation **verticale** d'une colonne de filtre, dans la page : une entrée par catégorie (produit…), avec un
  * compteur à droite et, en option, l'icône du produit (`icon` : glyphe de l'AppSwitch du kit, à gauche du libellé ; dès
- * qu'une entrée en a une, les entrées sans icône gardent la place vide pour aligner les libellés). L'entrée courante est surlignée (fond `surface-selected`, texte action en demi-gras).
+ * qu'une entrée en a une, les entrées sans icône gardent la place vide pour aligner les libellés ; `iconAppearance="tile"`
+ * reprend la pastille de l'icône sélectionnée de l'AppSwitch). L'entrée courante est surlignée (fond `surface-selected`, texte action en demi-gras).
  * Diffère de `soc-tabs` (horizontal, sans compteur) et de `soc-side-navigation` (menu du shell, presets).
  *
  * ## Accessibilité
@@ -45,9 +46,9 @@ export interface LabsNavListItem {
               (click)="value.set(item.id)"
             >
               @if (withIcons()) {
-                <span class="flex size-[var(--bridges-size-icon-md)] shrink-0 items-center justify-center" aria-hidden="true" data-part="icon">
+                <span [class]="iconClass(!!item.icon)" aria-hidden="true" data-part="icon">
                   @if (item.icon) {
-                    <soc-app-icon-glyph [name]="item.icon" />
+                    <soc-app-icon-glyph [name]="item.icon" [selected]="iconAppearance() === 'tile'" />
                   }
                 </span>
               }
@@ -76,7 +77,18 @@ export class SocLabsNavList {
   readonly value = model<string>('');
   readonly ariaLabel = input.required<string>();
 
+  /**
+   * Rendu des icônes : `glyph` (glyphe seul, couleur de l'AppSwitch au repos) ou `tile` (pastille de l'icône
+   * sélectionnée de l'AppSwitch : fond `appicon-bg-selected`, glyphe blanc et vert).
+   */
+  readonly iconAppearance = input<'glyph' | 'tile'>('glyph');
+
   protected readonly withIcons = computed(() => this.items().some((i) => !!i.icon));
+
+  protected iconClass(hasIcon: boolean): string {
+    if (this.iconAppearance() === 'glyph') return 'flex size-[var(--bridges-size-icon-md)] shrink-0 items-center justify-center';
+    return `flex size-[var(--bridges-size-icon-lg)] shrink-0 items-center justify-center rounded-[var(--index-navigation-appicon-radius)] ${hasIcon ? 'bg-[var(--index-navigation-appicon-bg-selected)]' : ''}`;
+  }
 
   /** Compteur : `text-secondary` tomberait à 4,1:1 sur `surface-selected` — l'entrée courante le passe en `text-action`. */
   protected countClass(current: boolean): string {

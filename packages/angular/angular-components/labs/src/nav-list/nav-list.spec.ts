@@ -6,7 +6,7 @@ import { SocLabsNavList, type LabsNavListItem } from './nav-list';
 @Component({
   standalone: true,
   imports: [SocLabsNavList],
-  template: `<soc-labs-nav-list ariaLabel="Produits" [items]="items" [(value)]="value" />`,
+  template: `<soc-labs-nav-list ariaLabel="Produits" [items]="items" [(value)]="value" [iconAppearance]="appearance()" />`,
 })
 class Host {
   items: LabsNavListItem[] = [
@@ -15,6 +15,7 @@ class Host {
     { id: 'payroll', label: 'Payroll', icon: 'payroll' },
   ];
   value = signal('tous');
+  appearance = signal<'glyph' | 'tile'>('glyph');
 }
 
 describe('Labs / NavList', () => {
@@ -57,5 +58,17 @@ describe('Labs / NavList', () => {
     fixture.componentInstance.items = fixture.componentInstance.items.map(({ icon, ...i }) => i);
     fixture.detectChanges();
     expect(qa(fixture, '[data-part="icon"]').length).toBe(0);
+  });
+
+  it('iconAppearance="tile": AppSwitch selected tile (blue background, selected glyph); empty slot has no background', () => {
+    const fixture = TestBed.createComponent(Host);
+    fixture.componentInstance.appearance.set('tile');
+    fixture.detectChanges();
+    const [tous, workspace] = qa<HTMLButtonElement>(fixture, 'nav button');
+    const tile = workspace.querySelector('[data-part="icon"]')!;
+    expect(tile.className).toContain('bg-[var(--index-navigation-appicon-bg-selected)]');
+    expect(tile.querySelector('svg [class*="appicon-icon-selected"]')).not.toBeNull();
+    expect(tile.querySelector('svg [class*="appicon-icon-accent"]')).not.toBeNull();
+    expect(tous.querySelector('[data-part="icon"]')!.className).not.toContain('bg-[');
   });
 });
