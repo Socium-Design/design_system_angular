@@ -18,3 +18,8 @@ export * from './button/button';
 export * from './icon-tile/icon-tile';
 export * from './widget-card/widget-card';
 export * from './settings-card/settings-card';
+export * from './switch-hidden-label/switch-hidden-label';
+export * from './tag/tag';
+export * from './nav-list/nav-list';
+export * from './changes-bar/changes-bar';
+export * from './option-row/option-row';
