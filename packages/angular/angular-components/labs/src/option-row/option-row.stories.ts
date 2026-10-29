@@ -56,8 +56,8 @@ import { SocLabsOptionRow, SocLabsOptionRowTags } from './option-row';
 class OptionsEntrepriseStory {
   readonly produits = [
     { id: 'tous', label: 'Tous les produits', count: '2 / 4', countLabel: '2 activées sur 4' },
-    { id: 'workspace', label: 'Workspace', count: '2 / 4', countLabel: '2 activées sur 4' },
-    { id: 'payroll', label: 'Payroll', count: '0 / 1', countLabel: '0 activée sur 1' },
+    { id: 'workspace', label: 'Workspace', count: '2 / 4', countLabel: '2 activées sur 4', icon: 'workspace' },
+    { id: 'payroll', label: 'Payroll', count: '0 / 1', countLabel: '0 activée sur 1', icon: 'payroll' },
   ];
   readonly produit = signal('tous');
   readonly onboarding = signal(false);

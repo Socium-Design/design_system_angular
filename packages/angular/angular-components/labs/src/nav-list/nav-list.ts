@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, input, model } from '@angular/core';
+import { SocAppIconGlyph, type AppIconName } from '@socium-design/angular-components';
 import { labsFocusRing } from '../internal/classes';
 
 export interface LabsNavListItem {
@@ -8,22 +9,26 @@ export interface LabsNavListItem {
   count?: string;
   /** Compteur lu par les lecteurs d'écran à la place de `count` (« 4 activées sur 23 »). */
   countLabel?: string;
+  /** Icône de produit du kit (`soc-app-icon-glyph`, la même que dans l'AppSwitch), décorative. */
+  icon?: AppIconName;
 }
 
 /**
  * ## Rôle
  * Navigation **verticale** d'une colonne de filtre, dans la page : une entrée par catégorie (produit…), avec un
- * compteur à droite. L'entrée courante est surlignée (fond `surface-selected`, texte action en demi-gras).
+ * compteur à droite et, en option, l'icône du produit (`icon` : glyphe de l'AppSwitch du kit, à gauche du libellé ; dès
+ * qu'une entrée en a une, les entrées sans icône gardent la place vide pour aligner les libellés). L'entrée courante est surlignée (fond `surface-selected`, texte action en demi-gras).
  * Diffère de `soc-tabs` (horizontal, sans compteur) et de `soc-side-navigation` (menu du shell, presets).
  *
  * ## Accessibilité
- * `<nav>` nommée par `ariaLabel`, liste de `<button>` ; l'entrée courante porte `aria-current="true"`. Le compteur
+ * `<nav>` nommée par `ariaLabel`, liste de `<button>` ; icônes décoratives (`aria-hidden`) ; l'entrée courante porte `aria-current="true"`. Le compteur
  * visuel est masqué aux lecteurs d'écran quand `countLabel` est fourni, qui est lu à sa place. Tab parcourt
  * les entrées, Entrée / Espace sélectionne ; focus visible.
  */
 @Component({
   selector: 'soc-labs-nav-list',
   standalone: true,
+  imports: [SocAppIconGlyph],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { class: 'relative block min-w-0' },
@@ -39,6 +44,13 @@ export interface LabsNavListItem {
               [attr.data-id]="item.id"
               (click)="value.set(item.id)"
             >
+              @if (withIcons()) {
+                <span class="flex size-[var(--bridges-size-icon-md)] shrink-0 items-center justify-center" aria-hidden="true" data-part="icon">
+                  @if (item.icon) {
+                    <soc-app-icon-glyph [name]="item.icon" />
+                  }
+                </span>
+              }
               <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
               @if (item.count) {
                 <span
@@ -63,6 +75,8 @@ export class SocLabsNavList {
   /** Id de l'entrée courante (↔). */
   readonly value = model<string>('');
   readonly ariaLabel = input.required<string>();
+
+  protected readonly withIcons = computed(() => this.items().some((i) => !!i.icon));
 
   /** Compteur : `text-secondary` tomberait à 4,1:1 sur `surface-selected` — l'entrée courante le passe en `text-action`. */
   protected countClass(current: boolean): string {
