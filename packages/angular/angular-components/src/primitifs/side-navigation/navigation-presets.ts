@@ -13,7 +13,6 @@ import {
   LucideCalendarCheck,
   LucideCalendarDays,
   LucideChartPie,
-  LucideCircleCheck,
   LucideClipboardCheck,
   LucideClipboardList,
   LucideClipboardPen,
@@ -48,6 +47,7 @@ import {
   LucidePackageCheck,
   LucidePiggyBank,
   LucidePresentation,
+  LucideRefreshCcw,
   LucideReceipt,
   LucideReceiptText,
   LucideSend,
@@ -145,9 +145,11 @@ export const NAVIGATION_PRESETS: Record<NavigationProduct, NavigationPreset> = {
       {
         title: 'PARAMÈTRES DE PAIE',
         items: [
+          { id: 'workspace-parametres-de-paie', label: 'Paramètres de paie', icon: LucideSlidersHorizontal },
           { id: 'workspace-rubriques-de-paie', label: 'Rubriques de paie', icon: LucideList },
-          { id: 'workspace-etat-de-paie', label: 'État de paie', icon: LucideFileText },
-          { id: 'workspace-controle-cycle-paie', label: 'Contrôle cycle paie', icon: LucideCircleCheck },
+          { id: 'workspace-bulletin-de-paie', label: 'Bulletin de paie', icon: LucideFileText },
+          { id: 'workspace-template-d-etat-de-paie', label: "Template d'état de paie", icon: LucideFileSpreadsheet },
+          { id: 'workspace-controle-du-cycle-de-paie', label: 'Contrôle du cycle de paie', icon: LucideRefreshCcw },
         ],
       },
       {
