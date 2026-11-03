@@ -23,3 +23,7 @@ export * from './tag/tag';
 export * from './nav-list/nav-list';
 export * from './changes-bar/changes-bar';
 export * from './option-row/option-row';
+export * from './progress-ring/progress-ring';
+export * from './grouped-table/grouped-table';
+export * from './timeline/timeline';
+export * from './population-picker/population-picker';
