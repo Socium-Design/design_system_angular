@@ -28,6 +28,13 @@ import { nextLabsId } from '../internal/unique-id';
 export class SocLabsOptionRowTags {}
 
 /**
+ * Message sous la description (ex. `soc-message` du kit, `variant="inline"`) : avertissement qui ne bloque pas
+ * l'option (#83).
+ */
+@Directive({ selector: '[socLabsOptionRowMessage]', standalone: true })
+export class SocLabsOptionRowMessage {}
+
+/**
  * ## Rôle
  * Ligne d'une **liste d'options activables** (fonctionnalités d'un client, réglages) : interrupteur du kit,
  * libellé cliquable (ouvre un détail : `(labelClick)`), description sur **une ligne** (tronquée par « … »),
@@ -38,6 +45,11 @@ export class SocLabsOptionRowTags {}
  * (filet à gauche). Le parent ne pilote pas leurs états : c'est au consommateur de passer `disabled` aux
  * sous-options tant que le parent est coupé, avec `disabledReason` (« Activez d'abord … »), affichée sous la
  * description.
+ *
+ * ## Message (slot `socLabsOptionRowMessage`)
+ * Un élément projeté avec `socLabsOptionRowMessage` (un `soc-message` du kit en `variant="inline"`) s'affiche
+ * dans la colonne du libellé, sous la description et la raison de désactivation. Il informe sans rien bloquer :
+ * l'état de la ligne et l'interrupteur ne changent pas. Le consommateur l'ajoute ou le retire selon ses données.
  *
  * ## Confirmation dans la ligne (`confirmMessage`)
  * Si `confirmMessage` est fourni, **activer** l'option ne la change pas tout de suite : l'interrupteur passe
@@ -89,6 +101,11 @@ export class SocLabsOptionRowTags {}
           >
             {{ disabledReason() }}
           </p>
+        }
+        @if (hasMessage()) {
+          <div class="pt-[var(--bridges-position-gap-2xs)]" data-part="message">
+            <ng-content select="[socLabsOptionRowMessage]" />
+          </div>
         }
       </div>
       @if (hasTags() || isNew()) {
@@ -159,8 +176,11 @@ export class SocLabsOptionRow {
   protected readonly confirming = signal(false);
 
   private readonly tags = contentChild(SocLabsOptionRowTags);
+  /** Contenu direct seulement : le message d'une sous-option ne compte pas pour son parent. */
+  private readonly message = contentChild(SocLabsOptionRowMessage, { descendants: false });
   private readonly children = contentChildren(forwardRef(() => SocLabsOptionRow));
   protected readonly hasTags = computed(() => !!this.tags());
+  protected readonly hasMessage = computed(() => !!this.message());
   protected readonly hasChildren = computed(() => this.children().length > 0);
 
   protected readonly state = computed(() =>
