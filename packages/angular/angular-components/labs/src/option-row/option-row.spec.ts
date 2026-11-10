@@ -2,11 +2,11 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { q, qa } from '../../../src/testing/helpers';
 import { SocLabsTag } from '../tag/tag';
-import { SocLabsOptionRow, SocLabsOptionRowTags } from './option-row';
+import { SocLabsOptionRow, SocLabsOptionRowMessage, SocLabsOptionRowTags } from './option-row';
 
 @Component({
   standalone: true,
-  imports: [SocLabsOptionRow, SocLabsOptionRowTags, SocLabsTag],
+  imports: [SocLabsOptionRow, SocLabsOptionRowTags, SocLabsOptionRowMessage, SocLabsTag],
   template: `
     <div role="list">
       <soc-labs-option-row
@@ -25,7 +25,11 @@ import { SocLabsOptionRow, SocLabsOptionRowTags } from './option-row';
           [(checked)]="child"
           [disabled]="!parent()"
           disabledReason="Activez d'abord « Parcours d'intégration »."
-        />
+        >
+          @if (alerte()) {
+            <p socLabsOptionRowMessage class="alerte">Nécessite le module Doc.</p>
+          }
+        </soc-labs-option-row>
       </soc-labs-option-row>
     </div>
   `,
@@ -36,6 +40,7 @@ class Host {
   confirm = signal<string | undefined>('Option payante : vérifiez qu’elle a été vendue au client.');
   isNew = signal(false);
   opened = signal(0);
+  alerte = signal(true);
 }
 
 describe('Labs / OptionRow', () => {
@@ -134,5 +139,24 @@ describe('Labs / OptionRow', () => {
     expect(switchOf(child).disabled).toBeFalse();
     expect(child.querySelector('[data-part="disabled-reason"]')).toBeNull();
     expect(qa(fixture, '[role="switch"]').length).toBe(2);
+  });
+
+  it('socLabsOptionRowMessage: shown under the description, never blocks the row, absent from the parent', () => {
+    const { fixture, host, parent, part, switchOf } = setup();
+    const child = q(fixture, 'soc-labs-option-row.child');
+    host.parent.set(true);
+    fixture.detectChanges();
+    const message = part('message', child)!;
+    expect(message.textContent).toContain('Nécessite le module Doc.');
+    expect(message.parentElement!.contains(part('label', child))).toBeTrue();
+    expect(part('children', child)).toBeNull();
+    expect(child.getAttribute('data-state')).toBe('off');
+    switchOf(child).click();
+    fixture.detectChanges();
+    expect(host.child()).toBeTrue();
+    expect(parent().querySelector(':scope > [data-part="row"] [data-part="message"]')).toBeNull();
+    host.alerte.set(false);
+    fixture.detectChanges();
+    expect(part('message', child)).toBeNull();
   });
 });

@@ -1,18 +1,18 @@
 import { Component, computed, signal } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
-import { SocTag } from '@socium-design/angular-components';
+import { SocMessage, SocMessageContent, SocTag } from '@socium-design/angular-components';
 import { labsBanner } from '../stories/labs-story';
 import { SocLabsChangesBar } from '../changes-bar/changes-bar';
 import { SocLabsNavList } from '../nav-list/nav-list';
 import { SocLabsTag } from '../tag/tag';
-import { SocLabsOptionRow, SocLabsOptionRowTags } from './option-row';
+import { SocLabsOptionRow, SocLabsOptionRowMessage, SocLabsOptionRowTags } from './option-row';
 
 /** Fonctionnalités et options d'une entreprise (prototype SIRH) : la cible des quatre composants. */
 @Component({
   selector: 'story-labs-options-entreprise',
   standalone: true,
-  imports: [SocLabsOptionRow, SocLabsOptionRowTags, SocLabsTag, SocTag, SocLabsNavList, SocLabsChangesBar],
+  imports: [SocLabsOptionRow, SocLabsOptionRowTags, SocLabsOptionRowMessage, SocLabsTag, SocTag, SocMessage, SocMessageContent, SocLabsNavList, SocLabsChangesBar],
   template: `
     <div class="flex max-w-[960px] gap-[var(--bridges-position-gap-lg)]">
       <soc-labs-nav-list class="w-[220px]" ariaLabel="Produits" [items]="produits" [(value)]="produit" iconAppearance="tile" />
@@ -31,7 +31,11 @@ import { SocLabsOptionRow, SocLabsOptionRowTags } from './option-row';
               [(checked)]="documents"
               [disabled]="!onboarding()"
               disabledReason="Activez d'abord « Parcours d'intégration (onboarding) »."
-            />
+            >
+              <soc-message socLabsOptionRowMessage variant="inline" status="warning">
+                <span socMessageContent>Nécessite le module Doc et l'option « Demandes de documents », non activés pour cette entreprise. Vérifiez avec les Sales.</span>
+              </soc-message>
+            </soc-labs-option-row>
           </soc-labs-option-row>
           <soc-labs-option-row
             label="Organigramme"
@@ -82,7 +86,10 @@ export default meta;
 
 type Story = StoryObj<SocLabsOptionRow>;
 
-/** Ligne d'option, sous-option, confirmation d'une option payante, navigation par produit, barre de modifications. */
+/**
+ * Ligne d'option, sous-option avec message d'avertissement (`socLabsOptionRowMessage`), confirmation d'une option
+ * payante, navigation par produit, barre de modifications.
+ */
 export const OptionsEntreprise: Story = {
   render: () => ({ template: `<story-labs-options-entreprise />` }),
 };
